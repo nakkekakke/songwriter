@@ -1,11 +1,14 @@
 import React from 'react'
+import { ListItem } from '@material-ui/core'
 
 const Song = ({ title, content }) => {
   return (
-    <li>
-      <h2>{title}</h2>
-      <p>{content}</p>
-    </li>
+    <ListItem>
+      <div>
+        <h2>{title}</h2>
+        <p>{content}</p>
+      </div>
+    </ListItem>
   )
 }
 

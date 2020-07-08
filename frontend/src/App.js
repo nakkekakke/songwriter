@@ -4,6 +4,10 @@ import Song from './components/Song'
 import Notification from './components/Notification'
 import songService from './services/songService'
 
+import { List, FormControl, InputLabel, Input, Button, Container, FormGroup, Divider } from '@material-ui/core'
+
+//import * as Styled from './styled'
+
 const App = () => {
   const [songs, setSongs] = useState([])
   const [newSongTitle, setNewSongTitle] = useState('')
@@ -26,11 +30,14 @@ const App = () => {
   
 
   const listSongs = () => songs.map(song =>
-    <Song 
-      key={song.id}
-      title={song.title}
-      content={song.content}
-    />
+    <>
+      <Song 
+        key={song.id}
+        title={song.title}
+        content={song.content}
+      />
+      <Divider/>
+    </>
   )
 
   const addSong = (event) => {
@@ -63,21 +70,31 @@ const App = () => {
   }
 
   return (
-    <div>
+    <Container maxWidth='sm'>
+    <div className='App'>
       <h1>Songs</h1>
       
       <Notification message={errorMessage} />
-      <ul>
+      <List>
         {listSongs()}
-      </ul>
+      </List>
       <form onSubmit={addSong}>
-        <p>Enter song title</p>
-        <input value={newSongTitle} onChange={handleSongTitleChange} />
-        <p>Enter song content</p>
-        <input value={newSongContent} onChange={handleSongContentChange} />
-        <button type='submit'>Submit</button>
+        <FormGroup row>
+          <FormControl>
+            <InputLabel htmlFor='title'>Enter song title</InputLabel>
+            <Input id='title' value={newSongTitle} onChange={handleSongTitleChange}></Input>
+          </FormControl>
+        </FormGroup>
+        <FormGroup row>
+          <FormControl>
+            <InputLabel htmlFor='content'>Enter song content</InputLabel>
+            <Input id='content' value={newSongContent} onChange={handleSongContentChange}></Input>
+          </FormControl>
+        </FormGroup>
+        <Button style={{marginTop: '1em'}} color='primary' variant='outlined' type='submit'>Submit</Button>
       </form>
     </div>
+    </Container>
   )
 }
 
