@@ -5,38 +5,14 @@ import Song from './components/Song'
 import Notification from './components/Notification'
 import NavBar from './components/NavBar'
 import { List, FormControl, InputLabel, Input, Button, Container, FormGroup, Divider } from '@material-ui/core'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import SongList from './components/SongList'
 
 const App = () => {
   const [songs, setSongs] = useState([])
   const [newSongTitle, setNewSongTitle] = useState('')
   const [newSongContent, setNewSongContent] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
-
-  useEffect(() => {
-    console.log('Effect in effect')
-    songService
-      .getAll()
-      .then(loadedSongs => {
-        setSongs(loadedSongs)
-      })
-      .catch(error => {
-        setErrorMessage(`Couldn't load songs`)
-      })
-  }, [])
-
-  console.log('Rendered', songs.length, 'songs')
-  
-
-  const listSongs = () => songs.map(song =>
-    <>
-      <Song 
-        key={song.id}
-        title={song.title}
-        content={song.content}
-      />
-      <Divider/>
-    </>
-  )
 
   const addSong = (event) => {
     event.preventDefault()
@@ -52,8 +28,8 @@ const App = () => {
         setNewSongTitle('')
         setNewSongContent('')
       })
-      .catch(error => {
-        setErrorMessage(`Couldn't add song`)
+      .catch(() => {
+        setErrorMessage('Couldn\'t add song')
       })
   }
 
@@ -69,15 +45,17 @@ const App = () => {
 
   return (
     <>
-      <NavBar/>
-      <Container maxWidth='xl'>
-        <div className='App'>
-          <h1>Songs</h1>
-          
+      <Router>
+        <NavBar/>
+        <Container maxWidth='xl' className='App'>
           <Notification message={errorMessage} />
-          <List>
-            {listSongs()}
-          </List>
+          <Switch>
+            
+            <Route path='/songs'>
+              <SongList/>
+            </Route>
+            <Route path='/'><p>Welcome</p></Route>
+          </Switch>
           <form onSubmit={addSong}>
             <FormGroup row>
               <FormControl>
@@ -93,8 +71,8 @@ const App = () => {
             </FormGroup>
             <Button style={{marginTop: '1em'}} color='primary' variant='outlined' type='submit'>Submit</Button>
           </form>
-        </div>
-      </Container>
+        </Container>
+      </Router>
     </>
   )
 }
