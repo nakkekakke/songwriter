@@ -1,14 +1,18 @@
 import React from 'react'
-import { ListItem } from '@material-ui/core'
+import { useParams } from 'react-router-dom'
 
-const Song = ({ title, content }) => {
+const Song = ({ songs }) => {
+  const id = useParams().id
+  let song
+  if (songs) {
+    song = songs.find(s => s.id === Number(id))
+  }
+  
   return (
-    <ListItem>
-      <div>
-        <h2>{title}</h2>
-        <p>{content}</p>
-      </div>
-    </ListItem>
+    <div>
+      <h1>{song ? song.title : 'No title'}</h1>
+      <p>{song ? song.content : 'No content'}</p>
+    </div>
   )
 }
 

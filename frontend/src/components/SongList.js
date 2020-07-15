@@ -1,32 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import songService from '../services/songService'
 import { List, Divider } from '@material-ui/core'
 import Notification from './Notification'
-import Song from './Song'
+import SongListItem from './SongListItem'
 
-const SongList = () => {
-  const [songs, setSongs] = useState([])
-  const [errorMessage, setErrorMessage] = useState(null)
-
-  useEffect(() => {
-    console.log('Effect in effect')
-    songService
-      .getAll()
-      .then(loadedSongs => {
-        setSongs(loadedSongs)
-      })
-      .catch(() => {
-        setErrorMessage('Couldn\'t load songs')
-      })
-  }, [])
+const SongList = ({ songs, errorMessage }) => {
 
   console.log('Rendered', songs.length, 'songs')
 
   const listSongs = () => songs.map(song =>
     <div key={song.id} >
-      <Song
-        title={song.title}
-        content={song.content}
+      <SongListItem
+        to={`/songs/${song.id}`}
+        song={song}
       />
       <Divider/>
     </div>

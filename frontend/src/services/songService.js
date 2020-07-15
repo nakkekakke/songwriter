@@ -7,10 +7,15 @@ const getAll = () => {
   return req.then(res => res.data)
 }
 
+const getOne = (id) => {
+  const req = axios.getOne(id)
+  return req.then(res => res.data)
+}
+
 const create = (songObject) => {
   console.log('Creating new song...')
   const req = axios.post(url, songObject)
   return req.then(res => res.data)
 }
 
-export default { getAll, create }
+export default { getAll, getOne, create }
