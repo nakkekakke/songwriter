@@ -3,7 +3,7 @@ import { ListItem } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 
 const SongListItem = ({ song }) => {
-  if (song != undefined) {
+  if (song !== undefined) {
     return (
       <ListItem component={Link} to={`/songs/${song.id}`} >
         <div>

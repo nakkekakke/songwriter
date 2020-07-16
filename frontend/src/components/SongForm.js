@@ -2,12 +2,11 @@ import React, { useState } from 'react'
 import { FormControl, InputLabel, Input, Button, FormGroup } from '@material-ui/core'
 import songService from '../services/songService'
 import { useHistory } from 'react-router-dom'
-import Notification from './Notification'
 
-
-const SongForm = ({ songs, setSongs, errorMessage, setErrorMessage }) => {
+const SongForm = ({ songs, setSongs, setAlertMessage, setAlertIsError }) => {
   const [newSongTitle, setNewSongTitle] = useState('')
   const [newSongContent, setNewSongContent] = useState('')
+
   const history = useHistory()
 
   const addSong = (event) => {
@@ -24,9 +23,13 @@ const SongForm = ({ songs, setSongs, errorMessage, setErrorMessage }) => {
         setNewSongTitle('')
         setNewSongContent('')
         history.push('/songs')
+        console.log(createdSong)
+        setAlertMessage('Added song: ' + createdSong.title)
+        setAlertIsError(false)
       })
       .catch(() => {
-        setErrorMessage('Couldn\'t add song')
+        setAlertMessage('Couldn\'t add song')
+        setAlertIsError(true)
       })
   }
 
@@ -43,7 +46,6 @@ const SongForm = ({ songs, setSongs, errorMessage, setErrorMessage }) => {
   return (
     <div>
       <h1>Create a song</h1>
-      <Notification message={errorMessage} />
       <form onSubmit={addSong}>
         <FormGroup row>
           <FormControl>

@@ -6,10 +6,13 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import SongList from './components/SongList'
 import Song from './components/Song'
 import SongForm from './components/SongForm'
+import SnackbarAlert from './components/SnackbarAlert'
 
 const App = () => {
   const [songs, setSongs] = useState([])
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [alertMessage, setAlertMessage] = useState('')
+  const [alertIsError, setAlertIsError] = useState(false)
+  //const [open, setOpen] = useState(false)
 
   useEffect(() => {
     console.log('Effect in effect')
@@ -19,9 +22,16 @@ const App = () => {
         setSongs(loadedSongs)
       })
       .catch(() => {
-        setErrorMessage('Couldn\'t load songs')
+        setAlertIsError(true)
+        setAlertMessage('Couldn\'t load songs')
       })
   }, [])
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === 'clickaway') return
+
+    setAlertMessage('')
+  }
 
   return (
     <>
@@ -33,14 +43,25 @@ const App = () => {
               <Song songs={songs} />
             </Route>
             <Route path='/songs'>
-              <SongList songs={songs} errorMessage={errorMessage}/>
+              <SongList 
+                songs={songs} 
+              />
             </Route>
             <Route path='/newSong'>
-              <SongForm songs={songs} setSongs={setSongs} errorMessage={errorMessage} setErrorMessage={setErrorMessage}/>
+              <SongForm 
+                songs={songs} 
+                setSongs={setSongs} 
+                setAlertMessage={setAlertMessage} 
+                setAlertIsError={setAlertIsError}
+              />
             </Route>
             <Route path='/'><p>Welcome</p></Route>
           </Switch>
-          
+          <SnackbarAlert 
+            message={alertMessage} 
+            isError={alertIsError} 
+            handleClose={handleAlertClose}
+          />
         </Container>
       </Router>
     </>
