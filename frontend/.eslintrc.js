@@ -36,7 +36,15 @@ module.exports = {
             'never'
         ],
         'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
-        'react-hooks/exhaustive-deps': 'warn' // Checks effect dependencies
+        'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
+        'eqeqeq': 'error',
+        'no-trailing-spaces': 'error',
+        'object-curly-spacing': [
+            'error', 'always'
+        ],
+        'arrow-spacing': [
+            'error', { 'before': true, 'after': true }
+        ]
     },
     'settings': {
         'react': {

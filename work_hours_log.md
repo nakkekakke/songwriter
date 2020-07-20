@@ -10,4 +10,5 @@
 | 14.7. | 2    | Navbar, React router |
 | 15.7. | 3    | Page for individual songs, refactoring, better React router |
 | 16.7. | 3    | Snackbar alerts |
-| total | 21   | | 
+| 20.7. | 2    | Practicing Material-UI and CSS |
+| total | 23   | | 

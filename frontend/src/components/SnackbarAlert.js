@@ -12,7 +12,7 @@ const SnackbarAlert = ({ message, isError, handleClose }) => {
       <Snackbar open={message !== ''} autoHideDuration={5000} onClose={handleClose}>
         <Alert
           variant='filled'
-          onClose={handleClose} 
+          onClose={handleClose}
           severity={isError ? 'error' : 'success'}
         >
           {message}
