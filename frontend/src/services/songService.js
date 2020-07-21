@@ -8,7 +8,7 @@ const getAll = () => {
 }
 
 const getOne = (id) => {
-  const req = axios.getOne(id)
+  const req = axios.get(url + '/' + id)
   return req.then(res => res.data)
 }
 
