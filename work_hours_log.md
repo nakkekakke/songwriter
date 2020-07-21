@@ -11,4 +11,6 @@
 | 15.7. | 3    | Page for individual songs, refactoring, better React router |
 | 16.7. | 3    | Snackbar alerts |
 | 20.7. | 2    | Practicing Material-UI and CSS |
-| total | 23   | | 
+| 21.7. | 4    | Upgraded pages for individual songs, song sections |
+|       | 1    | Planning, refactoring |
+| total | 28   | | 

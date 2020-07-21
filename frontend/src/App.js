@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import songService from './services/songService'
 import NavBar from './components/NavBar'
-import { makeStyles, Grid } from '@material-ui/core'
+import { makeStyles, Container } from '@material-ui/core'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import SongList from './components/SongList'
 import Song from './components/Song'
@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     padding: '1em'
   },
-  contentGrid: {
+  contentContainer: {
 
   }
 }))
@@ -52,9 +52,8 @@ const App = () => {
     <>
       <Router>
         <NavBar/>
-        <Grid container className={classes.mainContainer}>
-          <Grid item xs={0} sm={2} />
-          <Grid item xs={12} sm={8} align='center' className={classes.contentGrid}>
+        <Container maxWidth={false} className={classes.mainContainer}>
+          <Container maxWidth={false} align='center' className={classes.contentContainer}>
             <Switch>
               <Route path='/songs/:id'>
                 <Song songs={songs} />
@@ -74,14 +73,13 @@ const App = () => {
               </Route>
               <Route path='/'><p>Welcome</p></Route>
             </Switch>
-          </Grid>
+          </Container>
           <SnackbarAlert
             message={alertMessage}
             isError={alertIsError}
             handleClose={handleAlertClose}
           />
-          <Grid item xs={0} sm={2} />
-        </Grid>
+        </Container>
       </Router>
     </>
   )
