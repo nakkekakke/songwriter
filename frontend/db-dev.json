@@ -1,0 +1,29 @@
+{
+  "songs": [
+    {
+      "id": 1,
+      "title": "Test song",
+      "sections": [
+        {
+          "name": "Verse 1",
+          "lines": [
+            "Verse 1 line 1 lyrics.",
+            "Verse 1 line 1 lyrics.",
+            "Verse 1 line 2 lyrics...",
+            "Verse 1 line 3 lyrics....",
+            "Verse 1 line 4 lyrics!!!!"
+          ]
+        },
+        {
+          "name": "Chorus 1",
+          "lines": [
+            "Chorus 1 line 1 lyrics..",
+            "Chorus 1 line 2 lyrics...",
+            "Chorus 1 line 3 lyrics....",
+            "Chorus 1 line 4 lyrics!!!!"
+          ]
+        }
+      ]
+    }
+  ]
+}
