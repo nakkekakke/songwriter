@@ -13,4 +13,5 @@
 | 20.7. | 2    | Practicing Material-UI and CSS |
 | 21.7. | 4    | Upgraded pages for individual songs, song sections |
 |       | 1    | Planning, refactoring |
-| total | 28   | | 
+| 26.7. | 4    | Prop-types, refactoring, trying to fix multiple renderings bug |
+| total | 32   | | 
