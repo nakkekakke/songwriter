@@ -1,6 +1,7 @@
 import React from 'react'
 import { List, makeStyles } from '@material-ui/core'
 import SongListItem from './SongListItem'
+import PropTypes from 'prop-types'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -29,6 +30,10 @@ const SongList = ({ songs }) => {
       </List>
     </div>
   )
+}
+
+SongList.propTypes = {
+  songs: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default SongList

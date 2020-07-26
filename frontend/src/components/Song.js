@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { makeStyles, Container, Button } from '@material-ui/core'
 import songService from '../services/songService'
 import SongSection from './SongSection'
+import PropTypes from 'prop-types'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -46,6 +47,10 @@ const Song = ({ songs }) => {
       </div>
     </div>
   )
+}
+
+Song.propTypes = {
+  songs: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default Song

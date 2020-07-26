@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core'
+import PropTypes from 'prop-types'
 
 const useStyles = makeStyles((theme) => ({
   section: {
@@ -34,6 +35,13 @@ const SongSection = ({ section }) => {
       </div>
     </>
   )
+}
+
+SongSection.propTypes = {
+  section: PropTypes.shape({
+    name: PropTypes.string,
+    lines: PropTypes.arrayOf(PropTypes.string)
+  })
 }
 
 export default SongSection

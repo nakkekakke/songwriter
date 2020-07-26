@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FormControl, InputLabel, Input, Button, Grid } from '@material-ui/core'
 import songService from '../services/songService'
 import { useHistory } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 const SongForm = ({ songs, setSongs, setAlertMessage, setAlertIsError }) => {
   const [newSongTitle, setNewSongTitle] = useState('')
@@ -71,6 +72,13 @@ const SongForm = ({ songs, setSongs, setAlertMessage, setAlertIsError }) => {
       </form>
     </div>
   )
+}
+
+SongForm.propTypes = {
+  songs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  setSongs: PropTypes.func.isRequired,
+  setAlertMessage: PropTypes.func.isRequired,
+  setAlertIsError: PropTypes.func.isRequired
 }
 
 export default SongForm
