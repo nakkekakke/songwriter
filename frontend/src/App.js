@@ -56,7 +56,10 @@ const App = () => {
           <Container maxWidth={false} align='center' className={classes.contentContainer}>
             <Switch>
               <Route path='/songs/:id'>
-                <Song songs={songs} />
+                <Song
+                  setAlertMessage={setAlertMessage}
+                  setAlertIsError={setAlertIsError}
+                />
               </Route>
               <Route path='/songs'>
                 <SongList

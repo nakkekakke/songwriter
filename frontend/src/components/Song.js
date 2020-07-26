@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { makeStyles, Container, Button } from '@material-ui/core'
 import songService from '../services/songService'
@@ -17,20 +17,26 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const Song = ({ songs }) => {
+const Song = ({ setAlertMessage, setAlertIsError }) => {
+  const [song, setSong] = useState()
+
   const classes = useStyles()
-
   const id = useParams().id
-  let song
-  if (songs && songs.length > 0) {
-    song = songs.find(s => s.id === Number(id))
-  } else {
-    song = songService.getOne(id)
-  }
 
-  song && song.sections ? console.log('hei', song.sections) : console.log('')
+  useEffect(() => {
+    console.log('Song effect')
+    songService
+      .getOne(Number(id))
+      .then(loadedSong => {
+        setSong(loadedSong)
+      })
+      .catch(() => {
+        setAlertIsError(true)
+        setAlertMessage('Couldn\'t load song')
+      })
+  }, [id, setAlertMessage, setAlertIsError])
 
-  song && song.sections ? console.log('hai', song.sections[0]) : console.log('')
+  console.log('Song:', song)
 
   return (
     <div className={classes.root}>
@@ -41,7 +47,7 @@ const Song = ({ songs }) => {
         </Container>
         <Container maxWidth={false} align='left'>
           {song && song.sections ? song.sections.map(section => {
-            return <SongSection key={section} section={section} />
+            return <SongSection key={section.name} section={section} /> // Section names should be unique
           }) : <p>Loading</p>}
         </Container>
       </div>
@@ -50,7 +56,8 @@ const Song = ({ songs }) => {
 }
 
 Song.propTypes = {
-  songs: PropTypes.arrayOf(PropTypes.object)
+  setAlertIsError: PropTypes.func.isRequired,
+  setAlertMessage: PropTypes.func.isRequired
 }
 
 export default Song
