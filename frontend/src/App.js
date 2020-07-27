@@ -20,6 +20,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const App = () => {
+  console.log('App render')
   const [songs, setSongs] = useState([])
   const [alertMessage, setAlertMessage] = useState('')
   const [alertIsError, setAlertIsError] = useState(false)
@@ -33,6 +34,7 @@ const App = () => {
       .getAll()
       .then(loadedSongs => {
         setSongs(loadedSongs)
+        console.log('Got songs!')
       })
       .catch(() => {
         setAlertIsError(true)
@@ -57,6 +59,7 @@ const App = () => {
             <Switch>
               <Route path='/songs/:id'>
                 <Song
+                  songs={songs}
                   setAlertMessage={setAlertMessage}
                   setAlertIsError={setAlertIsError}
                 />

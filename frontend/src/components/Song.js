@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { makeStyles, Container, Button } from '@material-ui/core'
-import songService from '../services/songService'
+import { makeStyles, Container, Button, TextField } from '@material-ui/core'
 import SongSection from './SongSection'
 import PropTypes from 'prop-types'
 
@@ -13,49 +12,102 @@ const useStyles = makeStyles(() => ({
     marginBottom: '3px'
   },
   menuButton: {
-    marginBottom: '1em'
+    marginBottom: '15px'
+  },
+  titleForm: {
+    margin: '15px'
   }
 }))
 
-const Song = ({ setAlertMessage, setAlertIsError }) => {
-  const [song, setSong] = useState()
+let song = undefined // Outside of Song component because couldn't get setTimeout to work otherwise
+
+const Song = ({ songs, setAlertMessage, setAlertIsError }) => {
+  const [editMode, setEditMode] = useState(false)
+  const [title, setTitle] = useState('')
 
   const classes = useStyles()
   const id = useParams().id
 
-  useEffect(() => {
-    console.log('Song effect')
-    songService
-      .getOne(Number(id))
-      .then(loadedSong => {
-        setSong(loadedSong)
-      })
-      .catch(() => {
-        setAlertIsError(true)
-        setAlertMessage('Couldn\'t load song')
-      })
-  }, [id, setAlertMessage, setAlertIsError])
+  song = songs.find(s => s.id === Number(id))
 
-  console.log('Song:', song)
+  setTimeout(() => {
+    if (!song) {
+      setAlertMessage('Couldn\'t load song')
+      setAlertIsError(true)
+    }
+  }, 5000)
 
-  return (
-    <div className={classes.root}>
-      <h1>{song ? song.title : 'No title'}</h1>
-      <div>
-        <Container align='right' maxWidth={false} className={classes.menuContainer}>
-          <Button color='primary' variant='contained'>Edit song</Button>
-        </Container>
-        <Container maxWidth={false} align='left'>
-          {song && song.sections ? song.sections.map(section => {
-            return <SongSection key={section.name} section={section} /> // Section names should be unique
-          }) : <p>Loading</p>}
-        </Container>
+  console.log('Song render:', song)
+
+  const renderTitle = () => {
+    if (editMode) {
+      return (
+        <form onSubmit={handleTitleSubmit} className={classes.titleForm}>
+          <TextField label='Edit title' defaultValue={title ? title : song.title} onChange={handleTitleChange} />
+        </form>
+      )
+    } else {
+      return (
+        <h1>{song.title}</h1>
+      )
+    }
+  }
+
+  const handleEditButtonClick = () => {
+    editMode ? handleEditModeExit() : setEditMode(true)
+  }
+
+  const handleEditModeExit = () => {
+    console.log('Save stuff and exit')
+    setEditMode(false)
+  }
+
+  const handleTitleChange = (event) => {
+    console.log(event.target.value)
+    setTitle(event.target.value)
+  }
+
+  const handleTitleSubmit = (event) => {
+    event.preventDefault()
+    console.log(title)
+    setAlertIsError(false)
+    setAlertMessage('Song title changed to: ' + title)
+  }
+
+  if (song) {
+    return (
+      <div className={classes.root}>
+        {renderTitle()}
+        <div>
+          <Container align='right' maxWidth={false} className={classes.menuContainer}>
+            <Button
+              color='primary'
+              variant='contained'
+              onClick={handleEditButtonClick}
+            >
+              {editMode ? 'Exit edit mode' : 'Edit mode'}
+            </Button>
+          </Container>
+          <Container maxWidth={false} align='left'>
+            {song.sections ?
+              song.sections.map(section => {
+                return <SongSection key={section.name} section={section} editMode={editMode} /> // Section names should be unique
+              }) :
+              <p>No sections</p>
+            }
+          </Container>
+        </div>
       </div>
-    </div>
-  )
+    )
+  } else {
+    return (
+      <h1>Loading</h1>
+    )
+  }
 }
 
 Song.propTypes = {
+  songs: PropTypes.arrayOf(PropTypes.object).isRequired,
   setAlertIsError: PropTypes.func.isRequired,
   setAlertMessage: PropTypes.func.isRequired
 }
