@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { makeStyles, Container, Button, TextField } from '@material-ui/core'
 import SongSection from './SongSection'
@@ -19,23 +19,19 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-let song = undefined // Outside of Song component because couldn't get setTimeout to work otherwise
-
 const Song = ({ songs, setAlertMessage, setAlertIsError }) => {
   const [editMode, setEditMode] = useState(false)
   const [title, setTitle] = useState('')
+  const [song, setSong] = useState()
 
   const classes = useStyles()
   const id = useParams().id
 
-  song = songs.find(s => s.id === Number(id))
-
-  setTimeout(() => {
+  useEffect(() => {
     if (!song) {
-      setAlertMessage('Couldn\'t load song')
-      setAlertIsError(true)
+      setSong(songs.find(s => s.id === Number(id)))
     }
-  }, 5000)
+  }, [id, song, songs])
 
   console.log('Song render:', song)
 
@@ -101,7 +97,10 @@ const Song = ({ songs, setAlertMessage, setAlertIsError }) => {
     )
   } else {
     return (
-      <h1>Loading</h1>
+      <div>
+        <h1>Loading</h1>
+        <p>Check the url if it takes too long</p>
+      </div>
     )
   }
 }

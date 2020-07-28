@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { makeStyles, TextField } from '@material-ui/core'
+import { makeStyles, TextField, Button } from '@material-ui/core'
 import PropTypes from 'prop-types'
+import songHelper from '../helpers/songHelper'
 
 const useStyles = makeStyles((theme) => ({
   section: {
@@ -13,83 +14,100 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
     whiteSpace: 'nowrap'
   },
-  line: {
-
-  },
-  nameForm: {
+  editForm: {
     marginBottom: '17px'
   },
-  linesForm: {
-
+  nameField: {
+    marginBottom: '5px'
+  },
+  linesFieldDiv: {
+    marginRight: '1em'
+  },
+  lineSubmitButton: {
+    marginTop: '10px',
+    marginBottom: '-15px'
   }
 }))
 
 const SongSection = ({ section, editMode }) => {
+
   const [name, setName] = useState(section.name)
-  const [lines, setLines] = useState(section.lines)
+  const [linesString, setLinesString] = useState(songHelper.linesArrayToString(section.lines)) // Lines are a string while in state
+
+  console.log('Rendering songsection!', section, linesString)
 
   const classes = useStyles()
 
-  const renderName = () => {
-    if (editMode) {
-      return (
-        <form onSubmit={handleNameSubmit} className={classes.nameForm}>
-          <TextField label='Edit name' defaultValue={name} onChange={handleNameChange} />
-        </form>
-      )
-    }
+  const editView = () => {
     return (
-      <h2>{section.name}</h2>
-    )
-  }
-
-  const listLines = () => {  // TODO
-    if (editMode) {
-      return (
-        <form className={classes.linesForm}>
+      <form className={classes.editForm} onSubmit={handleEditSubmit}>
+        <TextField className={classes.nameField} label='Edit name' defaultValue={name} onChange={handleNameChange} />
+        <div className={classes.linesFieldDiv}>
           <TextField
             multiline
             label='Lines'
-            rows={section.lines.length}
-            defaultValue={linesToString()}
+            rows={songHelper.lineCount(linesString)}
+            defaultValue={linesString}
+            onChange={handleLinesChange}
+            fullWidth={true}
           />
-        </form>
-      )
-    }
-    return section.lines.map((line, index) => {
-      return <p className={classes.line} key={index}>{line}</p>
-    })
+        </div>
+        <Button
+          className={classes.lineSubmitButton}
+          size='small'
+          color='primary'
+          variant='outlined'
+          type='submit'
+        >
+          Save
+        </Button>
+      </form>
+    )
   }
 
-  const linesToString = () => {   // Helper function, move somewhere
-    let string = ''
-    for (let i = 0; i < lines.length; i++) {
-      string = string.concat(lines[i])
-      if (i + 1 < lines.length) {  // If it's not the last line, add a newline
-        string = string.concat('\n')
-      }
-      console.log('LinesToString: ', string)
-    }
-    return string
+  const normalView = () => {
+    return (
+      <div>
+        <h2>{section.name}</h2>
+        {section.lines.map((line, index) => {
+          return <p className={classes.line} key={index}>{line}</p>
+        })}
+      </div>
+    )
   }
 
-  const handleNameSubmit = (event) => {
+  const handleEditSubmit = (event) => {
     event.preventDefault()
-    console.log(name)
-    // setAlertIsError(false)
-    // setAlertMessage('Song title changed to: ' + newTitle)
+    handleNameSubmit()
+    handleLinesSubmit(event.target[1])
+    //setAlertIsError(false)
+    //setAlertMessage('Song edited')
+  }
+
+  const handleNameSubmit = () => {
+    console.log(name) // todo
   }
 
   const handleNameChange = (event) => {
-    console.log(event.target.value)
     setName(event.target.value)
+  }
+
+  const handleLinesSubmit = (linesTextField) => {
+    const linesArray = songHelper.linesStringToArray(linesString)
+    section.lines = linesArray // Saving here
+    const cleanedLines = songHelper.linesArrayToString(linesArray)
+    linesTextField.value = cleanedLines
+    setLinesString(cleanedLines)
+  }
+
+  const handleLinesChange = (event) => {
+    setLinesString(event.target.value)
   }
 
   return (
     <>
       <div className={classes.section}>
-        {renderName()}
-        {listLines()}
+        {editMode ? editView() : normalView()}
       </div>
     </>
   )

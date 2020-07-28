@@ -15,4 +15,5 @@
 |       | 1    | Planning, refactoring |
 | 26.7. | 4    | Prop-types, refactoring, trying to fix multiple renderings bug |
 | 27.7. | 5    | Song edit mode, bugfixing, refactoring |
-| total | 32   | | 
+| 28.7. | 7    | Edit mode upgrading, temporary saving |
+| total | 39   | | 

@@ -18,4 +18,10 @@ const create = (songObject) => {
   return req.then(res => res.data)
 }
 
-export default { getAll, getOne, create }
+const edit = (songObject) => {
+  console.log('Editing song: ', songObject)
+  const req = axios.put(url + '/' + songObject.id, songObject)
+  return req.then(res => res.data)
+}
+
+export default { getAll, getOne, create, edit }
