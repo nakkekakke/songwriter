@@ -34,7 +34,7 @@ const NavBar = () => {
           </Typography>
           <div className={classes.buttonsDiv}>
             <Button component={Link} to={'/songs'} color='inherit' className={classes.linkButton}>Your songs</Button>
-            <Button component={Link} to={'/newsong'} color='inherit' className={classes.linkButton}>Create a new song</Button>
+            <Button component={Link} to={'/songs/new'} color='inherit' className={classes.linkButton}>Create a new song</Button>
           </div>
           <Button color='inherit' className={classes.logout}>Logout</Button>
         </Toolbar>

@@ -34,7 +34,7 @@ const SongSection = ({ section, editMode }) => {
   const [name, setName] = useState(section.name)
   const [linesString, setLinesString] = useState(songHelper.linesArrayToString(section.lines)) // Lines are a string while in state
 
-  console.log('Rendering songsection!', section, linesString)
+  //console.log('Rendering songsection!', section, linesString)
 
   const classes = useStyles()
 
@@ -85,7 +85,8 @@ const SongSection = ({ section, editMode }) => {
   }
 
   const handleNameSubmit = () => {
-    console.log(name) // todo
+    console.log('Submitting name:', name) // todo
+    section.name = name
   }
 
   const handleNameChange = (event) => {

@@ -10,8 +10,11 @@ const linesArrayToString = (lines) => {
 }
 
 const linesStringToArray = (string) => {
-  const array = cutStringIntoLines(string).map(line => line = line.trim())
-  console.log('Trimmed lines:', array)
+  const array = cutStringIntoLines(string)
+    .map(line => line = line.trim())
+    .filter(line => line !== '')
+
+  //console.log('Trimmed lines:', array)
   return array
 }
 
@@ -20,7 +23,29 @@ const lineCount = (string) => {
 }
 
 const cutStringIntoLines = (string) => {
-  return string.match(/[^\r\n]+/g)
+  //console.log('Cutting:', string)
+  const cutLines = string.match(/[^\r\n]+/g)
+  return cutLines ? cutLines : []
 }
 
-export default { linesArrayToString, linesStringToArray, lineCount, cutStringIntoLines }
+const getDefaultSong = () => {
+  return {
+    title: 'New song',
+    sections: [
+      {
+        name: 'Section 1',
+        lines: []
+      }
+    ]
+  }
+}
+
+const addNewSection = (song) => {
+  const newSection = {
+    name: 'Section ' + (song.sections.length + 1),
+    lines: []
+  }
+  song.sections.push(newSection) // modifies the song directly
+}
+
+export default { linesArrayToString, linesStringToArray, lineCount, cutStringIntoLines, getDefaultSong, addNewSection }

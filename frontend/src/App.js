@@ -5,7 +5,6 @@ import { makeStyles, Container } from '@material-ui/core'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import SongList from './components/SongList'
 import Song from './components/Song'
-import SongForm from './components/SongForm'
 import SnackbarAlert from './components/SnackbarAlert'
 
 const useStyles = makeStyles(() => ({
@@ -42,6 +41,15 @@ const App = () => {
       })
   }, [])
 
+  const editSong = (newSong) => {
+    let newSongs = JSON.parse(JSON.stringify(songs)) // deep clone
+    const songIndex = newSongs.map(s => s.id).indexOf(newSong.id)
+    newSongs.splice(songIndex, 1, newSong) // replace old song
+    //console.log('Original:', songs)
+    //console.log('New:', newSongs)
+    setSongs(newSongs)
+  }
+
 
 
   const handleAlertClose = (event, reason) => {
@@ -62,19 +70,12 @@ const App = () => {
                   songs={songs}
                   setAlertMessage={setAlertMessage}
                   setAlertIsError={setAlertIsError}
+                  editSong={editSong}
                 />
               </Route>
               <Route path='/songs'>
                 <SongList
                   songs={songs}
-                />
-              </Route>
-              <Route path='/newSong'>
-                <SongForm
-                  songs={songs}
-                  setSongs={setSongs}
-                  setAlertMessage={setAlertMessage}
-                  setAlertIsError={setAlertIsError}
                 />
               </Route>
               <Route path='/'><p>Welcome</p></Route>

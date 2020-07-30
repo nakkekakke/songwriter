@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { makeStyles, Container, Button, TextField } from '@material-ui/core'
+import { Add } from '@material-ui/icons'
 import SongSection from './SongSection'
 import PropTypes from 'prop-types'
+import songHelper from '../helpers/songHelper'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -16,10 +18,13 @@ const useStyles = makeStyles(() => ({
   },
   titleForm: {
     margin: '15px'
+  },
+  addSectionButton: {
+    margin: '8px'
   }
 }))
 
-const Song = ({ songs, setAlertMessage, setAlertIsError }) => {
+const Song = ({ songs, setAlertMessage, setAlertIsError, editSong }) => {
   const [editMode, setEditMode] = useState(false)
   const [title, setTitle] = useState('')
   const [song, setSong] = useState()
@@ -29,7 +34,7 @@ const Song = ({ songs, setAlertMessage, setAlertIsError }) => {
 
   useEffect(() => {
     if (!song) {
-      setSong(songs.find(s => s.id === Number(id)))
+      id === 'new' ? setSong(songHelper.getDefaultSong) : setSong(songs.find(s => s.id === Number(id)))
     }
   }, [id, song, songs])
 
@@ -45,6 +50,16 @@ const Song = ({ songs, setAlertMessage, setAlertIsError }) => {
     } else {
       return (
         <h1>{song.title}</h1>
+      )
+    }
+  }
+
+  const addSectionButton = () => {
+    if (editMode) {
+      return (
+        <Button className={classes.addSectionButton} variant='contained' color='primary' startIcon={<Add />} onClick={handleAddSectionClick}>
+          New section
+        </Button>
       )
     }
   }
@@ -66,8 +81,21 @@ const Song = ({ songs, setAlertMessage, setAlertIsError }) => {
   const handleTitleSubmit = (event) => {
     event.preventDefault()
     console.log(title)
+    const editedSong = JSON.parse(JSON.stringify(song))
+    editedSong.title = title
+    setSong(editedSong)
+    editSong(editedSong)
     setAlertIsError(false)
     setAlertMessage('Song title changed to: ' + title)
+  }
+
+  const handleAddSectionClick = (event) => {
+    event.preventDefault()
+    console.log('Add new section!')
+    const editedSong = JSON.parse(JSON.stringify(song)) // deep clone
+    songHelper.addNewSection(editedSong) // modifies the song directly
+    setSong(editedSong)
+    editSong(editedSong)
   }
 
   if (song) {
@@ -93,6 +121,7 @@ const Song = ({ songs, setAlertMessage, setAlertIsError }) => {
             }
           </Container>
         </div>
+        {addSectionButton()}
       </div>
     )
   } else {
