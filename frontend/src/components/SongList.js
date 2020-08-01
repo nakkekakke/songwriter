@@ -1,7 +1,7 @@
 import React from 'react'
 import { List, makeStyles } from '@material-ui/core'
 import SongListItem from './SongListItem'
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -9,8 +9,9 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const SongList = ({ songs }) => {
+const SongList = () => {
   const classes = useStyles()
+  const songs = useSelector((state) => state)
 
   console.log('Rendered', songs.length, 'songs')
 
@@ -30,10 +31,6 @@ const SongList = ({ songs }) => {
       </List>
     </div>
   )
-}
-
-SongList.propTypes = {
-  songs: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default SongList

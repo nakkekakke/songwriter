@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import songService from './services/songService'
 import NavBar from './components/NavBar'
 import { makeStyles, Container } from '@material-ui/core'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import SongList from './components/SongList'
 import Song from './components/Song'
 import SnackbarAlert from './components/SnackbarAlert'
+import { initializeSongs } from './redux/songReducer'
+import songService from './services/songService'
+import { useDispatch } from 'react-redux'
 
 const useStyles = makeStyles(() => ({
   mainContainer: {
@@ -20,35 +22,27 @@ const useStyles = makeStyles(() => ({
 
 const App = () => {
   console.log('App render')
-  const [songs, setSongs] = useState([])
   const [alertMessage, setAlertMessage] = useState('')
   const [alertIsError, setAlertIsError] = useState(false)
   //const [open, setOpen] = useState(false)
 
   const classes = useStyles()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     console.log('Effect in effect')
     songService
       .getAll()
       .then(loadedSongs => {
-        setSongs(loadedSongs)
         console.log('Got songs!')
+        return dispatch(initializeSongs(loadedSongs))
       })
       .catch(() => {
         setAlertIsError(true)
         setAlertMessage('Couldn\'t load songs')
       })
-  }, [])
+  }, [dispatch])
 
-  const editSong = (newSong) => {
-    let newSongs = JSON.parse(JSON.stringify(songs)) // deep clone
-    const songIndex = newSongs.map(s => s.id).indexOf(newSong.id)
-    newSongs.splice(songIndex, 1, newSong) // replace old song
-    //console.log('Original:', songs)
-    //console.log('New:', newSongs)
-    setSongs(newSongs)
-  }
 
 
 
@@ -67,16 +61,12 @@ const App = () => {
             <Switch>
               <Route path='/songs/:id'>
                 <Song
-                  songs={songs}
                   setAlertMessage={setAlertMessage}
                   setAlertIsError={setAlertIsError}
-                  editSong={editSong}
                 />
               </Route>
               <Route path='/songs'>
-                <SongList
-                  songs={songs}
-                />
+                <SongList/>
               </Route>
               <Route path='/'><p>Welcome</p></Route>
             </Switch>

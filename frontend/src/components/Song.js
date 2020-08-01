@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import { makeStyles, Container, Button, TextField } from '@material-ui/core'
 import { Add } from '@material-ui/icons'
 import SongSection from './SongSection'
 import PropTypes from 'prop-types'
 import songHelper from '../helpers/songHelper'
+import { useDispatch, useSelector } from 'react-redux'
+import { createSong, editSong } from '../redux/songReducer'
+import songService from '../services/songService'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -24,19 +27,46 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const Song = ({ songs, setAlertMessage, setAlertIsError, editSong }) => {
+const Song = ({ setAlertMessage, setAlertIsError }) => {
   const [editMode, setEditMode] = useState(false)
   const [title, setTitle] = useState('')
-  const [song, setSong] = useState()
 
   const classes = useStyles()
-  const id = useParams().id
+  let id = useParams().id
+  const dispatch = useDispatch()
+  const history = useHistory()
+
+  // const song = useSelector((state) => {
+  //   if (id === 'new') {
+  //     songService
+  //       .create(songHelper.getDefaultSong())
+  //       .then(s => {
+  //         dispatch(createSong(s))
+  //         history.push('/songs/' + s.id)
+  //       })
+  //   } else {
+  //     return state.find(s => s.id === Number(id))
+  //   }
+  // })
+
+  let song = useSelector((state) => {
+    if (id !== 'new') {
+      return state.find(s => s.id === Number(id))
+    }
+  })
 
   useEffect(() => {
-    if (!song) {
-      id === 'new' ? setSong(songHelper.getDefaultSong) : setSong(songs.find(s => s.id === Number(id)))
+    if (id === 'new') {
+      songService
+        .create(songHelper.getDefaultSong())
+        .then(s => {
+          dispatch(createSong(s))
+          console.log('Setataan: ', s, song)
+          history.push('/songs/' + s.id)
+        })
     }
-  }, [id, song, songs])
+  }, [id, dispatch, history, song])
+
 
   console.log('Song render:', song)
 
@@ -82,9 +112,9 @@ const Song = ({ songs, setAlertMessage, setAlertIsError, editSong }) => {
     event.preventDefault()
     console.log(title)
     const editedSong = JSON.parse(JSON.stringify(song))
-    editedSong.title = title
-    setSong(editedSong)
-    editSong(editedSong)
+    //editedSong.title = title
+    //setSong(editedSong)
+    dispatch(editSong(editedSong))
     setAlertIsError(false)
     setAlertMessage('Song title changed to: ' + title)
   }
@@ -94,9 +124,17 @@ const Song = ({ songs, setAlertMessage, setAlertIsError, editSong }) => {
     console.log('Add new section!')
     const editedSong = JSON.parse(JSON.stringify(song)) // deep clone
     songHelper.addNewSection(editedSong) // modifies the song directly
-    setSong(editedSong)
-    editSong(editedSong)
+    //setSong(editedSong)
+    dispatch(editSong(editedSong))
   }
+
+  //const editSong = (newSong) => {
+  //let newSongs = JSON.parse(JSON.stringify(songs)) // deep clone
+  //const songIndex = newSongs.map(s => s.id).indexOf(newSong.id)
+  //newSongs.splice(songIndex, 1, newSong) // replace old song
+  //console.log('Original:', songs)
+  //console.log('New:', newSongs)
+  //}
 
   if (song) {
     return (
@@ -124,7 +162,7 @@ const Song = ({ songs, setAlertMessage, setAlertIsError, editSong }) => {
         {addSectionButton()}
       </div>
     )
-  } else {
+ } else {
     return (
       <div>
         <h1>Loading</h1>
@@ -135,7 +173,6 @@ const Song = ({ songs, setAlertMessage, setAlertIsError, editSong }) => {
 }
 
 Song.propTypes = {
-  songs: PropTypes.arrayOf(PropTypes.object).isRequired,
   setAlertIsError: PropTypes.func.isRequired,
   setAlertMessage: PropTypes.func.isRequired
 }
