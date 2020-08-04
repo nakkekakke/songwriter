@@ -18,4 +18,5 @@
 | 28.7. | 7    | Edit mode upgrading, temporary saving |
 | 30.7. | 5    | Improved song editing |
 | 31.7. | 5    | Implementing Redux and problem solving it |
-| total | 54   | | 
+| 4.7.  | 3    | Redux refactoring, code cleanup |
+| total | 57   | | 

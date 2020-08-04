@@ -1,3 +1,5 @@
+import songService from '../services/songService'
+
 const initialState = [
   {
     'id': 1,
@@ -89,26 +91,35 @@ const songReducer = (state = [], action) => {
 
 // Action creators
 export const createSong = (song) => {
-  console.log(CREATE_SONG)
-  return {
-    type: CREATE_SONG,
-    data: song
+  return async (action) => {
+    const createdSong = await songService.create(song)
+    console.log('Created:', createdSong)
+    action({
+      type: CREATE_SONG,
+      data: song
+    })
   }
 }
 
 export const editSong = (song) => {
-  console.log(EDIT_SONG, song)
-  return {
-    type: EDIT_SONG,
-    data: song
+  return async (action) => {
+    const editedSong = await songService.edit(song)
+    console.log('Edited:', editedSong)
+    action({
+      type: EDIT_SONG,
+      data: editedSong
+    })
   }
 }
 
-export const initializeSongs = (songs) => {
-  console.log('Initializing:', songs)
-  return {
-    type: INIT_SONGS,
-    data: songs
+export const initializeSongs = () => {
+  return async (action) => {
+    const songs = await songService.getAll()
+    console.log('Initialized:', songs)
+    action({
+      type: INIT_SONGS,
+      data: songs
+    })
   }
 }
 

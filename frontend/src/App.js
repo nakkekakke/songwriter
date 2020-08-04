@@ -6,7 +6,6 @@ import SongList from './components/SongList'
 import Song from './components/Song'
 import SnackbarAlert from './components/SnackbarAlert'
 import { initializeSongs } from './redux/songReducer'
-import songService from './services/songService'
 import { useDispatch } from 'react-redux'
 
 const useStyles = makeStyles(() => ({
@@ -30,21 +29,9 @@ const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    console.log('Effect in effect')
-    songService
-      .getAll()
-      .then(loadedSongs => {
-        console.log('Got songs!')
-        return dispatch(initializeSongs(loadedSongs))
-      })
-      .catch(() => {
-        setAlertIsError(true)
-        setAlertMessage('Couldn\'t load songs')
-      })
+    console.log('App effect')
+    dispatch(initializeSongs())
   }, [dispatch])
-
-
-
 
   const handleAlertClose = (event, reason) => {
     if (reason === 'clickaway') return

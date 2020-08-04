@@ -1,27 +1,27 @@
 import axios from 'axios'
 const url = 'http://localhost:3001/songs'
 
-const getAll = () => {
+const getAll = async () => {
   console.log('Getting songs...')
-  const req = axios.get(url)
-  return req.then(res => res.data)
+  const res = await axios.get(url)
+  return res.data
 }
 
-const getOne = (id) => {
-  const req = axios.get(url + '/' + id)
-  return req.then(res => res.data)
+const getOne = async (id) => {
+  const res = await axios.get(url + '/' + id)
+  return res.data
 }
 
-const create = (songObject) => {
+const create = async (songObject) => {
   console.log('Creating new song...')
-  const req = axios.post(url, songObject)
-  return req.then(res => res.data)
+  const res = await axios.post(url, songObject)
+  return res.data
 }
 
-const edit = (songObject) => {
+const edit = async (songObject) => {
   console.log('Editing song: ', songObject)
-  const req = axios.put(url + '/' + songObject.id, songObject)
-  return req.then(res => res.data)
+  const res = await axios.put(url + '/' + songObject.id, songObject)
+  return res.data
 }
 
 export default { getAll, getOne, create, edit }

@@ -7,7 +7,6 @@ import PropTypes from 'prop-types'
 import songHelper from '../helpers/songHelper'
 import { useDispatch, useSelector } from 'react-redux'
 import { createSong, editSong } from '../redux/songReducer'
-import songService from '../services/songService'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -36,19 +35,6 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  // const song = useSelector((state) => {
-  //   if (id === 'new') {
-  //     songService
-  //       .create(songHelper.getDefaultSong())
-  //       .then(s => {
-  //         dispatch(createSong(s))
-  //         history.push('/songs/' + s.id)
-  //       })
-  //   } else {
-  //     return state.find(s => s.id === Number(id))
-  //   }
-  // })
-
   let song = useSelector((state) => {
     if (id !== 'new') {
       return state.find(s => s.id === Number(id))
@@ -57,13 +43,10 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
 
   useEffect(() => {
     if (id === 'new') {
-      songService
-        .create(songHelper.getDefaultSong())
-        .then(s => {
-          dispatch(createSong(s))
-          console.log('Setataan: ', s, song)
-          history.push('/songs/' + s.id)
-        })
+      const createdSong = createSong(songHelper.getDefaultSong())
+      dispatch(createdSong)
+      console.log('Setataan: ', createdSong)
+      history.push('/songs/' + createdSong.id)
     }
   }, [id, dispatch, history, song])
 
@@ -74,7 +57,11 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
     if (editMode) {
       return (
         <form onSubmit={handleTitleSubmit} className={classes.titleForm}>
-          <TextField label='Edit title' defaultValue={title ? title : song.title} onChange={handleTitleChange} />
+          <TextField
+            label='Edit title'
+            defaultValue={title ? title : song.title}
+            onChange={handleTitleChange}
+          />
         </form>
       )
     } else {
@@ -87,7 +74,13 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
   const addSectionButton = () => {
     if (editMode) {
       return (
-        <Button className={classes.addSectionButton} variant='contained' color='primary' startIcon={<Add />} onClick={handleAddSectionClick}>
+        <Button
+          className={classes.addSectionButton}
+          variant='contained'
+          color='primary'
+          startIcon={<Add />}
+          onClick={handleAddSectionClick}
+        >
           New section
         </Button>
       )
@@ -110,10 +103,8 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
 
   const handleTitleSubmit = (event) => {
     event.preventDefault()
-    console.log(title)
     const editedSong = JSON.parse(JSON.stringify(song))
-    //editedSong.title = title
-    //setSong(editedSong)
+    editedSong.title = title
     dispatch(editSong(editedSong))
     setAlertIsError(false)
     setAlertMessage('Song title changed to: ' + title)
@@ -124,17 +115,8 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
     console.log('Add new section!')
     const editedSong = JSON.parse(JSON.stringify(song)) // deep clone
     songHelper.addNewSection(editedSong) // modifies the song directly
-    //setSong(editedSong)
     dispatch(editSong(editedSong))
   }
-
-  //const editSong = (newSong) => {
-  //let newSongs = JSON.parse(JSON.stringify(songs)) // deep clone
-  //const songIndex = newSongs.map(s => s.id).indexOf(newSong.id)
-  //newSongs.splice(songIndex, 1, newSong) // replace old song
-  //console.log('Original:', songs)
-  //console.log('New:', newSongs)
-  //}
 
   if (song) {
     return (
@@ -153,7 +135,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
           <Container maxWidth={false} align='left'>
             {song.sections ?
               song.sections.map(section => {
-                return <SongSection key={section.name} section={section} editMode={editMode} /> // Section names should be unique
+                return <SongSection key={section.name} section={section} editMode={editMode} /> // Section names should be unique, maybe give them IDs in the future
               }) :
               <p>No sections</p>
             }
@@ -162,7 +144,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
         {addSectionButton()}
       </div>
     )
- } else {
+  } else {
     return (
       <div>
         <h1>Loading</h1>
