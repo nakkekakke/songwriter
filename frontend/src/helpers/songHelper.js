@@ -33,6 +33,7 @@ const getDefaultSong = () => {
     title: 'New song',
     sections: [
       {
+        id: 1,
         name: 'Section 1',
         lines: []
       }

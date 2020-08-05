@@ -15,9 +15,6 @@ const songReducer = (state = [], action) => {
     return action.data
   case CREATE_SONG: {
     const newState = state.concat(action.data)
-    console.log('pushing')
-    action.history.push('/' + action.data.id)
-    console.log('pushed')
     return newState
   }
   case EDIT_SONG: {
@@ -30,17 +27,16 @@ const songReducer = (state = [], action) => {
   }
 }
 
-// Action creators
-export const createSong = (song, history) => {
-  console.log('Song to create:', song)
-  return async (action) => {
+// Action creators & thunks
+export const createSong = (song) => {
+  return async (dispatch) => {
     const createdSong = await songService.create(song)
     console.log('Created:', createdSong)
-    action({
+    dispatch({
       type: CREATE_SONG,
-      data: createdSong,
-      history: history
+      data: createdSong
     })
+    return createdSong
   }
 }
 
@@ -48,10 +44,10 @@ export const editTitle = (song, title) => {
   let songToSave = JSON.parse(JSON.stringify(song))
   songToSave.title = title
 
-  return async (action) => {
+  return async (dispatch) => {
     const editedSong = await songService.edit(songToSave)
     console.log('Edited:', editedSong)
-    action({
+    dispatch({
       type: EDIT_SONG,
       data: editedSong
     })
@@ -59,12 +55,12 @@ export const editTitle = (song, title) => {
 }
 
 export const editSection = (songId, section) => {
-  return async (action) => {
+  return async (dispatch) => {
     let songToSave = await songService.getOne(songId)
     songToSave.sections = songToSave.sections.map(s => s.id === section.id ? section : s) // Replace edited section
     console.log('Song to save:', songToSave)
     const editedSong = await songService.edit(songToSave)
-    action({
+    dispatch({
       type: EDIT_SONG,
       data: editedSong
     })
@@ -75,9 +71,9 @@ export const addSection = (song) => {
   let songToSave = JSON.parse(JSON.stringify(song))
   songToSave = songHelper.addNewSection(songToSave)
 
-  return async (action) => {
+  return async (dispatch) => {
     const editedSong = await songService.edit(songToSave)
-    action({
+    dispatch({
       type: EDIT_SONG,
       data: editedSong
     })
@@ -85,10 +81,10 @@ export const addSection = (song) => {
 }
 
 export const initializeSongs = () => {
-  return async (action) => {
+  return async (dispatch) => {
     const songs = await songService.getAll()
     console.log('Initialized:', songs)
-    action({
+    dispatch({
       type: INIT_SONGS,
       data: songs
     })

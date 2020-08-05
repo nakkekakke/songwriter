@@ -43,7 +43,12 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
 
   useEffect(() => {
     if (id === 'new') {
-      dispatch(createSong(songHelper.getDefaultSong(), history))
+      dispatch(createSong(songHelper.getDefaultSong())) // Note: not error handling createSong
+        .then(res => {
+          history.push('/songs/' + res.id)
+          console.log('Redirected!')
+        })
+        .catch(e => console.log('Error creating new song:', e))
     }
   }, [id, dispatch, history, song])
 

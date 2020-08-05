@@ -18,5 +18,7 @@
 | 28.7. | 7    | Edit mode upgrading, temporary saving |
 | 30.7. | 5    | Improved song editing |
 | 31.7. | 5    | Implementing Redux and problem solving it |
-| 4.7.  | 3    | Redux refactoring, code cleanup |
-| total | 57   | | 
+| 4.8.  | 3    | Redux refactoring, code cleanup |
+|       | 4    | Improving Redux, trying to solve redirecting problem |
+| 5.8.  | 3    | Solved redirecting problem |
+| total | 61   | | 
