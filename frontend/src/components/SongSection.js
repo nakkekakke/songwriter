@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { makeStyles, TextField, Button } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import songHelper from '../helpers/songHelper'
+import { useDispatch } from 'react-redux'
+import { editSection } from '../redux/songReducer'
 
 const useStyles = makeStyles((theme) => ({
   section: {
@@ -29,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const SongSection = ({ section, editMode }) => {
+const SongSection = ({ songId, section, editMode }) => {
 
   const [name, setName] = useState(section.name)
   const [linesString, setLinesString] = useState(songHelper.linesArrayToString(section.lines)) // Lines are a string while in state
@@ -37,6 +39,7 @@ const SongSection = ({ section, editMode }) => {
   //console.log('Rendering songsection!', section, linesString)
 
   const classes = useStyles()
+  const dispatch = useDispatch()
 
   const editView = () => {
     return (
@@ -78,27 +81,22 @@ const SongSection = ({ section, editMode }) => {
 
   const handleEditSubmit = (event) => {
     event.preventDefault()
-    handleNameSubmit()
-    handleLinesSubmit(event.target[1])
+    console.log('Submitting name:', name)
+
+    const linesArray = songHelper.linesStringToArray(linesString)
+
+    const editedSection = { id: section.id, name: name, lines: linesArray }
+    dispatch(editSection(songId, editedSection))
+
+    const cleanedLines = songHelper.linesArrayToString(linesArray)
+    event.target[1].value = cleanedLines
+    setLinesString(cleanedLines)
     //setAlertIsError(false)
     //setAlertMessage('Song edited')
   }
 
-  const handleNameSubmit = () => {
-    console.log('Submitting name:', name) // todo
-    section.name = name
-  }
-
   const handleNameChange = (event) => {
     setName(event.target.value)
-  }
-
-  const handleLinesSubmit = (linesTextField) => {
-    const linesArray = songHelper.linesStringToArray(linesString)
-    section.lines = linesArray // Saving here
-    const cleanedLines = songHelper.linesArrayToString(linesArray)
-    linesTextField.value = cleanedLines
-    setLinesString(cleanedLines)
   }
 
   const handleLinesChange = (event) => {
@@ -115,7 +113,9 @@ const SongSection = ({ section, editMode }) => {
 }
 
 SongSection.propTypes = {
+  songId: PropTypes.number.isRequired,
   section: PropTypes.shape({
+    id: PropTypes.number.isRequired,
     name: PropTypes.string,
     lines: PropTypes.arrayOf(PropTypes.string)
   }).isRequired,

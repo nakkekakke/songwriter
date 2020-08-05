@@ -6,7 +6,7 @@ import SongSection from './SongSection'
 import PropTypes from 'prop-types'
 import songHelper from '../helpers/songHelper'
 import { useDispatch, useSelector } from 'react-redux'
-import { createSong, editSong } from '../redux/songReducer'
+import { createSong, editTitle, addSection } from '../redux/songReducer'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -43,10 +43,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
 
   useEffect(() => {
     if (id === 'new') {
-      const createdSong = createSong(songHelper.getDefaultSong())
-      dispatch(createdSong)
-      console.log('Setataan: ', createdSong)
-      history.push('/songs/' + createdSong.id)
+      dispatch(createSong(songHelper.getDefaultSong(), history))
     }
   }, [id, dispatch, history, song])
 
@@ -103,9 +100,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
 
   const handleTitleSubmit = (event) => {
     event.preventDefault()
-    const editedSong = JSON.parse(JSON.stringify(song))
-    editedSong.title = title
-    dispatch(editSong(editedSong))
+    dispatch(editTitle(song, title))
     setAlertIsError(false)
     setAlertMessage('Song title changed to: ' + title)
   }
@@ -113,9 +108,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
   const handleAddSectionClick = (event) => {
     event.preventDefault()
     console.log('Add new section!')
-    const editedSong = JSON.parse(JSON.stringify(song)) // deep clone
-    songHelper.addNewSection(editedSong) // modifies the song directly
-    dispatch(editSong(editedSong))
+    dispatch(addSection(song))
   }
 
   if (song) {
@@ -135,7 +128,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
           <Container maxWidth={false} align='left'>
             {song.sections ?
               song.sections.map(section => {
-                return <SongSection key={section.name} section={section} editMode={editMode} /> // Section names should be unique, maybe give them IDs in the future
+                return <SongSection key={section.id} songId={song.id} section={section} editMode={editMode} />
               }) :
               <p>No sections</p>
             }

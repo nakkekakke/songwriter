@@ -1,70 +1,11 @@
 import songService from '../services/songService'
-
-const initialState = [
-  {
-    'id': 1,
-    'title': 'Test song',
-    'sections': [
-      {
-        'name': 'Verse 1',
-        'lines': [
-          'Verse 1 line 1 lyrics.',
-          'Verse 1 line 2 lyrics...',
-          'Verse 1 line 3 lyrics....',
-          'Verse 1 line 4 lyrics!!!!'
-        ]
-      },
-      {
-        'name': 'Chorus 1',
-        'lines': [
-          'Chorus 1 line 1 lyrics..',
-          'Chorus 1 line 2 lyrics...',
-          'Chorus 1 line 3 lyrics....',
-          'Chorus 1 line 4 lyrics!!!!'
-        ]
-      },
-      {
-        'name': 'Chorus 2',
-        'lines': [
-          'Chorus 2 line 1 lyrics..',
-          'Chorus 2 line 2 lyrics...',
-          'Chorus 2 line 3 lyrics....',
-          'Chorus 2 line 4 lyrics!!!!'
-        ]
-      }
-    ]
-  },
-  {
-    'id': 2,
-    'title': 'Test song 2',
-    'sections': [
-      {
-        'name': 'Verse 1',
-        'lines': [
-          'Verse 1 line 1 lyrics.',
-          'Verse 1 line 2 lyrics...',
-          'Verse 1 line 3 lyrics....',
-          'Verse 1 line 4 lyrics!!!!'
-        ]
-      },
-      {
-        'name': 'Chorus 1',
-        'lines': [
-          'Chorus 1 line 1 lyrics..',
-          'Chorus 1 line 2 lyrics...',
-          'Chorus 1 line 3 lyrics....',
-          'Chorus 1 line 4 lyrics!!!!'
-        ]
-      }
-    ]
-  }
-]
-
+import songHelper from '../helpers/songHelper'
 
 // Action types
 export const INIT_SONGS = 'INIT_SONGS'
 export const CREATE_SONG = 'CREATE_SONG'
 export const EDIT_SONG = 'EDIT_SONG'
+export const ADD_SECTION = 'ADD_SECTION'
 
 
 // Reducer
@@ -72,16 +13,16 @@ const songReducer = (state = [], action) => {
   switch (action.type) {
   case INIT_SONGS:
     return action.data
-  case CREATE_SONG:
-    return state.concat(action.data)
+  case CREATE_SONG: {
+    const newState = state.concat(action.data)
+    console.log('pushing')
+    action.history.push('/' + action.data.id)
+    console.log('pushed')
+    return newState
+  }
   case EDIT_SONG: {
     const id = action.data.id
-    const songToEdit = state.find(s => s.id === id)
-    if (songToEdit) {
-      return state.map(song => song.id !== id ? song : action.data)
-    }
-    console.log('Error in reducer')
-    return state
+    return state.map(song => song.id !== id ? song : action.data)
   }
   default:
     console.log('Default in reducer')
@@ -90,21 +31,52 @@ const songReducer = (state = [], action) => {
 }
 
 // Action creators
-export const createSong = (song) => {
+export const createSong = (song, history) => {
+  console.log('Song to create:', song)
   return async (action) => {
     const createdSong = await songService.create(song)
     console.log('Created:', createdSong)
     action({
       type: CREATE_SONG,
-      data: song
+      data: createdSong,
+      history: history
     })
   }
 }
 
-export const editSong = (song) => {
+export const editTitle = (song, title) => {
+  let songToSave = JSON.parse(JSON.stringify(song))
+  songToSave.title = title
+
   return async (action) => {
-    const editedSong = await songService.edit(song)
+    const editedSong = await songService.edit(songToSave)
     console.log('Edited:', editedSong)
+    action({
+      type: EDIT_SONG,
+      data: editedSong
+    })
+  }
+}
+
+export const editSection = (songId, section) => {
+  return async (action) => {
+    let songToSave = await songService.getOne(songId)
+    songToSave.sections = songToSave.sections.map(s => s.id === section.id ? section : s) // Replace edited section
+    console.log('Song to save:', songToSave)
+    const editedSong = await songService.edit(songToSave)
+    action({
+      type: EDIT_SONG,
+      data: editedSong
+    })
+  }
+}
+
+export const addSection = (song) => {
+  let songToSave = JSON.parse(JSON.stringify(song))
+  songToSave = songHelper.addNewSection(songToSave)
+
+  return async (action) => {
+    const editedSong = await songService.edit(songToSave)
     action({
       type: EDIT_SONG,
       data: editedSong
