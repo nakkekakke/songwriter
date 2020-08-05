@@ -30,13 +30,17 @@ const songReducer = (state = [], action) => {
 // Action creators & thunks
 export const createSong = (song) => {
   return async (dispatch) => {
-    const createdSong = await songService.create(song)
-    console.log('Created:', createdSong)
-    dispatch({
-      type: CREATE_SONG,
-      data: createdSong
-    })
-    return createdSong
+    try {
+      const createdSong = await songService.create(song)
+      console.log('Created:', createdSong)
+      dispatch({
+        type: CREATE_SONG,
+        data: createdSong
+      })
+      return createdSong
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
@@ -45,25 +49,33 @@ export const editTitle = (song, title) => {
   songToSave.title = title
 
   return async (dispatch) => {
-    const editedSong = await songService.edit(songToSave)
-    console.log('Edited:', editedSong)
-    dispatch({
-      type: EDIT_SONG,
-      data: editedSong
-    })
+    try {
+      const editedSong = await songService.edit(songToSave)
+      console.log('Edited:', editedSong)
+      dispatch({
+        type: EDIT_SONG,
+        data: editedSong
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
 export const editSection = (songId, section) => {
   return async (dispatch) => {
-    let songToSave = await songService.getOne(songId)
-    songToSave.sections = songToSave.sections.map(s => s.id === section.id ? section : s) // Replace edited section
-    console.log('Song to save:', songToSave)
-    const editedSong = await songService.edit(songToSave)
-    dispatch({
-      type: EDIT_SONG,
-      data: editedSong
-    })
+    try {
+      let songToSave = await songService.getOne(songId)
+      songToSave.sections = songToSave.sections.map(s => s.id === section.id ? section : s) // Replace edited section
+      console.log('Song to save:', songToSave)
+      const editedSong = await songService.edit(songToSave)
+      dispatch({
+        type: EDIT_SONG,
+        data: editedSong
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
@@ -72,22 +84,30 @@ export const addSection = (song) => {
   songToSave = songHelper.addNewSection(songToSave)
 
   return async (dispatch) => {
-    const editedSong = await songService.edit(songToSave)
-    dispatch({
-      type: EDIT_SONG,
-      data: editedSong
-    })
+    try {
+      const editedSong = await songService.edit(songToSave)
+      dispatch({
+        type: EDIT_SONG,
+        data: editedSong
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
 export const initializeSongs = () => {
   return async (dispatch) => {
-    const songs = await songService.getAll()
-    console.log('Initialized:', songs)
-    dispatch({
-      type: INIT_SONGS,
-      data: songs
-    })
+    try {
+      const songs = await songService.getAll()
+      console.log('Initialized:', songs)
+      dispatch({
+        type: INIT_SONGS,
+        data: songs
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
