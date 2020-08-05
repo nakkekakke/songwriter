@@ -24,4 +24,10 @@ const edit = async (songObject) => {
   return res.data
 }
 
-export default { getAll, getOne, create, edit }
+const destroy = async (id) => {
+  console.log('Deleting song with id:', id)
+  const res = await axios.delete(url + '/' + id)
+  return res.data
+}
+
+export default { getAll, getOne, create, edit, destroy }

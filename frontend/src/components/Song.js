@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { makeStyles, Container, Button, TextField } from '@material-ui/core'
-import { Add } from '@material-ui/icons'
+import { useParams, useHistory } from 'react-router-dom'
+import { makeStyles, Container, Button, TextField, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog } from '@material-ui/core'
+import { Add, DeleteForever } from '@material-ui/icons'
 import SongSection from './SongSection'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import { editTitle, addSection } from '../redux/songReducer'
+import { editTitle, addSection, deleteSong } from '../redux/songReducer'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -21,17 +21,25 @@ const useStyles = makeStyles(() => ({
     margin: '15px'
   },
   addSectionButton: {
-    margin: '8px'
+    margin: 'auto'
+  },
+  deleteSongButton: {
+  },
+  buttonContainer: {
+    display: 'flex',
+    alignItems: 'center',
   }
 }))
 
 const Song = ({ setAlertMessage, setAlertIsError }) => {
   const [editMode, setEditMode] = useState(false)
   const [title, setTitle] = useState('')
+  const [delConfirmOpen, setDelConfirmOpen] = useState(false)
 
   const classes = useStyles()
   let id = useParams().id
   const dispatch = useDispatch()
+  const history = useHistory()
 
   let song = useSelector((state) => {
     if (id !== 'new') {
@@ -75,6 +83,48 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
     }
   }
 
+  console.log('Delconfirmopen:', delConfirmOpen)
+
+  const deleteSongButton = () => {
+    if (editMode) {
+      return (
+        <Button
+          className={classes.deleteSongButton}
+          variant='contained'
+          color='secondary'
+          startIcon={<DeleteForever />}
+          onClick={() => setDelConfirmOpen(true)}
+        >
+          Delete song
+        </Button>
+      )
+    }
+  }
+
+  const deleteDialog = () => {
+    return (
+      <Dialog
+        open={delConfirmOpen}
+        onClose={() => setDelConfirmOpen(false)}
+      >
+        <DialogTitle>Delete this song?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Once deleted, this song cannot be restored.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteAgreeClick} color='secondary' variant='contained'>
+            Delete permanently
+          </Button>
+          <Button onClick={() => setDelConfirmOpen(false)} variant='contained'>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    )
+  }
+
   const handleEditButtonClick = () => {
     editMode ? handleEditModeExit() : setEditMode(true)
   }
@@ -101,6 +151,12 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
     dispatch(addSection(song))
   }
 
+  const handleDeleteAgreeClick = () => {
+    console.log('Deleting song here')
+    dispatch(deleteSong(song))
+    history.push('/songs/')
+  }
+
   if (song) {
     return (
       <div className={classes.root}>
@@ -124,7 +180,11 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
             }
           </Container>
         </div>
-        {addSectionButton()}
+        <Container className={classes.buttonContainer} maxWidth={false}>
+          {addSectionButton()}
+          {deleteSongButton()}
+        </Container>
+        {deleteDialog()}
       </div>
     )
   } else {

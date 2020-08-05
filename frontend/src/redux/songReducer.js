@@ -6,6 +6,7 @@ export const INIT_SONGS = 'INIT_SONGS'
 export const CREATE_SONG = 'CREATE_SONG'
 export const EDIT_SONG = 'EDIT_SONG'
 export const ADD_SECTION = 'ADD_SECTION'
+export const DELETE_SONG = 'DELETE_SONG'
 
 
 // Reducer
@@ -21,6 +22,8 @@ const songReducer = (state = [], action) => {
     const id = action.data.id
     return state.map(song => song.id !== id ? song : action.data)
   }
+  case DELETE_SONG:
+    return state.filter(song => song.id !== action.data.id)
   default:
     console.log('Default in reducer')
     return state
@@ -104,6 +107,21 @@ export const initializeSongs = () => {
       dispatch({
         type: INIT_SONGS,
         data: songs
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
+export const deleteSong = (song) => {
+  return async (dispatch) => {
+    try {
+      const returnValue = await songService.destroy(song.id)
+      console.log('Destroy returned:', returnValue)
+      dispatch({
+        type: DELETE_SONG,
+        data: song
       })
     } catch (error) {
       console.log(error)

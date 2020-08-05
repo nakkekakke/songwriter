@@ -21,4 +21,5 @@
 | 4.8.  | 3    | Redux refactoring, code cleanup |
 |       | 4    | Improving Redux, trying to solve redirecting problem |
 | 5.8.  | 3    | Solved redirecting problem |
-| total | 61   | | 
+|       | 2    | Song deleting |
+| total | 66   | |
