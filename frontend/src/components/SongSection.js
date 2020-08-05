@@ -33,10 +33,9 @@ const useStyles = makeStyles((theme) => ({
 
 const SongSection = ({ songId, section, editMode }) => {
 
+  // Local states for inputs only
   const [name, setName] = useState(section.name)
   const [linesString, setLinesString] = useState(songHelper.linesArrayToString(section.lines)) // Lines are a string while in state
-
-  //console.log('Rendering songsection!', section, linesString)
 
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -44,11 +43,12 @@ const SongSection = ({ songId, section, editMode }) => {
   const editView = () => {
     return (
       <form className={classes.editForm} onSubmit={handleEditSubmit}>
-        <TextField className={classes.nameField} label='Edit name' defaultValue={name} onChange={handleNameChange} />
+        <TextField className={classes.nameField} label='Edit name' name='name' defaultValue={name} onChange={handleNameChange} />
         <div className={classes.linesFieldDiv}>
           <TextField
             multiline
             label='Lines'
+            name='lines'
             rows={songHelper.lineCount(linesString)}
             defaultValue={linesString}
             onChange={handleLinesChange}
@@ -89,7 +89,7 @@ const SongSection = ({ songId, section, editMode }) => {
     dispatch(editSection(songId, editedSection))
 
     const cleanedLines = songHelper.linesArrayToString(linesArray)
-    event.target[1].value = cleanedLines
+    event.target.lines.value = cleanedLines
     setLinesString(cleanedLines)
     //setAlertIsError(false)
     //setAlertMessage('Song edited')

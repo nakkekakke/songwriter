@@ -54,4 +54,4 @@ const addNewSection = (song) => {
 
 
 
-export default { linesArrayToString, linesStringToArray, lineCount, cutStringIntoLines, getDefaultSong, addNewSection }
+export default { linesArrayToString, linesStringToArray, lineCount, getDefaultSong, addNewSection }

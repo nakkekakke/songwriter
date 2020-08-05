@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { makeStyles, Container, Button, TextField } from '@material-ui/core'
 import { Add } from '@material-ui/icons'
 import SongSection from './SongSection'
 import PropTypes from 'prop-types'
-import songHelper from '../helpers/songHelper'
 import { useDispatch, useSelector } from 'react-redux'
-import { createSong, editTitle, addSection } from '../redux/songReducer'
+import { editTitle, addSection } from '../redux/songReducer'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -33,25 +32,12 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
   const classes = useStyles()
   let id = useParams().id
   const dispatch = useDispatch()
-  const history = useHistory()
 
   let song = useSelector((state) => {
     if (id !== 'new') {
       return state.find(s => s.id === Number(id))
     }
   })
-
-  useEffect(() => {
-    if (id === 'new') {
-      dispatch(createSong(songHelper.getDefaultSong())) // Note: not error handling createSong
-        .then(res => {
-          history.push('/songs/' + res.id)
-          console.log('Redirected!')
-        })
-        .catch(e => console.log('Error creating new song:', e))
-    }
-  }, [id, dispatch, history, song])
-
 
   console.log('Song render:', song)
 
@@ -110,8 +96,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
     setAlertMessage('Song title changed to: ' + title)
   }
 
-  const handleAddSectionClick = (event) => {
-    event.preventDefault()
+  const handleAddSectionClick = () => {
     console.log('Add new section!')
     dispatch(addSection(song))
   }
