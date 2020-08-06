@@ -52,7 +52,7 @@ const App = () => {
                   setAlertIsError={setAlertIsError}
                 />
               </Route>
-              <Route path='/songs'>
+              <Route path='/songs/'>
                 <SongList/>
               </Route>
               <Route path='/'><p>Welcome</p></Route>

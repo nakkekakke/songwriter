@@ -1,5 +1,5 @@
 import axios from 'axios'
-const url = 'http://localhost:3001/songs'
+const url = 'http://localhost:3001/songs/'
 
 const getAll = async () => {
   console.log('Getting songs...')
@@ -8,7 +8,7 @@ const getAll = async () => {
 }
 
 const getOne = async (id) => {
-  const res = await axios.get(url + '/' + id)
+  const res = await axios.get(url + id)
   return res.data
 }
 
@@ -20,13 +20,13 @@ const create = async (songObject) => {
 
 const edit = async (songObject) => {
   console.log('Editing song: ', songObject)
-  const res = await axios.put(url + '/' + songObject.id, songObject)
+  const res = await axios.put(url + songObject.id, songObject)
   return res.data
 }
 
 const destroy = async (id) => {
   console.log('Deleting song with id:', id)
-  const res = await axios.delete(url + '/' + id)
+  const res = await axios.delete(url + id)
   return res.data
 }
 
