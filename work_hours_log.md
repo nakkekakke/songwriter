@@ -23,5 +23,5 @@
 | 5.8.  | 3    | Solved redirecting problem |
 |       | 2    | Song deleting |
 | 6.8.  | 2    | Section deleting |
-|       | 3    | UI tinkering and enhancing, CSS uniforming |
-| total | 66   | |
+|       | 3    | UI tinkering and enhancing, CSS uniforming, code cleanup |
+| total | 71   | |
