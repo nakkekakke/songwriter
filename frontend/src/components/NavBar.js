@@ -8,9 +8,8 @@ const useStyles = makeStyles(() => ({
     flexGrow: 1
   },
   title: {
-    //flex: 1,
-    fontSize: '1.5em',
-    paddingRight: '1em'
+    fontSize: 20,
+    paddingRight: 15
   },
   buttonsDiv: {
     flex: 1
@@ -18,7 +17,7 @@ const useStyles = makeStyles(() => ({
   linkButton: {
     textDecoration: 'none',
     color: 'white',
-    padding: '1.5em'
+    padding: 20
   }
 }))
 

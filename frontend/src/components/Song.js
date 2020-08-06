@@ -12,25 +12,16 @@ const useStyles = makeStyles(() => ({
 
   },
   menuContainer: {
-    marginBottom: '3px'
-  },
-  menuButton: {
-    marginBottom: '15px'
+    marginBottom: 3
   },
   titleForm: {
-    margin: '15px'
+    margin: 15
   },
   addSectionButton: {
-    //marginLeft: 'auto'
+    marginTop: 8
   },
   deleteSongButton: {
     marginLeft: 'auto'
-  },
-  buttonContainer: {
-    //display: 'flex'
-  },
-  noSectionsContainer: {
-
   }
 }))
 
@@ -44,11 +35,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  let song = useSelector((state) => {
-    if (id !== 'new') {
-      return state.find(s => s.id === Number(id))
-    }
-  })
+  const song = useSelector((state) => state.find(s => s.id === Number(id)))
 
   console.log('Song render:', song)
 
@@ -70,6 +57,23 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
     }
   }
 
+  const renderSections = () => {
+    if (song.sections.length === 0) {
+      return (
+        <Container>
+          <h2>No sections</h2>
+        </Container>
+      )
+    }
+    return (
+      <Container maxWidth={false} align='left'>
+        {song.sections.map(section => {
+          return <SongSection key={section.id} songId={song.id} section={section} editMode={editMode} />
+        })}
+      </Container>
+    )
+  }
+
   const addSectionButton = () => {
     if (editMode) {
       return (
@@ -84,6 +88,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
         </Button>
       )
     }
+    return (<div/>)
   }
 
   console.log('Delconfirmopen:', delConfirmOpen)
@@ -102,6 +107,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
         </Button>
       )
     }
+    return (<div/>)
   }
 
   const deleteDialog = () => {
@@ -174,17 +180,9 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
               {editMode ? 'Exit edit mode' : 'Edit mode'}
             </Button>
           </Container>
-          {song.sections.length !== 0 ?
-            <Container maxWidth={false} align='left'>
-              {song.sections.map(section => {
-                return <SongSection key={section.id} songId={song.id} section={section} editMode={editMode} />
-              })}
-            </Container>:
-            <Container className={classes.noSectionsContainer}>
-              <h2>No sections</h2>
-            </Container>}
+          {renderSections()}
         </div>
-        <Container className={classes.buttonContainer} maxWidth={false}>
+        <Container maxWidth={false}>
           {addSectionButton()}
         </Container>
         <Container align='right' maxWidth={false}>

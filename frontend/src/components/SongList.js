@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
 
   },
   addSongButton: {
-    margin: '8px'
+    margin: 8
   }
 }))
 

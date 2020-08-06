@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
   mainContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '1em'
+    padding: 20
   },
   contentContainer: {
 

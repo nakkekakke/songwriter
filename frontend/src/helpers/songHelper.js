@@ -34,7 +34,7 @@ const getDefaultSong = () => {
     sections: [
       {
         id: 1,
-        name: 'Section 1',
+        name: 'New section',
         lines: []
       }
     ]

@@ -7,34 +7,38 @@ import { editSection, deleteSection } from '../redux/songReducer'
 
 const useStyles = makeStyles((theme) => ({
   section: {
-    borderWidth: '2px',
+    borderWidth: 2,
     borderStyle: 'solid',
-    borderRadius: '5px',
+    borderRadius: 5,
     borderColor: theme.palette.primary.main,
-    padding: '1em',
-    marginBottom: '3px',
+    padding: 20,
+    marginBottom: 3,
     overflow: 'auto',
     whiteSpace: 'nowrap'
   },
+  normalViewRoot: {
+    marginTop: -12,
+    marginBottom: -15
+  },
+  line: {
+    marginTop: -5
+  },
   editForm: {
-    marginBottom: '17px'
+    marginBottom: 15
   },
   nameField: {
-    marginBottom: '5px'
-  },
-  linesFieldDiv: {
-    marginRight: '1em'
+    marginBottom: 10
   },
   buttonDiv: {
     display: 'flex'
   },
   lineSubmitButton: {
-    marginTop: '10px',
-    marginBottom: '-20px',
+    marginTop: 10,
+    marginBottom: -25
   },
   deleteButton: {
-    marginTop: '10px',
-    marginBottom: '-20px',
+    marginTop: 10,
+    marginBottom: -25,
     marginLeft: 'auto'
   }
 }))
@@ -53,7 +57,7 @@ const SongSection = ({ songId, section, editMode }) => {
     return (
       <form className={classes.editForm} onSubmit={handleEditSubmit}>
         <TextField className={classes.nameField} label='Edit name' name='name' defaultValue={name} onChange={handleNameChange} />
-        <div className={classes.linesFieldDiv}>
+        <div>
           <TextField
             multiline
             label='Lines'
@@ -90,7 +94,7 @@ const SongSection = ({ songId, section, editMode }) => {
 
   const normalView = () => {
     return (
-      <div>
+      <div className={classes.normalViewRoot}>
         <h2>{section.name}</h2>
         {section.lines.map((line, index) => {
           return <p className={classes.line} key={index}>{line}</p>
