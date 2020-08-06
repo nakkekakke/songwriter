@@ -82,6 +82,23 @@ export const editSection = (songId, section) => {
   }
 }
 
+export const deleteSection = (songId, section) => {
+  return async (dispatch) => {
+    try {
+      let songToSave = await songService.getOne(songId)
+      songToSave.sections = songToSave.sections.filter(s => s.id !== section.id)
+      console.log('Song to save:', songToSave)
+      const editedSong = await songService.edit(songToSave)
+      dispatch({
+        type: EDIT_SONG,
+        data: editedSong
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
 export const addSection = (song) => {
   let songToSave = JSON.parse(JSON.stringify(song))
   songToSave = songHelper.addNewSection(songToSave)

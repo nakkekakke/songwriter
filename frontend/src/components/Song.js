@@ -21,13 +21,16 @@ const useStyles = makeStyles(() => ({
     margin: '15px'
   },
   addSectionButton: {
-    margin: 'auto'
+    //marginLeft: 'auto'
   },
   deleteSongButton: {
+    marginLeft: 'auto'
   },
   buttonContainer: {
-    display: 'flex',
-    alignItems: 'center',
+    //display: 'flex'
+  },
+  noSectionsContainer: {
+
   }
 }))
 
@@ -171,17 +174,20 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
               {editMode ? 'Exit edit mode' : 'Edit mode'}
             </Button>
           </Container>
-          <Container maxWidth={false} align='left'>
-            {song.sections ?
-              song.sections.map(section => {
+          {song.sections.length !== 0 ?
+            <Container maxWidth={false} align='left'>
+              {song.sections.map(section => {
                 return <SongSection key={section.id} songId={song.id} section={section} editMode={editMode} />
-              }) :
-              <p>No sections</p>
-            }
-          </Container>
+              })}
+            </Container>:
+            <Container className={classes.noSectionsContainer}>
+              <h2>No sections</h2>
+            </Container>}
         </div>
         <Container className={classes.buttonContainer} maxWidth={false}>
           {addSectionButton()}
+        </Container>
+        <Container align='right' maxWidth={false}>
           {deleteSongButton()}
         </Container>
         {deleteDialog()}

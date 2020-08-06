@@ -42,11 +42,16 @@ const getDefaultSong = () => {
 }
 
 const addNewSection = (song) => {
+  if (song.sections.length === 0) {
+    song.sections = getDefaultSong().sections
+    return song
+  }
+
   let maxId = song.sections.reduce((max, current) => current.id > max.id ? current : max).id // Find the previously highest section id
+  console.log(maxId)
   const newSection = {
+    ...getDefaultSong().sections[0],
     id: maxId + 1,
-    name: 'Section ' + (song.sections.length + 1),
-    lines: []
   }
   song.sections.push(newSection) // modifies the song directly
   return song
