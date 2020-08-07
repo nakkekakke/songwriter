@@ -24,4 +24,6 @@
 |       | 2    | Song deleting |
 | 6.8.  | 2    | Section deleting |
 |       | 3    | UI tinkering and enhancing, CSS uniforming, code cleanup |
-| total | 71   | |
+|       | 3    | Section list reordering (drag and drop style) |
+|       | 1    | Tried to fix animation problem with drag and drop + "Paper" component |
+| total | 75   | |

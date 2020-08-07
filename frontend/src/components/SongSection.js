@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
-import { makeStyles, TextField, Button } from '@material-ui/core'
+import { makeStyles, TextField, Button, Icon, Box, Paper } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import songHelper from '../helpers/songHelper'
 import { useDispatch } from 'react-redux'
 import { editSection, deleteSection } from '../redux/songReducer'
+
+import { SortableHandle } from 'react-sortable-hoc'
+import { DragIndicator } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) => ({
   section: {
@@ -14,7 +17,8 @@ const useStyles = makeStyles((theme) => ({
     padding: 20,
     marginBottom: 3,
     overflow: 'auto',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    backgroundColor: '#fff'
   },
   normalViewRoot: {
     marginTop: -12,
@@ -40,10 +44,16 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 10,
     marginBottom: -25,
     marginLeft: 'auto'
+  },
+  dragHandle: {
+    marginLeft: 'auto',
+    marginTop: 10,
+    marginBottom: -25,
   }
 }))
 
 const SongSection = ({ songId, section, editMode }) => {
+
 
   // Local states for inputs only
   const [name, setName] = useState(section.name)
@@ -52,6 +62,8 @@ const SongSection = ({ songId, section, editMode }) => {
 
   const classes = useStyles()
   const dispatch = useDispatch()
+
+  const DragHandle = SortableHandle(() => <Box className={classes.dragHandle}> <Icon><DragIndicator /></Icon> </Box>)
 
   const editView = () => {
     return (
@@ -78,6 +90,7 @@ const SongSection = ({ songId, section, editMode }) => {
           >
             Save
           </Button>
+          <DragHandle />
           <Button
             className={classes.deleteButton}
             size='small'
@@ -139,11 +152,9 @@ const SongSection = ({ songId, section, editMode }) => {
   }
 
   return (
-    <>
-      <div className={classes.section}>
-        {editMode ? editView() : normalView()}
-      </div>
-    </>
+    <div className={classes.section}>
+      {editMode ? editView() : normalView()}
+    </div>
   )
 }
 

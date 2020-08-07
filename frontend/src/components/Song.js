@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { makeStyles, Container, Button, TextField, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog } from '@material-ui/core'
 import { Add, DeleteForever } from '@material-ui/icons'
-import SongSection from './SongSection'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { editTitle, addSection, deleteSong } from '../redux/songReducer'
+import SongSectionList from './SongSectionList'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -31,7 +31,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
   const [delConfirmOpen, setDelConfirmOpen] = useState(false)
 
   const classes = useStyles()
-  let id = useParams().id
+  const id = useParams().id
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -57,22 +57,6 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
     }
   }
 
-  const renderSections = () => {
-    if (song.sections.length === 0) {
-      return (
-        <Container>
-          <h2>No sections</h2>
-        </Container>
-      )
-    }
-    return (
-      <Container maxWidth={false} align='left'>
-        {song.sections.map(section => {
-          return <SongSection key={section.id} songId={song.id} section={section} editMode={editMode} />
-        })}
-      </Container>
-    )
-  }
 
   const addSectionButton = () => {
     if (editMode) {
@@ -180,7 +164,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
               {editMode ? 'Exit edit mode' : 'Edit mode'}
             </Button>
           </Container>
-          {renderSections()}
+          <SongSectionList song={song} editMode={editMode} />
         </div>
         <Container maxWidth={false}>
           {addSectionButton()}

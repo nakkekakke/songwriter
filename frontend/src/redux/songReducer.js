@@ -53,12 +53,7 @@ export const editTitle = (song, title) => {
 
   return async (dispatch) => {
     try {
-      const editedSong = await songService.edit(songToSave)
-      console.log('Edited:', editedSong)
-      dispatch({
-        type: EDIT_SONG,
-        data: editedSong
-      })
+      editAndDispatch(songToSave, dispatch)
     } catch (error) {
       console.log(error)
     }
@@ -70,12 +65,7 @@ export const editSection = (songId, section) => {
     try {
       let songToSave = await songService.getOne(songId)
       songToSave.sections = songToSave.sections.map(s => s.id === section.id ? section : s) // Replace edited section
-      console.log('Song to save:', songToSave)
-      const editedSong = await songService.edit(songToSave)
-      dispatch({
-        type: EDIT_SONG,
-        data: editedSong
-      })
+      editAndDispatch(songToSave, dispatch)
     } catch (error) {
       console.log(error)
     }
@@ -87,12 +77,7 @@ export const deleteSection = (songId, section) => {
     try {
       let songToSave = await songService.getOne(songId)
       songToSave.sections = songToSave.sections.filter(s => s.id !== section.id)
-      console.log('Song to save:', songToSave)
-      const editedSong = await songService.edit(songToSave)
-      dispatch({
-        type: EDIT_SONG,
-        data: editedSong
-      })
+      editAndDispatch(songToSave, dispatch)
     } catch (error) {
       console.log(error)
     }
@@ -105,11 +90,7 @@ export const addSection = (song) => {
 
   return async (dispatch) => {
     try {
-      const editedSong = await songService.edit(songToSave)
-      dispatch({
-        type: EDIT_SONG,
-        data: editedSong
-      })
+      editAndDispatch(songToSave, dispatch)
     } catch (error) {
       console.log(error)
     }
@@ -144,6 +125,29 @@ export const deleteSong = (song) => {
       console.log(error)
     }
   }
+}
+
+export const sortSections = (song, sortedSections) => {
+  let songToSave = JSON.parse(JSON.stringify(song))
+  songToSave.sections = sortedSections
+
+  return async (dispatch) => {
+    try {
+      editAndDispatch(songToSave, dispatch)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
+// Helper function for action creators
+const editAndDispatch = async (songToSave, dispatch) => {
+  const editedSong = await songService.edit(songToSave)
+  console.log('Edited song:', editedSong)
+  dispatch({
+    type: EDIT_SONG,
+    data: editedSong
+  })
 }
 
 export default songReducer
