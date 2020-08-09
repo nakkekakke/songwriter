@@ -4,7 +4,7 @@ import { makeStyles, Container, Button, TextField, DialogTitle, DialogContent, D
 import { Add, DeleteForever } from '@material-ui/icons'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import { editTitle, addSection, deleteSong } from '../redux/songReducer'
+import { editTitle, addSection, deleteSong, saveSong, resetSong } from '../redux/songReducer'
 import SongSectionList from './SongSectionList'
 
 const useStyles = makeStyles(() => ({
@@ -29,6 +29,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
   const [editMode, setEditMode] = useState(false)
   const [title, setTitle] = useState('')
   const [delConfirmOpen, setDelConfirmOpen] = useState(false)
+  const [saveOpen, setSaveOpen] = useState(false)
 
   const classes = useStyles()
   const id = useParams().id
@@ -103,7 +104,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
         <DialogTitle>Delete this song?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Once deleted, this song cannot be restored.
+            Once deleted, this song cannot be restored (not even by discarding changes when exiting Edit Mode).
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -118,13 +119,54 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
     )
   }
 
-  const handleEditButtonClick = () => {
-    editMode ? handleEditModeExit() : setEditMode(true)
+  const saveDialog = () => {
+    return (
+      <Dialog
+        open={saveOpen}
+        onClose={() => setSaveOpen(false)}
+      >
+        <DialogTitle>Save changes?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Save or discard the changes you have made.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSaveAgreeClick} color='primary' variant='contained'>
+            Save changes
+          </Button>
+          <Button onClick={handleSaveDiscardClick} color='secondary' variant='contained'>
+            Discard changes
+          </Button>
+          <Button onClick={() => setSaveOpen(false)} variant='contained'>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    )
   }
 
-  const handleEditModeExit = () => {
-    console.log('Save stuff and exit')
+  const handleEditButtonClick = () => {
+    editMode ? handleEditModeExitClick() : setEditMode(true)
+  }
+
+  const handleEditModeExitClick = () => {
+    console.log('Exiting edit mode')
+    setSaveOpen(true)
+  }
+
+  const handleSaveAgreeClick = () => {
+    console.log('Saving!')
+    setSaveOpen(false)
     setEditMode(false)
+    dispatch(saveSong(song))
+  }
+
+  const handleSaveDiscardClick = () => {
+    console.log('Discarding changes!')
+    setSaveOpen(false)
+    setEditMode(false)
+    dispatch(resetSong(song))
   }
 
   const handleTitleChange = (event) => {
@@ -173,6 +215,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
           {deleteSongButton()}
         </Container>
         {deleteDialog()}
+        {saveDialog()}
       </div>
     )
   } else {

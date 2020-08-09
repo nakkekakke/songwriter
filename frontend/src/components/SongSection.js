@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { makeStyles, TextField, Button, Icon, Box, Paper } from '@material-ui/core'
+import { makeStyles, TextField, Button, Icon, Box } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import songHelper from '../helpers/songHelper'
 import { useDispatch } from 'react-redux'

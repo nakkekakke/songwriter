@@ -7,6 +7,8 @@ export const CREATE_SONG = 'CREATE_SONG'
 export const EDIT_SONG = 'EDIT_SONG'
 export const ADD_SECTION = 'ADD_SECTION'
 export const DELETE_SONG = 'DELETE_SONG'
+export const EDIT_SECTION = 'EDIT_SECTION'
+export const DELETE_SECTION = 'DELETE_SECTION'
 
 
 // Reducer
@@ -19,18 +21,33 @@ const songReducer = (state = [], action) => {
     return newState
   }
   case EDIT_SONG: {
+    console.log('Editing song:', action.data)
     const id = action.data.id
     return state.map(song => song.id !== id ? song : action.data)
   }
   case DELETE_SONG:
     return state.filter(song => song.id !== action.data.id)
+  case EDIT_SECTION: {
+    const songId = action.data.songId
+    const sectionId = action.data.section.id
+    const song = state.find(s => s.id === songId)
+    const editedSections = song.sections.map(section => section.id !== sectionId ? section : action.data.section)
+    return state.map(s => s.id !== songId ? s : { ...song, sections: editedSections })
+  }
+  case DELETE_SECTION: {
+    const songId = action.data.songId
+    const sectionId = action.data.section.id
+    const song = state.find(s => s.id === songId)
+    const editedSections = song.sections.filter(section => section.id !== sectionId)
+    return state.map(s => s.id !== songId ? s : { ...song, sections: editedSections })
+  }
   default:
     console.log('Default in reducer')
     return state
   }
 }
 
-// Action creators & thunks
+// Song action creators
 export const createSong = (song) => {
   return async (dispatch) => {
     try {
@@ -48,54 +65,17 @@ export const createSong = (song) => {
 }
 
 export const editTitle = (song, title) => {
-  let songToSave = JSON.parse(JSON.stringify(song))
-  songToSave.title = title
+  let songToDispatch = JSON.parse(JSON.stringify(song))
+  songToDispatch.title = title
 
   return async (dispatch) => {
-    try {
-      editAndDispatch(songToSave, dispatch)
-    } catch (error) {
-      console.log(error)
-    }
+    dispatch({
+      type: EDIT_SONG,
+      data: songToDispatch
+    })
   }
 }
 
-export const editSection = (songId, section) => {
-  return async (dispatch) => {
-    try {
-      let songToSave = await songService.getOne(songId)
-      songToSave.sections = songToSave.sections.map(s => s.id === section.id ? section : s) // Replace edited section
-      editAndDispatch(songToSave, dispatch)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-}
-
-export const deleteSection = (songId, section) => {
-  return async (dispatch) => {
-    try {
-      let songToSave = await songService.getOne(songId)
-      songToSave.sections = songToSave.sections.filter(s => s.id !== section.id)
-      editAndDispatch(songToSave, dispatch)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-}
-
-export const addSection = (song) => {
-  let songToSave = JSON.parse(JSON.stringify(song))
-  songToSave = songHelper.addNewSection(songToSave)
-
-  return async (dispatch) => {
-    try {
-      editAndDispatch(songToSave, dispatch)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-}
 
 export const initializeSongs = () => {
   return async (dispatch) => {
@@ -127,27 +107,75 @@ export const deleteSong = (song) => {
   }
 }
 
-export const sortSections = (song, sortedSections) => {
-  let songToSave = JSON.parse(JSON.stringify(song))
-  songToSave.sections = sortedSections
+// Section action creators
+export const editSection = (songId, section) => {
+  return async (dispatch) => {
+    dispatch({
+      type: EDIT_SECTION,
+      data: { songId, section }
+    })
+  }
+}
+
+export const deleteSection = (songId, section) => {
+  return async (dispatch) => {
+    dispatch({
+      type: DELETE_SECTION,
+      data: { songId, section }
+    })
+  }
+}
+
+export const addSection = (song) => {
+  let songToDispatch = JSON.parse(JSON.stringify(song))
+  songToDispatch = songHelper.addNewSection(songToDispatch)
 
   return async (dispatch) => {
+    dispatch({
+      type: EDIT_SONG,
+      data: songToDispatch
+    })
+  }
+}
+
+export const sortSections = (song, sortedSections) => {
+  let songToDispatch = JSON.parse(JSON.stringify(song))
+  songToDispatch.sections = sortedSections
+
+  return async (dispatch) => {
+    dispatch({
+      type: EDIT_SONG,
+      data: songToDispatch
+    })
+  }
+}
+
+export const saveSong = (song) => {
+  return async (dispatch) => {
     try {
-      editAndDispatch(songToSave, dispatch)
+      const savedSong = await songService.edit(song)
+      dispatch({
+        type: EDIT_SONG,
+        data: savedSong
+      })
     } catch (error) {
       console.log(error)
     }
   }
 }
 
-// Helper function for action creators
-const editAndDispatch = async (songToSave, dispatch) => {
-  const editedSong = await songService.edit(songToSave)
-  console.log('Edited song:', editedSong)
-  dispatch({
-    type: EDIT_SONG,
-    data: editedSong
-  })
+export const resetSong = (song) => {
+  return async (dispatch) => {
+    try {
+      const previousSong = await songService.getOne(song.id)
+      dispatch({
+        type: EDIT_SONG,
+        data: previousSong
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
 
 export default songReducer
