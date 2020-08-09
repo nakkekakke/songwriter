@@ -26,7 +26,7 @@
 |       | 3    | UI tinkering and enhancing, CSS uniforming, code cleanup |
 |       | 3    | Section list reordering (drag and drop style) |
 |       | 1    | Tried to fix animation problem with drag and drop + "Paper" component |
-| 10.8. | 1    | Researching authentication methods |
+| 9.8.  | 1    | Researching authentication methods |
 |       | 1    | Trying to figure out multiple reducers |
 |       | 3    | Frontend now sends all changes to backend at once, upon user confirmation |
 | total | 80   | |
