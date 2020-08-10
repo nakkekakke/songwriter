@@ -8,7 +8,8 @@
     "watch": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "lint-fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "build:ui": "rm -rf build && cd ../frontend && npm run build --prod && cp -r build ../backend"
   },
   "author": "Niko Juntunen",
   "license": "GPL-3.0-or-later",

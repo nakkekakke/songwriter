@@ -1,5 +1,5 @@
 import axios from 'axios'
-const url = 'http://localhost:3001/songs/'
+const url = '/api/songs/'
 
 const getAll = async () => {
   console.log('Getting songs...')

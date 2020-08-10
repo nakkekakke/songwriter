@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const PORT = 3001
+
 const cors = require('cors')
 
 let songs =
@@ -148,29 +148,32 @@ const getNewId = () => {
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static('build'))
 
-app.get('/songs/:id', (req, res) => {
+const url = '/api/songs/'
+
+app.get(url +':id', (req, res) => {
   const id = Number(req.params.id)
-  console.log('Server get /songs/' + id)
+  console.log('Server get /api/songs/' + id)
   const song = songs.find(s => s.id === id)
   res.json(song)
 })
 
-app.get('/songs', (req, res) => {
-  console.log('Server get /songs')
+app.get(url, (req, res) => {
+  console.log('Server get /api/songs')
   res.json(songs)
 })
 
-app.post('/songs', (req, res) => {
-  console.log('Server post /songs:', req.body)
+app.post(url, (req, res) => {
+  console.log('Server post /api/songs:', req.body)
   const song = { ...req.body, id: getNewId() }
   songs.push(song)
   res.send(song)
 })
 
-app.put('/songs/:id', (req, res) => {
+app.put(url + ':id', (req, res) => {
   const id = Number(req.params.id)
-  console.log('Server put /songs/' + id)
+  console.log('Server put /api/songs/' + id)
   console.log('Incoming song:', req.body)
   const song = req.body
   songs = songs.map(s => s.id === id ? song : s)
@@ -178,14 +181,15 @@ app.put('/songs/:id', (req, res) => {
   res.send(song)
 })
 
-app.delete('/songs/:id', (req, res) => {
+app.delete(url + ':id', (req, res) => {
   const id = Number(req.params.id)
-  console.log('Server delete /songs/' + id)
+  console.log('Server delete /api/songs/' + id)
   const song = songs.find(s => s.id === id)
   songs = songs.filter(s => s.id !== id)
   res.send(song)
 })
 
+const PORT = process.env.port || 3001
 app.listen(PORT, () => {
   console.log('Server running on port', PORT)
 })
