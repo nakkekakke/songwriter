@@ -36,10 +36,10 @@ songRouter.post('/', (req, res) => {
 })
 
 songRouter.put('/:id', (req, res) => {
-  console.log('Incoming song:', req.body)
-  Song.findByIdAndUpdate(req.params.id, req.body)
+  console.log('NODE: Incoming song:', req.body)
+  Song.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(song => {
-      console.log('Updated song:', song)
+      console.log('NODE: Updated song:', song)
       res.json(song)
     })
     .catch(error => {

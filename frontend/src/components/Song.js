@@ -36,7 +36,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const song = useSelector((state) => state.find(s => s.id === Number(id)))
+  const song = useSelector((state) => state.find(s => s.id === id))
 
   console.log('Song render:', song)
 

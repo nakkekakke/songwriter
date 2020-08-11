@@ -159,7 +159,7 @@ const SongSection = ({ songId, section, editMode }) => {
 }
 
 SongSection.propTypes = {
-  songId: PropTypes.number.isRequired,
+  songId: PropTypes.string.isRequired,
   section: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string,

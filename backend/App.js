@@ -5,6 +5,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const songRouter = require('./routers/songs')
 const middleware = require('./utils/middleware')
+const path = require('path')
 
 mongoose.connect(config.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -20,6 +21,9 @@ app.use(cors())
 
 app.use('/api/songs', songRouter)
 
-app.use(middleware.unknownEndpoint)
+// If url is for React router
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'build', 'index.html'))
+})
 
 module.exports = app
