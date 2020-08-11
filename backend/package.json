@@ -9,7 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "build:ui": "rm -rf build && cd ../frontend && npm run build --prod && cp -r build ../backend"
+    "build:ui": "rm -rf build && cd ../frontend && npm run build --prod && cp -r build ../backend",
+    "deploy": "cd .. && git subtree push --prefix backend heroku master"
   },
   "author": "Niko Juntunen",
   "license": "GPL-3.0-or-later",
@@ -19,6 +20,8 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.28"
   }
 }

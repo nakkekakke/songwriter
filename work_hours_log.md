@@ -29,4 +29,7 @@
 | 9.8.  | 1    | Researching authentication methods |
 |       | 1    | Trying to figure out multiple reducers |
 |       | 3    | Frontend now sends all changes to backend at once, upon user confirmation |
-| total | 80   | |
+| 10.8. | 3    | Backend properly initialized, production version to Heroku |
+|       | 3    | Refactoring backend to use MongoDB |
+|       | 3    | Trying to fix issue with app crashing when refreshing in Heroku |
+| total | 89   | |
