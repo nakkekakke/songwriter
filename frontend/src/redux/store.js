@@ -1,13 +1,19 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 import songReducer from './songReducer'
+import snapshotReducer from './snapshotReducer'
 
 const composeEnhancers = composeWithDevTools({ trace: true })
 
+const reducers = combineReducers({
+  songs: songReducer,
+  snapshot: snapshotReducer
+})
+
 const store = createStore(
-  songReducer,
+  reducers,
   composeEnhancers(
     applyMiddleware(thunk)
   )

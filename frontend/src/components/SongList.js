@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
 
 const SongList = () => {
   const classes = useStyles()
-  const songs = useSelector((state) => state)
+  const songs = useSelector((state) => state.songs)
   const dispatch = useDispatch()
   const history = useHistory()
 

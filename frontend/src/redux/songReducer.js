@@ -42,7 +42,6 @@ const songReducer = (state = [], action) => {
     return state.map(s => s.id !== songId ? s : { ...song, sections: editedSections })
   }
   default:
-    console.log('Default in reducer')
     return state
   }
 }
@@ -164,17 +163,12 @@ export const saveSong = (song) => {
   }
 }
 
-export const resetSong = (song) => {
+export const getSongFromSnapshot = (snapshot) => {
   return async (dispatch) => {
-    try {
-      const previousSong = await songService.getOne(song.id)
-      dispatch({
-        type: EDIT_SONG,
-        data: previousSong
-      })
-    } catch (error) {
-      console.log(error)
-    }
+    dispatch({
+      type: EDIT_SONG,
+      data: snapshot
+    })
   }
 }
 

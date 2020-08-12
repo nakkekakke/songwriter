@@ -32,4 +32,6 @@
 | 10.8. | 3    | Backend properly initialized, production version to Heroku |
 |       | 3    | Refactoring backend to use MongoDB |
 |       | 3    | Trying to fix issue with app crashing when refreshing in Heroku |
-| total | 89   | |
+| 11.8. | 1    | Fixed frontend and backend communication issue |
+| 12.8. | 3    | Snapshot system for checking for unsaved changes |
+| total | 93   | |

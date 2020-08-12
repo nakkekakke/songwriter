@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useHistory, Prompt } from 'react-router-dom'
 import { makeStyles, Container, Button, TextField, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog } from '@material-ui/core'
 import { Add, DeleteForever } from '@material-ui/icons'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import { editTitle, addSection, deleteSong, saveSong, resetSong } from '../redux/songReducer'
+import { editTitle, addSection, deleteSong, saveSong, getSongFromSnapshot } from '../redux/songReducer'
+import { saveSnapshot, resetSnapshot } from '../redux/snapshotReducer'
 import SongSectionList from './SongSectionList'
+import _ from 'lodash'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -14,7 +16,7 @@ const useStyles = makeStyles(() => ({
   menuContainer: {
     marginBottom: 3
   },
-  titleForm: {
+  titleField: {
     margin: 15
   },
   addSectionButton: {
@@ -27,29 +29,32 @@ const useStyles = makeStyles(() => ({
 
 const Song = ({ setAlertMessage, setAlertIsError }) => {
   const [editMode, setEditMode] = useState(false)
-  const [title, setTitle] = useState('')
   const [delConfirmOpen, setDelConfirmOpen] = useState(false)
   const [saveOpen, setSaveOpen] = useState(false)
+  const [titleError, setTitleError] = useState(false)
 
   const classes = useStyles()
   const id = useParams().id
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const song = useSelector((state) => state.find(s => s.id === id))
+  const song = useSelector((state) => state.songs.find(s => s.id === id))
+
+  const snapshot = useSelector((state) => state.snapshot) // Todo: prompt to leave page if snapshot exists
 
   console.log('Song render:', song)
 
   const renderTitle = () => {
     if (editMode) {
       return (
-        <form onSubmit={handleTitleSubmit} className={classes.titleForm}>
-          <TextField
-            label='Edit title'
-            defaultValue={title ? title : song.title}
-            onChange={handleTitleChange}
-          />
-        </form>
+        <TextField
+          error={titleError}
+          className={classes.titleField}
+          label='Edit title'
+          defaultValue={song.title}
+          onChange={handleTitleChange}
+          helperText={titleError ? 'Title cannot be empty!' : ''} // Todo: enforce
+        />
       )
     } else {
       return (
@@ -75,8 +80,6 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
     }
     return (<div/>)
   }
-
-  console.log('Delconfirmopen:', delConfirmOpen)
 
   const deleteSongButton = () => {
     if (editMode) {
@@ -147,7 +150,16 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
   }
 
   const handleEditButtonClick = () => {
-    editMode ? handleEditModeExitClick() : setEditMode(true)
+    if (editMode) {
+      handleEditModeExitClick()
+    } else {
+      handleEditModeEnterClick()
+    }
+  }
+
+  const handleEditModeEnterClick = () => {
+    dispatch(saveSnapshot(song))
+    setEditMode(true)
   }
 
   const handleEditModeExitClick = () => {
@@ -166,19 +178,19 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
     console.log('Discarding changes!')
     setSaveOpen(false)
     setEditMode(false)
-    dispatch(resetSong(song))
+    dispatch(resetSnapshot())
+    dispatch(getSongFromSnapshot(snapshot))
+    console.log('Snapshot after reset:', snapshot)
   }
 
   const handleTitleChange = (event) => {
     console.log(event.target.value)
-    setTitle(event.target.value)
-  }
-
-  const handleTitleSubmit = (event) => {
-    event.preventDefault()
-    dispatch(editTitle(song, title))
-    setAlertIsError(false)
-    setAlertMessage('Song title changed to: ' + title)
+    if (event.target.value === '') { 
+      setTitleError(true)
+    } else if (titleError) {
+      setTitleError(false)
+    }
+    dispatch(editTitle(song, event.target.value))
   }
 
   const handleAddSectionClick = () => {
@@ -190,6 +202,10 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
     console.log('Deleting song here')
     dispatch(deleteSong(song))
     history.push('/songs/')
+  }
+
+  const unsavedChanges = () => {
+    return !_.isEmpty(snapshot) && !_.isEqual(snapshot, song)
   }
 
   if (song) {
@@ -216,6 +232,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
         </Container>
         {deleteDialog()}
         {saveDialog()}
+        <Prompt when={unsavedChanges()} message={'Unsaved changes!'}/>
       </div>
     )
   } else {
