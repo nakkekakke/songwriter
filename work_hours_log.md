@@ -37,4 +37,5 @@
 | 13.8. | 3    | Custom prompt when leaving edit mode with unsaved changes, refactoring |
 |       | 1    | Dialog exit button |
 |       | 2    | Storing section input value in Redux so it's included in snapshots |
-| total | 99   | |
+|       | 1    | Removed section save buttons, added one save button for all changes |
+| total | 100  | |

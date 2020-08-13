@@ -21,7 +21,6 @@ const songReducer = (state = [], action) => {
     return newState
   }
   case EDIT_SONG: {
-    console.log('Editing song:', action.data)
     const id = action.data.id
     return state.map(song => song.id !== id ? song : action.data)
   }

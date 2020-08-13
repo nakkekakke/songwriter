@@ -16,13 +16,16 @@ const useStyles = makeStyles((theme) => ({
 
   },
   menuContainer: {
-    marginBottom: 3
+    marginBottom: theme.spacing(1)
+  },
+  editModeButton: {
+    marginLeft: theme.spacing(1)
   },
   titleField: {
     margin: 15
   },
   addSectionButton: {
-    marginTop: 8
+    marginTop: theme.spacing(1)
   },
   deleteSongButton: {
     marginLeft: 'auto'
@@ -71,6 +74,32 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
     }
   }
 
+  const saveButton = () => {
+    if (unsavedChanges()) {
+      return (
+        <Button
+          color='primary'
+          variant='outlined'
+          onClick={handleSaveClick}
+        >
+          Save changes
+        </Button>
+      )
+    }
+  }
+
+  const editModeButton = () => {
+    return (
+      <Button
+        color='primary'
+        variant='contained'
+        onClick={handleEditButtonClick}
+        className={classes.editModeButton}
+      >
+        {editMode ? 'Exit edit mode' : 'Edit mode'}
+      </Button>
+    )
+  }
 
   const addSectionButton = () => {
     if (editMode) {
@@ -155,6 +184,11 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
     )
   }
 
+  const handleSaveClick = () => {
+    dispatch(saveSnapshot(song))
+    dispatch(saveSong(song))
+  }
+
   const handleEditButtonClick = () => {
     if (editMode) {
       handleEditModeExitClick()
@@ -196,7 +230,6 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
   }
 
   const handleTitleChange = (event) => {
-    console.log(event.target.value)
     if (event.target.value === '') {
       setTitleError(true)
     } else if (titleError) {
@@ -226,13 +259,8 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
         {renderTitle()}
         <div>
           <Container align='right' maxWidth={false} className={classes.menuContainer}>
-            <Button
-              color='primary'
-              variant='contained'
-              onClick={handleEditButtonClick}
-            >
-              {editMode ? 'Exit edit mode' : 'Edit mode'}
-            </Button>
+            {saveButton()}
+            {editModeButton()}
           </Container>
           <SongSectionList song={song} editMode={editMode} />
         </div>
