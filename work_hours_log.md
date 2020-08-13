@@ -34,4 +34,7 @@
 |       | 3    | Trying to fix issue with app crashing when refreshing in Heroku |
 | 11.8. | 1    | Fixed frontend and backend communication issue |
 | 12.8. | 3    | Snapshot system for checking for unsaved changes |
-| total | 93   | |
+| 13.8. | 3    | Custom prompt when leaving edit mode with unsaved changes, refactoring |
+|       | 1    | Dialog exit button |
+|       | 2    | Storing section input value in Redux so it's included in snapshots |
+| total | 99   | |

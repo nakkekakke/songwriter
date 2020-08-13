@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { makeStyles, TextField, Button, Icon, Box } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import songHelper from '../../helpers/songHelper'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { editSection, deleteSection } from '../../redux/songReducer'
 
 import { SortableHandle } from 'react-sortable-hoc'
@@ -52,12 +52,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const SongSection = ({ songId, section, editMode }) => {
+const SongSection = ({ songId, sectionId, editMode }) => {
 
 
   // Local states for inputs only
-  const [name, setName] = useState(section.name)
-  const [linesString, setLinesString] = useState(songHelper.linesArrayToString(section.lines)) // Lines are a string while in state
+  //const [name, setName] = useState(section.name)
+  //const [linesString, setLinesString] = useState(songHelper.linesArrayToString(section.lines)) // Lines are a string while in state
   const [deleteConfirm, setDeleteConfirm] = useState(false)
 
   const classes = useStyles()
@@ -65,17 +65,19 @@ const SongSection = ({ songId, section, editMode }) => {
 
   const DragHandle = SortableHandle(() => <Box className={classes.dragHandle}> <Icon><DragIndicator /></Icon> </Box>)
 
+  const section = useSelector((state) => state.songs.find(s => s.id === songId).sections.find(s => s.id === sectionId))
+
   const editView = () => {
     return (
-      <form className={classes.editForm} onSubmit={handleEditSubmit}>
-        <TextField className={classes.nameField} label='Edit name' name='name' defaultValue={name} onChange={handleNameChange} />
+      <form className={classes.editForm} >
+        <TextField className={classes.nameField} label='Edit name' name='name' defaultValue={section.name} onChange={handleNameChange} />
         <div>
           <TextField
             multiline
             label='Lines'
             name='lines'
-            rows={songHelper.lineCount(linesString)}
-            defaultValue={linesString}
+            rows={section.lines.size}
+            defaultValue={songHelper.linesArrayToString(section.lines)}
             onChange={handleLinesChange}
             fullWidth={true}
           />
@@ -116,28 +118,15 @@ const SongSection = ({ songId, section, editMode }) => {
     )
   }
 
-  const handleEditSubmit = (event) => {
-    event.preventDefault()
-    console.log('Submitting name:', name)
-
-    const linesArray = songHelper.linesStringToArray(linesString)
-
-    const editedSection = { id: section.id, name: name, lines: linesArray }
-    dispatch(editSection(songId, editedSection))
-
-    const cleanedLines = songHelper.linesArrayToString(linesArray)
-    event.target.lines.value = cleanedLines
-    setLinesString(cleanedLines)
-    //setAlertIsError(false)
-    //setAlertMessage('Song edited')
-  }
-
   const handleNameChange = (event) => {
-    setName(event.target.value)
+    const editedSection = { ...section, lines: [...section.lines], name: event.target.value }
+    dispatch(editSection(songId, editedSection))
   }
 
   const handleLinesChange = (event) => {
-    setLinesString(event.target.value)
+    const linesArray = songHelper.linesStringToArray(event.target.value)
+    const editedSection = { ...section, lines: linesArray }
+    dispatch(editSection(songId, editedSection))
   }
 
   const handleDeleteClick = (event) => {
@@ -160,11 +149,7 @@ const SongSection = ({ songId, section, editMode }) => {
 
 SongSection.propTypes = {
   songId: PropTypes.string.isRequired,
-  section: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string,
-    lines: PropTypes.arrayOf(PropTypes.string)
-  }).isRequired,
+  sectionId: PropTypes.number.isRequired,
   editMode: PropTypes.bool.isRequired
 }
 

@@ -19,9 +19,7 @@ const create = async (songObject) => {
 }
 
 const edit = async (songObject) => {
-  console.log('REACT: Editing song: ', songObject)
   const res = await axios.put(url + songObject.id, songObject)
-  console.log('REACT: Edited!')
   return res.data
 }
 

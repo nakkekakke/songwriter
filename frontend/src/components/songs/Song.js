@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useParams, useHistory, Prompt } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import { makeStyles, Container, Button, TextField, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog } from '@material-ui/core'
 import { Add, DeleteForever } from '@material-ui/icons'
 import PropTypes from 'prop-types'
@@ -8,10 +8,10 @@ import { editTitle, addSection, deleteSong, saveSong, getSongFromSnapshot } from
 import { saveSnapshot, resetSnapshot } from '../../redux/snapshotReducer'
 import SongSectionList from './SongSectionList'
 import _ from 'lodash'
-import NavigationPrompt from 'react-router-navigation-prompt'
 import UnsavedPrompt from './UnsavedPrompt'
+import DialogCloseButton from '../DialogCloseButton'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
 
   },
@@ -26,6 +26,12 @@ const useStyles = makeStyles(() => ({
   },
   deleteSongButton: {
     marginLeft: 'auto'
+  },
+  dialogCloseButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
   }
 }))
 
@@ -143,9 +149,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
           <Button onClick={handleSaveDiscardClick} color='secondary' variant='contained'>
             Discard changes
           </Button>
-          <Button onClick={() => setSaveOpen(false)} variant='contained'>
-            Cancel
-          </Button>
+          <DialogCloseButton onClick={() => setSaveOpen(false)} />
         </DialogActions>
       </Dialog>
     )

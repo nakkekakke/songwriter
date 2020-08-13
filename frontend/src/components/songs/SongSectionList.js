@@ -16,7 +16,7 @@ const SortableItem = SortableElement(({ section, song, editMode }) => {
   return (
     <SongSection
       songId={song.id}
-      section={section}
+      sectionId={section.id}
       editMode={editMode}
     >
     </SongSection>

@@ -47,8 +47,7 @@ const addNewSection = (song) => {
     return song
   }
 
-  let maxId = song.sections.reduce((max, current) => current.id > max.id ? current : max).id // Find the previously highest section id
-  console.log(maxId)
+  let maxId = song.sections.map(s => s.id).reduce((max, current) => current > max ? current : max) // Find the previously highest section id
   const newSection = {
     ...getDefaultSong().sections[0],
     id: maxId + 1,
