@@ -170,7 +170,12 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
 
   const handleEditModeExitClick = () => {
     console.log('Exiting edit mode')
-    setSaveOpen(true)
+    if (unsavedChanges()) {
+      setSaveOpen(true)
+    } else {
+      setEditMode(false)
+      dispatch(resetSnapshot())
+    }
   }
 
   const handleSaveAgreeClick = () => {

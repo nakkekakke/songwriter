@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   nameField: {
     marginBottom: 10
   },
-  buttonDiv: {
+  bottomDiv: {
     display: 'flex'
   },
   lineSubmitButton: {
@@ -82,16 +82,7 @@ const SongSection = ({ songId, sectionId, editMode }) => {
             fullWidth={true}
           />
         </div>
-        <div className={classes.buttonDiv}>
-          <Button
-            className={classes.lineSubmitButton}
-            size='small'
-            color='primary'
-            variant='outlined'
-            type='submit'
-          >
-            Save
-          </Button>
+        <div className={classes.bottomDiv}>
           <DragHandle />
           <Button
             className={classes.deleteButton}
