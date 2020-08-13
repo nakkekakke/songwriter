@@ -4,10 +4,12 @@ import { makeStyles, Container, Button, TextField, DialogTitle, DialogContent, D
 import { Add, DeleteForever } from '@material-ui/icons'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import { editTitle, addSection, deleteSong, saveSong, getSongFromSnapshot } from '../redux/songReducer'
-import { saveSnapshot, resetSnapshot } from '../redux/snapshotReducer'
+import { editTitle, addSection, deleteSong, saveSong, getSongFromSnapshot } from '../../redux/songReducer'
+import { saveSnapshot, resetSnapshot } from '../../redux/snapshotReducer'
 import SongSectionList from './SongSectionList'
 import _ from 'lodash'
+import NavigationPrompt from 'react-router-navigation-prompt'
+import UnsavedPrompt from './UnsavedPrompt'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -40,7 +42,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
 
   const song = useSelector((state) => state.songs.find(s => s.id === id))
 
-  const snapshot = useSelector((state) => state.snapshot) // Todo: prompt to leave page if snapshot exists
+  const snapshot = useSelector((state) => state.snapshot)
 
   console.log('Song render:', song)
 
@@ -171,6 +173,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
     console.log('Saving!')
     setSaveOpen(false)
     setEditMode(false)
+    dispatch(resetSnapshot())
     dispatch(saveSong(song))
   }
 
@@ -185,7 +188,7 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
 
   const handleTitleChange = (event) => {
     console.log(event.target.value)
-    if (event.target.value === '') { 
+    if (event.target.value === '') {
       setTitleError(true)
     } else if (titleError) {
       setTitleError(false)
@@ -232,7 +235,11 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
         </Container>
         {deleteDialog()}
         {saveDialog()}
-        <Prompt when={unsavedChanges()} message={'Unsaved changes!'}/>
+        <UnsavedPrompt
+          handleSaveAgreeClick={handleSaveAgreeClick}
+          handleSaveDiscardClick={handleSaveDiscardClick}
+          unsavedChanges={unsavedChanges}
+        />
       </div>
     )
   } else {

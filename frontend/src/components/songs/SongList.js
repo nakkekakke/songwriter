@@ -3,8 +3,8 @@ import { List, makeStyles, Button } from '@material-ui/core'
 import SongListItem from './SongListItem'
 import { useSelector, useDispatch } from 'react-redux'
 import { Add } from '@material-ui/icons'
-import songHelper from '../helpers/songHelper'
-import { createSong } from '../redux/songReducer'
+import songHelper from '../../helpers/songHelper'
+import { createSong } from '../../redux/songReducer'
 import { useHistory } from 'react-router'
 
 const useStyles = makeStyles(() => ({

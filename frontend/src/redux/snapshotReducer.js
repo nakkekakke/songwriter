@@ -5,13 +5,12 @@ const initialState = {} // Might upgrade to array at some point, maybe store in 
 
 const snapshotReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SAVE_SNAPSHOT:
-      return action.data
-    case RESET_SNAPSHOT:
-      console.log('resetting')
-      return initialState
-    default:
-      return state
+  case SAVE_SNAPSHOT:
+    return action.data
+  case RESET_SNAPSHOT:
+    return initialState
+  default:
+    return state
   }
 }
 

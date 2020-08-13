@@ -4,7 +4,7 @@ import SongSection from './SongSection'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 import arrayMove from 'array-move'
 import { useDispatch } from 'react-redux'
-import { sortSections } from '../redux/songReducer'
+import { sortSections } from '../../redux/songReducer'
 
 const useStyles = makeStyles(() => ({
   root: {

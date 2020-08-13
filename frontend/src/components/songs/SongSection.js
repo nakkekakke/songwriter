@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { makeStyles, TextField, Button, Icon, Box } from '@material-ui/core'
 import PropTypes from 'prop-types'
-import songHelper from '../helpers/songHelper'
+import songHelper from '../../helpers/songHelper'
 import { useDispatch } from 'react-redux'
-import { editSection, deleteSection } from '../redux/songReducer'
+import { editSection, deleteSection } from '../../redux/songReducer'
 
 import { SortableHandle } from 'react-sortable-hoc'
 import { DragIndicator } from '@material-ui/icons'
