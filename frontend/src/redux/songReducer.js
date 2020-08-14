@@ -9,6 +9,7 @@ export const ADD_SECTION = 'ADD_SECTION'
 export const DELETE_SONG = 'DELETE_SONG'
 export const EDIT_SECTION = 'EDIT_SECTION'
 export const DELETE_SECTION = 'DELETE_SECTION'
+export const CLONE_SECTION = 'CLONE_SECTION'
 
 
 // Reducer
@@ -39,6 +40,14 @@ const songReducer = (state = [], action) => {
     const song = state.find(s => s.id === songId)
     const editedSections = song.sections.filter(section => section.id !== sectionId)
     return state.map(s => s.id !== songId ? s : { ...song, sections: editedSections })
+  }
+  case CLONE_SECTION: {
+    const songId = action.data.songId
+    const sectionId = action.data.section.id
+    const song = state.find(s => s.id === songId)
+    const section = song.sections.find(s => s.id === sectionId)
+    const newSong = songHelper.cloneAndAddSection(song, section) // Does not mutate
+    return state.map(s => s.id !== songId ? s : newSong)
   }
   default:
     return state
@@ -105,6 +114,29 @@ export const deleteSong = (song) => {
   }
 }
 
+export const saveSong = (song) => {
+  return async (dispatch) => {
+    try {
+      const savedSong = await songService.edit(song)
+      dispatch({
+        type: EDIT_SONG,
+        data: savedSong
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
+export const getSongFromSnapshot = (snapshot) => {
+  return async (dispatch) => {
+    dispatch({
+      type: EDIT_SONG,
+      data: snapshot
+    })
+  }
+}
+
 // Section action creators
 export const editSection = (songId, section) => {
   return async (dispatch) => {
@@ -136,6 +168,15 @@ export const addSection = (song) => {
   }
 }
 
+export const cloneSection = (songId, section) => {
+  return (dispatch) => {
+    dispatch({
+      type: CLONE_SECTION,
+      data: { songId, section }
+    })
+  }
+}
+
 export const sortSections = (song, sortedSections) => {
   let songToDispatch = JSON.parse(JSON.stringify(song))
   songToDispatch.sections = sortedSections
@@ -144,29 +185,6 @@ export const sortSections = (song, sortedSections) => {
     dispatch({
       type: EDIT_SONG,
       data: songToDispatch
-    })
-  }
-}
-
-export const saveSong = (song) => {
-  return async (dispatch) => {
-    try {
-      const savedSong = await songService.edit(song)
-      dispatch({
-        type: EDIT_SONG,
-        data: savedSong
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
-}
-
-export const getSongFromSnapshot = (snapshot) => {
-  return async (dispatch) => {
-    dispatch({
-      type: EDIT_SONG,
-      data: snapshot
     })
   }
 }

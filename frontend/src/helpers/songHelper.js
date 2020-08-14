@@ -32,30 +32,51 @@ const getDefaultSong = () => {
   return {
     title: 'New song',
     sections: [
-      {
-        id: 1,
-        name: 'New section',
-        lines: []
-      }
+      getDefaultSection()
     ]
   }
 }
 
-const addNewSection = (song) => {
+const getDefaultSection = () => {
+  return {
+    id: 1,
+    name: 'New section',
+    lines: []
+  }
+}
+
+const createNewSectionId = (song) => {
   if (song.sections.length === 0) {
-    song.sections = getDefaultSong().sections
-    return song
+    return 1
+  }
+  let maxId = song.sections.map(s => s.id).reduce((max, current) => current > max ? current : max) // Find the previously highest section id
+  return maxId + 1
+}
+
+const createNewSection = (song) => {
+  if (song.sections.length === 0) {
+    return getDefaultSection()
   }
 
-  let maxId = song.sections.map(s => s.id).reduce((max, current) => current > max ? current : max) // Find the previously highest section id
   const newSection = {
-    ...getDefaultSong().sections[0],
-    id: maxId + 1,
+    ...getDefaultSection(),
+    id: createNewSectionId(song),
   }
+
+  return newSection
+}
+
+const addNewSection = (song) => {
+  const newSection = createNewSection(song)
   song.sections.push(newSection) // modifies the song directly
   return song
 }
 
+const cloneAndAddSection = (song, section) => {
+  const newSection = { ...section, id: createNewSectionId(song) }
+  return { ...song, sections: [...song.sections, newSection] }
+}
 
 
-export default { linesArrayToString, linesStringToArray, lineCount, getDefaultSong, addNewSection }
+
+export default { linesArrayToString, linesStringToArray, lineCount, getDefaultSong, addNewSection, createNewSection, cloneAndAddSection }
