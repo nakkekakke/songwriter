@@ -38,4 +38,7 @@
 |       | 1    | Dialog exit button |
 |       | 2    | Storing section input value in Redux so it's included in snapshots |
 |       | 1    | Removed section save buttons, added one save button for all changes |
-| total | 100  | |
+| 14.8. | 2    | Section cloning |
+|       | 4    | MongoDB in-memory server for tests, backend refactoring |
+|       | 2    | Testing |
+| total | 108  | |

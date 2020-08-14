@@ -1,8 +1,10 @@
 module.exports = {
+    'plugins': ['jest'],
     'env': {
         'node': true,
         'commonjs': true,
-        'es2020': true
+        'es2020': true,
+        'jest/globals': true
     },
     'extends': 'eslint:recommended',
     'parserOptions': {

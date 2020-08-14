@@ -1,6 +1,6 @@
 const http = require('http')
 const config = require('./utils/config')
-const app = require('./App')
+const app = require('./app').app
 
 const server = http.createServer(app)
 
