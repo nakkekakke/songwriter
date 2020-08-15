@@ -12,6 +12,8 @@ app.use(express.static('build'))
 app.use(express.json())
 app.use(cors())
 
+app.use(requestLogger)
+
 app.use('/api/songs', songRouter)
 
 // If url is for React router
@@ -19,7 +21,6 @@ app.get('/song*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'build', 'index.html'))
 })
 
-app.use(requestLogger)
 app.use(unknownEndpoint)
 app.use(errorHandler)
 
