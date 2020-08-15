@@ -41,4 +41,5 @@
 | 14.8. | 2    | Section cloning |
 |       | 4    | MongoDB in-memory server for tests, backend refactoring |
 |       | 2    | Testing |
-| total | 108  | |
+| 15.8. | 5    | Improved backend middleware, more tests, backend refactoring |
+| total | 113  | |
