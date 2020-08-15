@@ -2,59 +2,53 @@ const songRouter = require('express').Router()
 const Song = require('../models/song')
 //const songService = require('../services/songService')
 
-songRouter.get('/:id', (req, res) => {
+songRouter.get('/:id', (req, res, next) => {
   Song.findById(req.params.id)
     .then(song => {
       song ? res.json(song.toJSON()) : res.status(404).end()
     })
     .catch(error => {
-      console.log(error)
+      next(error)
     })
 })
 
-songRouter.get('/', (req, res) => {
-  console.log('Server get /api/songs')
+songRouter.get('/', (req, res, next) => {
   Song.find({})
     .then(songs => {
       res.json(songs.map(s => s.toJSON()))
     })
     .catch(error => {
-      console.log(error)
+      next(error)
     })
 })
 
-songRouter.post('/', (req, res) => {
-  console.log('Server post /api/songs:', req.body)
+songRouter.post('/', (req, res, next) => {
   Song.create(req.body)
     .then(song => {
-      console.log('Created:', song)
       res.json(song)
     })
     .catch(error => {
-      console.log(error)
+      next(error)
     })
 })
 
-songRouter.put('/:id', (req, res) => {
-  console.log('NODE: Incoming song:', req.body)
+songRouter.put('/:id', (req, res, next) => {
   Song.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(song => {
-      console.log('NODE: Updated song:', song)
       res.json(song)
     })
     .catch(error => {
-      console.log(error)
+      next(error)
     })
 })
 
-songRouter.delete('/:id', (req, res) => {
+songRouter.delete('/:id', (req, res, next) => {
   Song.findByIdAndDelete(req.params.id)
     .then(song => {
-      console.log('Deleted song:', song)
       res.json(song)
     })
     .catch(error => {
-      console.log(error)
+      next(error)
     })
 })
 

@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const songRouter = require('./routers/songs')
-const middleware = require('./utils/middleware')
+const { requestLogger, unknownEndpoint, errorHandler } = require('./utils/middleware')
 const path = require('path')
 const databaseSetup = require('./database/databaseSetup')
 
@@ -19,6 +19,8 @@ app.get('/song*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'build', 'index.html'))
 })
 
-app.use(middleware.unknownEndpoint)
+app.use(requestLogger)
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
 module.exports = { app, dbConnection }

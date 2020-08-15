@@ -2,14 +2,39 @@ const mongoose = require('mongoose')
 
 const sectionSchema = new mongoose.Schema({
   _id: false,
-  id: Number,
-  name: String,
-  lines: [String]
+  id: {
+    type: Number,
+    required: true,
+    min: 1
+  },
+  name: {
+    type: String,
+    required: true,
+    minlength: 1,
+    maxlength: 50
+  },
+  lines: {
+    type: [
+      {
+        type: String,
+        maxlength: 200
+      }
+    ],
+    required: true
+  }
 })
 
 const songSchema = new mongoose.Schema({
-  title: String,
-  sections: [sectionSchema]
+  title: {
+    type: String,
+    required: true,
+    minlength: 1,
+    maxlength: 50
+  },
+  sections: {
+    type: [sectionSchema],
+    required: true,
+  }
 })
 
 songSchema.set('toJSON', {
