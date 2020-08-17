@@ -1,10 +1,11 @@
 const songRouter = require('express').Router()
 const Song = require('../models/song')
+const User = require('../models/user')
 //const songService = require('../services/songService')
 
 songRouter.get('/:id', async (req, res, next) => {
   try {
-    const song = await Song.findById(req.params.id)
+    const song = await Song.findById(req.params.id).populate('user')
     song ? res.json(song.toJSON()) : res.status(404).end()
   } catch (error) {
     next(error)
@@ -13,7 +14,7 @@ songRouter.get('/:id', async (req, res, next) => {
 
 songRouter.get('/', async (req, res, next) => {
   try {
-    const songs = await Song.find({})
+    const songs = await Song.find({}).populate('user')
     res.json(songs.map(s => s.toJSON()))
   } catch (error) {
     next(error)
@@ -22,7 +23,10 @@ songRouter.get('/', async (req, res, next) => {
 
 songRouter.post('/', async (req, res, next) => {
   try {
-    const song = await Song.create(req.body)
+    const user = await User.findById(req.body.userId)
+    const song = await Song.create({ ...req.body, user: user._id })
+    user.songs = user.songs.concat(song._id)
+    await user.save()
     res.json(song)
   } catch (error) {
     next(error)
@@ -31,7 +35,7 @@ songRouter.post('/', async (req, res, next) => {
 
 songRouter.put('/:id', async (req, res, next) => {
   try {
-    const song = await Song.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    const song = await Song.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('user')
     res.json(song)
   } catch (error) {
     next(error)

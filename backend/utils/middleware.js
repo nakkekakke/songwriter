@@ -1,3 +1,6 @@
+const config = require('../utils/config')
+const jwt = require('express-jwt')
+
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: 'Unknown endpoint.' })
 }
@@ -14,6 +17,8 @@ const errorHandler = (err, req, res, next) => {
     return res.status(400).json({ error: err.message }) // for custom messages, edit model verification
   } else if (err.name === 'DisconnectedError') {
     return res.status(503).send({ error: 'Could not connect to database.' })
+  } else if (err.name === 'UnauthorizedError') {
+    return res.status(401).send({ error: 'Invalid token' })
   } else if (err.name !== undefined) {
     return (res.status(500).json({ error: err.message }))
   }
@@ -31,4 +36,10 @@ const requestLogger = (req, res, next) => {
   next()
 }
 
-module.exports = { unknownEndpoint, errorHandler, requestLogger }
+const jwtAuth = (req, res, next) => {
+  console.log('AUTHISSA')
+  jwt({ secret: config.JWT_SECRET, algorithms: ['HS256'] }).unless({ path: ['/api/login'] })
+  next()
+}
+
+module.exports = { unknownEndpoint, errorHandler, requestLogger, jwtAuth }

@@ -42,4 +42,7 @@
 |       | 4    | MongoDB in-memory server for tests, backend refactoring |
 |       | 2    | Testing |
 | 15.8. | 5    | Improved backend middleware, more tests, backend refactoring |
-| total | 113  | |
+| 17.8. | 1    | A couple more backend tests |
+|       | 3    | Users to backend and MongoDB |
+|       | 3    | Backend user authentication |
+| total | 120  | |
