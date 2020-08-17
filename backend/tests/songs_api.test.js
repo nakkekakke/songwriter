@@ -8,8 +8,6 @@ const api = supertest(app)
 
 let conn
 
-let initialSongsCount
-
 beforeAll(async () => {
   conn = await dbConnection
 })
@@ -27,12 +25,12 @@ describe('Mongo database', () => {
 })
 
 describe('When there are songs initially in the database', () => {
+
+  let initialSongs
+
   beforeEach(async () => {
     await Song.deleteMany({})
-    const initialSongs = getInitialSongs()
-    initialSongsCount = initialSongs.length
-    await Song.create(initialSongs)
-
+    initialSongs = await Song.create(getInitialSongs())
   })
 
   describe('all songs', () => {
@@ -46,7 +44,7 @@ describe('When there are songs initially in the database', () => {
 
     test('have correct amount of songs', async () => {
       const res = await api.get('/api/songs')
-      expect(res.body).toHaveLength(initialSongsCount)
+      expect(res.body).toHaveLength(initialSongs.length)
     })
 
     test('do not have _id or __v properties', async () => {
@@ -93,7 +91,7 @@ describe('When there are songs initially in the database', () => {
         expect(songToGetRes.body.error).toEqual('Invalid ID.')
       })
 
-      test('if no song with that id exist', async () => {
+      test('if no song with that id exists', async () => {
         const badId = await getNonexistingId()
         const songToGetRes = await api
           .get(`/api/songs/${badId}`)
@@ -109,23 +107,23 @@ describe('When there are songs initially in the database', () => {
     describe('succeeds', () => {
 
       test('with valid data', async () => {
-        const newSongRes = await api
+        const postRes = await api
           .post('/api/songs')
           .send(sampleSong)
           .expect(200)
-        expect(newSongRes.body).toBeDefined()
-        expect(newSongRes.body).toMatchShapeOf(sampleSong)
+        expect(postRes.body).toBeDefined()
+        expect(postRes.body).toMatchShapeOf(sampleSong)
       })
 
       describe('and assigns the song a new 24 character id', () => {
 
         test('that replaces its previous id', async () => {
-          const newSongRes = await api
+          const postRes = await api
             .post('/api/songs')
             .send(sampleSong)
             .expect(200)
 
-          const newSong = newSongRes.body
+          const newSong = postRes.body
           expect(newSong.id).toBeDefined()
           expect(newSong.id).not.toEqual(sampleSong.id)
           expect(newSong.id).toHaveLength(24)
@@ -135,12 +133,12 @@ describe('When there are songs initially in the database', () => {
           const songWithNoId = { ...sampleSong }
           delete songWithNoId.id
 
-          const newSongRes = await api
+          const postRes = await api
             .post('/api/songs')
             .send(songWithNoId)
             .expect(200)
 
-          const newSong = newSongRes.body
+          const newSong = postRes.body
           expect(newSong.id).toBeDefined()
           expect(newSong.id).toHaveLength(24)
         })
@@ -163,7 +161,7 @@ describe('When there are songs initially in the database', () => {
             .expect(400)
 
           const songsRes = await api.get('/api/songs')
-          expect(songsRes.body).toHaveLength(initialSongsCount)
+          expect(songsRes.body).toHaveLength(initialSongs.length)
         })
 
         test('has invalid data', async () => {
@@ -175,24 +173,13 @@ describe('When there are songs initially in the database', () => {
             .expect(400)
 
           const songsRes = await api.get('/api/songs')
-          expect(songsRes.body).toHaveLength(initialSongsCount)
+          expect(songsRes.body).toHaveLength(initialSongs.length)
         })
 
       })
 
       describe('if sections', () => {
         //// Mongoose seems to create this property automatically if it doesnt exist...
-        // test('property is missing', async () => {
-        //   const invalidSong = { ...sampleSong }
-        //   delete invalidSong.sections
-
-        //   const newSongRes = await api
-        //     .post('/api/songs')
-        //     .send(invalidSong)
-        //     .expect(400)
-
-        //   expect(newSongRes.body.error).toBeDefined()
-        // })
 
         test('have invalid data', async () => {
           const invalidSong = { ...sampleSong, sections: [1] }
@@ -203,11 +190,71 @@ describe('When there are songs initially in the database', () => {
             .expect(400)
 
           const songsRes = await api.get('/api/songs')
-          expect(songsRes.body).toHaveLength(initialSongsCount)
+          expect(songsRes.body).toHaveLength(initialSongs.length)
         })
 
       })
 
+    })
+
+  })
+
+  describe('deleting a song', () => {
+
+    test('succeeds with an existing id', async () => {
+      const existingId = initialSongs[0].id
+
+      await api
+        .delete('/api/songs/' + existingId)
+        .expect(200)
+
+      const songsRes = await api.get('/api/songs')
+      expect(songsRes.body.map(s => s.id)).not.toEqual(expect.arrayContaining([existingId])) // Map should not contain existingId
+      expect(songsRes.body).toHaveLength(initialSongs.length - 1)
+    })
+
+    test('fails if no song with that id exists', async () => {
+      const nonExistingId = await getNonexistingId()
+
+      await api.delete('/api/songs/' + nonExistingId)
+
+      const songsRes = await api.get('/api/songs')
+      expect(songsRes.body).toHaveLength(initialSongs.length)
+    })
+
+  })
+
+  describe('editing a song', () => {
+
+    test('succeeds with an existing id', async () => {
+      const initialTitle = initialSongs[0].title
+      let songToEdit = initialSongs[0]
+      songToEdit.title = 'Edited title'
+
+      const editRes = await api
+        .put('/api/songs/' + songToEdit.id)
+        .send(songToEdit)
+        .expect(200)
+
+      expect(editRes.body.id).toEqual(songToEdit.id)
+      expect(editRes.body.title).not.toEqual(initialTitle)
+      expect(editRes.body.title).toEqual(songToEdit.title)
+    })
+
+    test('fails if no song with that id exists', async () => {
+      let songToEdit = initialSongs[0]
+      songToEdit.title = 'Edited title'
+      songToEdit._id = await getNonexistingId()
+
+      const editRes = await api
+        .put('/api/songs/' + songToEdit.id)
+        .send(songToEdit)
+        .expect(200)
+
+      expect(editRes.body).toEqual(null)
+
+      const songsRes = await api.get('/api/songs')
+      expect(songsRes.body).toHaveLength(initialSongs.length)
     })
 
   })
