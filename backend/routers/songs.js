@@ -1,7 +1,6 @@
 const songRouter = require('express').Router()
 const Song = require('../models/song')
 const User = require('../models/user')
-//const songService = require('../services/songService')
 
 songRouter.get('/:id', async (req, res, next) => {
   try {

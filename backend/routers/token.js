@@ -1,7 +1,7 @@
-const loginRouter = require('express').Router()
+const tokenRouter = require('express').Router()
 const { authenticate } = require('../services/userService')
 
-loginRouter.post('/', async (req, res, next) => {
+tokenRouter.post('/', async (req, res, next) => {
   const username = req.body.username
   const password = req.body.password
   try {
@@ -16,4 +16,4 @@ loginRouter.post('/', async (req, res, next) => {
   }
 })
 
-module.exports = loginRouter
+module.exports = tokenRouter

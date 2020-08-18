@@ -45,4 +45,5 @@
 | 17.8. | 1    | A couple more backend tests |
 |       | 3    | Users to backend and MongoDB |
 |       | 3    | Backend user authentication |
-| total | 120  | |
+| 18.8. | 5    | Backend authentication and user tests, some refactoring |
+| total | 125  | |

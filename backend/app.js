@@ -1,20 +1,31 @@
+// npm imports
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const songRouter = require('./routers/songs')
-const { requestLogger, unknownEndpoint, errorHandler } = require('./utils/middleware')
 const path = require('path')
-const databaseSetup = require('./database/databaseSetup')
-const userRouter = require('./routers/users')
-const loginRouter = require('./routers/login')
 const jwt = require('express-jwt')
-const config = require('./utils/config')
+const slashes = require('connect-slashes')
 
-let dbConnection = databaseSetup.connect()
+// Local imports
+const config = require('./utils/config')
+const dbSetup = require('./database/setup')
+const userRouter = require('./routers/users')
+const tokenRouter = require('./routers/token')
+const songRouter = require('./routers/songs')
+
+// Local middleware
+const {
+  requestLogger,
+  unknownEndpoint,
+  errorHandler
+} = require('./utils/middleware')
+
+const dbConnection = dbSetup.connect()
 
 app.use(express.static('build'))
 app.use(express.json())
 app.use(cors())
+app.use(slashes(false))
 
 app.use(requestLogger)
 
@@ -23,18 +34,18 @@ app.use(jwt({
   algorithms: ['HS256']
 }).unless({
   path: [
-    '/',
-    /^(\/api?\/login\/?)$/,  // /login(/) and /api/login(/)
-    /^(\/register\/?)$/     // /register(/)
+    '/api/token',
+    /^(?!(\/api)).*/,
+    { url: '/api/users', methods: ['POST'] }
   ]
 }))
 
 app.use('/api/songs', songRouter)
 app.use('/api/users', userRouter)
-app.use('/api/login', loginRouter)
+app.use('/api/token', tokenRouter)
 
-// If url is for React router
-app.get('/song*', (req, res) => {
+// If url doesn't start with '/api'
+app.get(/^(?!(\/api)).*/, (req, res) => {
   res.sendFile(path.resolve(__dirname, 'build', 'index.html'))
 })
 
