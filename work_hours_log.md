@@ -46,4 +46,6 @@
 |       | 3    | Users to backend and MongoDB |
 |       | 3    | Backend user authentication |
 | 18.8. | 5    | Backend authentication and user tests, some refactoring |
-| total | 125  | |
+| 19.8. | 5    | Refactored frontend to use token authentication |
+|       | 2    | Split NavBar to more atomic components, added animated loading screen |
+| total | 132  | |

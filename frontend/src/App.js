@@ -1,71 +1,33 @@
-import React, { useState, useEffect } from 'react'
-import NavBar from './components/NavBar'
-import { makeStyles, Container } from '@material-ui/core'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import SongList from './components/songs/SongList'
-import Song from './components/songs/Song'
-import SnackbarAlert from './components/SnackbarAlert'
-import { initializeSongs } from './redux/songReducer'
-import { useDispatch } from 'react-redux'
+import React, { useEffect, Suspense } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginWithToken } from './redux/authReducer'
+import LoadingScreen from './LoadingScreen'
 
-const useStyles = makeStyles(() => ({
-  mainContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20
-  },
-  contentContainer: {
-
-  }
-}))
+const AuthenticatedApp = React.lazy(async () => await import('./AuthenticatedApp'))
+const UnauthenticatedApp = React.lazy(async () => await import('./UnauthenticatedApp'))
 
 const App = () => {
-  console.log('App render')
-  const [alertMessage, setAlertMessage] = useState('')
-  const [alertIsError, setAlertIsError] = useState(false)
-  //const [open, setOpen] = useState(false)
 
-  const classes = useStyles()
   const dispatch = useDispatch()
 
+  const user = useSelector((state) => state.auth.user)
+
   useEffect(() => {
-    console.log('App effect')
-    dispatch(initializeSongs())
+    const jsonUser = localStorage.getItem('SongWriterUser')
+    console.log('Getting user effect')
+    if (jsonUser) {
+      const authUser = JSON.parse(jsonUser)
+      dispatch(loginWithToken(authUser))
+    }
   }, [dispatch])
 
-  const handleAlertClose = (event, reason) => {
-    if (reason === 'clickaway') return
-
-    setAlertMessage('')
-  }
-
   return (
-    <>
-      <Router>
-        <NavBar/>
-        <Container maxWidth={false} className={classes.mainContainer}>
-          <Container maxWidth={false} align='center' className={classes.contentContainer}>
-            <Switch>
-              <Route path='/songs/:id'>
-                <Song
-                  setAlertMessage={setAlertMessage}
-                  setAlertIsError={setAlertIsError}
-                />
-              </Route>
-              <Route path='/songs/'>
-                <SongList/>
-              </Route>
-              <Route path='/'><p>Welcome</p></Route>
-            </Switch>
-          </Container>
-          <SnackbarAlert
-            message={alertMessage}
-            isError={alertIsError}
-            handleClose={handleAlertClose}
-          />
-        </Container>
-      </Router>
-    </>
+    <Suspense fallback={<LoadingScreen />}>
+      {user ?
+        <AuthenticatedApp/> :
+        <UnauthenticatedApp />
+      }
+    </Suspense>
   )
 }
 

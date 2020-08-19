@@ -10,9 +10,10 @@ ReactDOM.render(
   //<React.StrictMode> // MAKES EVERYTHING RENDER TWICE!
   <CssBaseline>
     <Provider store={store}>
-      <App />
+      <App/>
     </Provider>
   </CssBaseline>,
   //</React.StrictMode>
   document.getElementById('root')
 )
+//<App />
