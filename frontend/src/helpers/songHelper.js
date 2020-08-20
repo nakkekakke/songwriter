@@ -28,12 +28,13 @@ const cutStringIntoLines = (string) => {
   return cutLines ? cutLines : []
 }
 
-const getDefaultSong = () => {
+const getDefaultSong = (user) => {
   return {
     title: 'New song',
     sections: [
       getDefaultSection()
-    ]
+    ],
+    username: user ? user.username : null
   }
 }
 

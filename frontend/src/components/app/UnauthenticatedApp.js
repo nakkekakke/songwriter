@@ -1,8 +1,8 @@
 import React from 'react'
-import NavBar from './components/nav/NavBar'
+import NavBar from '../nav/NavBar'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { Container, makeStyles } from '@material-ui/core'
-import LoginForm from './components/LoginForm'
+import LoginForm from '../LoginForm'
 
 const useStyles = makeStyles(() => ({
   mainContainer: {

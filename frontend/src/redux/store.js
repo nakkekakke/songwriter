@@ -5,13 +5,15 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import songReducer from './songReducer'
 import snapshotReducer from './snapshotReducer'
 import authReducer from './authReducer'
+import alertReducer from './alertReducer'
 
 const composeEnhancers = composeWithDevTools({ trace: true })
 
 const reducers = combineReducers({
   songs: songReducer,
   snapshot: snapshotReducer,
-  auth: authReducer
+  auth: authReducer,
+  alert: alertReducer
 })
 
 const store = createStore(

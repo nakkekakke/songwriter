@@ -7,12 +7,15 @@ const userSchema = new mongoose.Schema({
     unique: true
   },
   password: String,
-  songs: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Song'
-    }
-  ]
+  songs: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Song'
+      }
+    ],
+    required: true
+  }
 })
 
 userSchema.plugin(uniqueValidator) // ValidationError

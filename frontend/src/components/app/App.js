@@ -1,7 +1,7 @@
 import React, { useEffect, Suspense } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginWithToken } from './redux/authReducer'
-import LoadingScreen from './LoadingScreen'
+import { loginWithToken } from '../../redux/authReducer'
+import LoadingScreen from '../LoadingScreen'
 
 const AuthenticatedApp = React.lazy(async () => await import('./AuthenticatedApp'))
 const UnauthenticatedApp = React.lazy(async () => await import('./UnauthenticatedApp'))

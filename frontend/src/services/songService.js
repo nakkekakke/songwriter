@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from './config'
 import { getAuthHeader } from '../helpers/auth'
 const url = '/api/songs/'
 
@@ -18,9 +18,9 @@ const getOne = async (id) => {
   return res.data
 }
 
-const create = async (songObject) => {
+const create = async (songObjectWithUser) => {
   console.log('Creating new song...')
-  const res = await axios.post(url, songObject, getAuthConfig())
+  const res = await axios.post(url, songObjectWithUser, getAuthConfig())
   return res.data
 }
 

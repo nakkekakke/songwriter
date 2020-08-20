@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const Song = ({ setAlertMessage, setAlertIsError }) => {
+const Song = () => {
   const [editMode, setEditMode] = useState(false)
   const [delConfirmOpen, setDelConfirmOpen] = useState(false)
   const [saveOpen, setSaveOpen] = useState(false)
@@ -287,11 +287,6 @@ const Song = ({ setAlertMessage, setAlertIsError }) => {
       </div>
     )
   }
-}
-
-Song.propTypes = {
-  setAlertIsError: PropTypes.func.isRequired,
-  setAlertMessage: PropTypes.func.isRequired
 }
 
 export default Song

@@ -19,13 +19,14 @@ const useStyles = makeStyles(() => ({
 const SongList = () => {
   const classes = useStyles()
   const songs = useSelector((state) => state.songs)
+  const user = useSelector((state) => state.auth.user)
   const dispatch = useDispatch()
   const history = useHistory()
 
   console.log('Rendered', songs.length, 'songs')
 
   const handleNewSongClick = () => {
-    dispatch(createSong(songHelper.getDefaultSong())) // Note: not error handling createSong
+    dispatch(createSong(songHelper.getDefaultSong(user))) // Note: not error handling createSong
       .then(res => {
         history.push('/songs/' + res.id)
         console.log('Redirected!')

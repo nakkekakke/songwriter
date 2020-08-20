@@ -22,11 +22,17 @@ songRouter.get('/', async (req, res, next) => {
 
 songRouter.post('/', async (req, res, next) => {
   try {
-    const user = await User.findById(req.body.userId)
-    const song = await Song.create({ ...req.body, user: user._id })
-    user.songs = user.songs.concat(song._id)
-    await user.save()
-    res.json(song)
+    const user = await User.findOne({ username: req.body.username })
+    if (user) {
+      const song = await Song.create({ ...req.body, user: user._id })
+      user.songs = user.songs.concat(song._id)
+      await user.save()
+      res.json(song)
+    } else {
+      const error = new Error('Invalid user')
+      error.name = 'UserError'
+      throw error
+    }
   } catch (error) {
     next(error)
   }
@@ -44,6 +50,9 @@ songRouter.put('/:id', async (req, res, next) => {
 songRouter.delete('/:id', async (req, res, next) => {
   try {
     const song = await Song.findByIdAndDelete(req.params.id)
+    const user = await User.findById(song.user)
+    user.songs = user.songs.filter(s => s.toString() !== song._id.toString())
+    await user.save()
     res.json(song)
   } catch (error) {
     next(error)

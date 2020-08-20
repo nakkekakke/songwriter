@@ -19,6 +19,8 @@ const errorHandler = (err, req, res, next) => {
     return res.status(503).send({ error: 'Could not connect to database.' })
   } else if (err.name === 'UnauthorizedError') {
     return res.status(401).send({ error: 'Invalid token' })
+  } else if (err.name === 'UserError') {
+    return res.status(422).send({ error: 'User not found' })
   } else if (err.name !== undefined) {
     return (res.status(500).json({ error: err.message }))
   }

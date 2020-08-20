@@ -5,6 +5,7 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAILURE = 'LOGIN_FAILURE'
 export const LOGIN_WITH_TOKEN = 'LOGIN_WITH_TOKEN'
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
+export const AUTH_FAILURE = 'AUTH_FAILURE'
 
 const initialState = {
   loginInProgress: false,
@@ -23,6 +24,8 @@ const authReducer = (state = initialState, action) => {
   case LOGIN_WITH_TOKEN:
     return { loginInProgress: false, loggedIn: true, user: action.data }
   case LOGOUT_SUCCESS:
+    return initialState
+  case AUTH_FAILURE:
     return initialState
   default:
     return state
@@ -69,6 +72,16 @@ export const logout = () => {
   return (dispatch) => {
     dispatch({
       type: LOGOUT_SUCCESS
+    })
+  }
+}
+
+export const authFailure = () => {
+  console.log('Auth failure: token expired or faulty')
+  localStorage.removeItem('SongWriterUser')
+  return (dispatch) => {
+    dispatch({
+      type: AUTH_FAILURE
     })
   }
 }

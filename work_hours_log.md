@@ -48,4 +48,6 @@
 | 18.8. | 5    | Backend authentication and user tests, some refactoring |
 | 19.8. | 5    | Refactored frontend to use token authentication |
 |       | 2    | Split NavBar to more atomic components, added animated loading screen |
-| total | 132  | |
+| 20.8. | 2    | Frontend now shows login screen if any API call is unauthenticated |
+|       | 2    | Frontend refactoring, started reworking alert system |
+| total | 136  | |
