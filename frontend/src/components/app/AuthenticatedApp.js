@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import NavBar from '../nav/NavBar'
 import { makeStyles, Container } from '@material-ui/core'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import SongList from '../songs/SongList'
 import Song from '../songs/Song'
-import SnackbarAlert from '../SnackbarAlert'
 import { initializeSongs } from '../../redux/songReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { showAlert } from '../../redux/alertReducer'
 
 const useStyles = makeStyles(() => ({
   mainContainer: {
@@ -21,7 +19,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const AuthenticatedApp = () => {
-  console.log('App render')
+  console.log('App rendering')
   //const [open, setOpen] = useState(false)
 
   const classes = useStyles()
@@ -31,11 +29,12 @@ const AuthenticatedApp = () => {
 
   useEffect(() => {
     console.log('App effect')
-    dispatch(initializeSongs())
+    const got = dispatch(initializeSongs())
+    console.log('got:', got)
     if (user) {
-      dispatch(showAlert('Logged in', 'success'))
+      //dispatch(showAlert(alerts.welcome))
     }
-  }, [dispatch])
+  }, [dispatch, user])
 
   return (
     <>
@@ -53,7 +52,6 @@ const AuthenticatedApp = () => {
               <Route path='/'><p>Welcome</p></Route>
             </Switch>
           </Container>
-          <SnackbarAlert />
         </Container>
       </Router>
     </>

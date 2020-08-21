@@ -2,6 +2,7 @@ import React, { useEffect, Suspense } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginWithToken } from '../../redux/authReducer'
 import LoadingScreen from '../LoadingScreen'
+import SnackbarAlert from '../SnackbarAlert'
 
 const AuthenticatedApp = React.lazy(async () => await import('./AuthenticatedApp'))
 const UnauthenticatedApp = React.lazy(async () => await import('./UnauthenticatedApp'))
@@ -22,12 +23,15 @@ const App = () => {
   }, [dispatch])
 
   return (
-    <Suspense fallback={<LoadingScreen />}>
-      {user ?
-        <AuthenticatedApp/> :
-        <UnauthenticatedApp />
-      }
-    </Suspense>
+    <div>
+      <Suspense fallback={<LoadingScreen />}>
+        {user ?
+          <AuthenticatedApp/> :
+          <UnauthenticatedApp />
+        }
+      </Suspense>
+      <SnackbarAlert />
+    </div>
   )
 }
 

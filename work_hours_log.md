@@ -50,4 +50,6 @@
 |       | 2    | Split NavBar to more atomic components, added animated loading screen |
 | 20.8. | 2    | Frontend now shows login screen if any API call is unauthenticated |
 |       | 2    | Frontend refactoring, started reworking alert system |
-| total | 136  | |
+| 21.8. | 2    | Frontend planning, more frontend refactoring and alerts |
+|       | 3    | Signup page, login page tweaking, manual end-to-end testing |
+| total | 141  | |

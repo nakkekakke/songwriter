@@ -2,9 +2,8 @@ import React from 'react'
 import { AppBar, Toolbar, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import LogoutButton from './LogButton'
-import NavButton from './NavButton'
-import { useSelector } from 'react-redux'
 import NavButtonsDiv from './NavButtonsDiv'
+import PropTypes from 'prop-types'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -33,6 +32,10 @@ const NavBar = ({ loggedIn }) => {
     </div>
 
   )
+}
+
+NavBar.propTypes = {
+  loggedIn: PropTypes.bool
 }
 
 export default NavBar

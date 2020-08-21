@@ -1,9 +1,9 @@
 import React from 'react'
-import { Container, CircularProgress, makeStyles } from '@material-ui/core'
+import { Container, CircularProgress, makeStyles, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles(() => ({
   root: {
-    marginTop: 70
+    marginTop: 114 // 64 (navbar) + 20 (container padding) + 30 (login header top margin)
   }
 }))
 
@@ -12,7 +12,10 @@ const LoadingScreen = () => {
   return (
     <div>
       <Container align='center' className={classes.root}>
-        <h1>Logging in</h1>
+        <Typography component='h1' variant='h4'>
+          Loading
+        </Typography>
+        <h1>Loading</h1>
         <CircularProgress size={70} thickness={4}/>
       </Container>
     </div>

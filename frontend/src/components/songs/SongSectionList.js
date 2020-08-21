@@ -1,16 +1,10 @@
 import React from 'react'
-import { makeStyles, Container } from '@material-ui/core'
+import { Container } from '@material-ui/core'
 import SongSection from './SongSection'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 import arrayMove from 'array-move'
 import { useDispatch } from 'react-redux'
 import { sortSections } from '../../redux/songReducer'
-
-const useStyles = makeStyles(() => ({
-  root: {
-
-  }
-}))
 
 const SortableItem = SortableElement(({ section, song, editMode }) => {
   return (
@@ -44,7 +38,6 @@ const SortableList = SortableContainer(({ song, editMode }) => {
 const SongSectionList = ({ song, editMode }) => {
 
   const dispatch = useDispatch()
-  const classes = useStyles()
 
   const handleSortEnd = ({ oldIndex, newIndex }) => {
     const sortedSections = arrayMove(song.sections, oldIndex, newIndex)

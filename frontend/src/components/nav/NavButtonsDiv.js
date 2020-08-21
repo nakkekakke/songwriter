@@ -1,6 +1,7 @@
 import React from 'react'
 import NavButton from './NavButton'
 import { makeStyles } from '@material-ui/core'
+import PropTypes from 'prop-types'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -24,6 +25,10 @@ const NavButtonsDiv = ({ loggedIn }) => {
       {loggedIn ? loggedInButtons() : loggedOutButtons()}
     </div>
   )
+}
+
+NavButtonsDiv.propTypes = {
+  loggedIn: PropTypes.bool
 }
 
 export default NavButtonsDiv

@@ -1,4 +1,5 @@
 import authService from '../services/authService'
+import { showAlert, alerts } from './alertReducer'
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -47,11 +48,13 @@ export const login = (username, password) => {
         type: LOGIN_SUCCESS,
         data: user
       })
+      dispatch(showAlert(alerts.loginSuccess))
     } catch (error) {
       console.log('Login failed')
       dispatch({
         type: LOGIN_FAILURE
       })
+      dispatch(showAlert(alerts.loginFailure))
     }
   }
 }

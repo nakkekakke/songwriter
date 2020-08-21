@@ -3,6 +3,8 @@ import { Button } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { logout } from '../../redux/authReducer'
 import { useHistory } from 'react-router'
+import PropTypes from 'prop-types'
+import { showAlert, alerts } from '../../redux/alertReducer'
 
 const LogButton = ({ loggedIn }) => {
 
@@ -12,6 +14,7 @@ const LogButton = ({ loggedIn }) => {
   const handleLogClick = () => {
     if (loggedIn) {
       dispatch(logout())
+      dispatch(showAlert(alerts.logout))
     }
     history.push('/')
   }
@@ -21,9 +24,13 @@ const LogButton = ({ loggedIn }) => {
       color='inherit'
       onClick={handleLogClick}
     >
-      {loggedIn ? 'Logout' : 'Login'}
+      {loggedIn ? 'Log out' : 'Log in'}
     </Button>
   )
+}
+
+LogButton.propTypes = {
+  loggedIn: PropTypes.bool
 }
 
 export default LogButton
