@@ -52,4 +52,7 @@
 |       | 2    | Frontend refactoring, started reworking alert system |
 | 21.8. | 2    | Frontend planning, more frontend refactoring and alerts |
 |       | 3    | Signup page, login page tweaking, manual end-to-end testing |
-| total | 141  | |
+| 22.8. | 2    | Fixing tests, refactoring database data, check for available username |
+|       | 3    | User specific songs, signup page tweaking and input validation, fixing Heroku |
+|       | 1    | Tried to get username uniqueness check to work before form submit |
+| total | 147  | |
