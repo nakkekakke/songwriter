@@ -39,4 +39,16 @@ userRouter.post('/', async (req, res, next) => {
   }
 })
 
+userRouter.post('/username-available', async (req, res, next) => {
+  const username = req.body.username
+  console.log('username:', username)
+  try {
+    const found = await User.findOne({ username })
+    console.log('found:', found)
+    return found ? false : true
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = userRouter

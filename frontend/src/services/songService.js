@@ -6,10 +6,9 @@ const getAuthConfig = () => {
   return { headers: getAuthHeader() }
 }
 
-const getAll = async () => {
+const getAll = async (user) => {
   console.log('Getting songs...')
-  console.log('header:', getAuthConfig())
-  const res = await axios.get(url, getAuthConfig())
+  const res = await axios.get(url, { ...getAuthConfig(), params: user })
   return res.data
 }
 

@@ -34,7 +34,7 @@ const authReducer = (state = initialState, action) => {
 }
 
 export const login = (username, password) => {
-  console.log('logging in user:', username, 'with password', password)
+  console.log('logging in user:', username)
   return async (dispatch) => {
     dispatch({
       type: LOGIN_REQUEST,
@@ -42,7 +42,6 @@ export const login = (username, password) => {
     })
     try {
       const user = await authService.authenticate(username, password)
-      console.log('login res:', user)
       localStorage.setItem('SongWriterUser', JSON.stringify(user))
       dispatch({
         type: LOGIN_SUCCESS,
@@ -70,7 +69,6 @@ export const loginWithToken = (user) => {
 }
 
 export const logout = () => {
-  console.log('Logging out user')
   localStorage.removeItem('SongWriterUser')
   return (dispatch) => {
     dispatch({
@@ -80,7 +78,6 @@ export const logout = () => {
 }
 
 export const authFailure = () => {
-  console.log('Auth failure: token expired or faulty')
   localStorage.removeItem('SongWriterUser')
   return (dispatch) => {
     dispatch({

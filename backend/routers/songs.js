@@ -2,18 +2,20 @@ const songRouter = require('express').Router()
 const Song = require('../models/song')
 const User = require('../models/user')
 
-songRouter.get('/:id', async (req, res, next) => {
-  try {
-    const song = await Song.findById(req.params.id)
-    song ? res.json(song.toJSON()) : res.status(404).end()
-  } catch (error) {
-    next(error)
-  }
-})
+// songRouter.get('/:id', async (req, res, next) => {
+//   try {
+//     const song = await Song.findById(req.params.id)
+//     song ? res.json(song.toJSON()) : res.status(404).end()
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
 songRouter.get('/', async (req, res, next) => {
   try {
-    const songs = await Song.find({})
+    console.log('params:', req.user)
+    const songs = await Song.find({ user: req.user.id })
+    console.log('songs:', songs)
     res.json(songs.map(s => s.toJSON()))
   } catch (error) {
     next(error)

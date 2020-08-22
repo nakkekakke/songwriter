@@ -36,7 +36,8 @@ app.use(jwt({
   path: [
     '/api/token',
     /^(?!(\/api)).*/,
-    { url: '/api/users', methods: ['POST'] }
+    { url: '/api/users', methods: ['POST'] },
+    '/api/users/username-available'
   ]
 }))
 

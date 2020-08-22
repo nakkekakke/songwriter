@@ -11,7 +11,7 @@ export const alerts = {
   songSaved: { message: 'Song saved.', type: 'success' },
   logout: { message: 'Logged out.', type: 'success' },
   signupSuccess: { message: 'Signup successful! You can now log in.', type: 'success' },
-  signupFailure: { message: 'Oops, something went wrong! Try again.', type: 'error' },
+  signupFailure: { message: 'Username is already taken!', type: 'error' },
 }
 
 const initialState = {

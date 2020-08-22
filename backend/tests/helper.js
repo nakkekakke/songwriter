@@ -8,6 +8,14 @@ const getInitialSongs = () => {
   return JSON.parse(rawSongs)
 }
 
+const assignSongs = (songs, user) => {
+  songs.forEach(song => {
+    song.user = user.id
+    user.songs = user.songs.concat(song.id)
+  })
+  return songs
+}
+
 const sampleSong = {
   id: 'TestID1234',
   title: 'Song title',
@@ -16,12 +24,8 @@ const sampleSong = {
       name: 'Section name',
       lines: ['Line 1', 'Line 2']
     }
-  ]
-}
-
-const getInitialUsers = () => {
-  let rawUsers = fs.readFileSync('./tests/test_songs.json')
-  return JSON.parse(rawUsers)
+  ],
+  user: '123456789012345678901234'
 }
 
 const getNonexistingSongId = async () => {
@@ -48,4 +52,4 @@ const api = {
 
 const userCred = { username: 'test', password: 'test' }
 
-module.exports = { getInitialSongs, sampleSong, getNonexistingId: getNonexistingSongId, api, userCred }
+module.exports = { getInitialSongs, sampleSong, getNonexistingId: getNonexistingSongId, api, userCred, assignSongs }

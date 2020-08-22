@@ -6,7 +6,8 @@ const {
   sampleSong,
   getNonexistingId,
   api,
-  userCred
+  userCred,
+  assignSongs
 } = require('./helper')
 
 
@@ -15,7 +16,7 @@ let token
 let testUser
 
 const userAddedSong = () => {
-  return { ...sampleSong, userId: testUser.id }
+  return { ...sampleSong, username: testUser.username, user: testUser.id }
 }
 
 
@@ -49,7 +50,9 @@ describe('When user is authenticated', () => {
 
     beforeEach(async () => {
       await Song.deleteMany({})
-      initialSongs = await Song.create(getInitialSongs())
+      testUser.songs = []
+      const assignedSongs = assignSongs(getInitialSongs(), testUser)
+      initialSongs = await Song.create(assignedSongs)
     })
 
     describe('all songs', () => {
@@ -324,7 +327,9 @@ describe('When user is authenticated', () => {
 describe('When user is not authenticated', () => {
   let songs
   beforeEach(async () => {
-    songs = await Song.create(getInitialSongs())
+    testUser.songs = []
+    const assignedSongs = assignSongs(getInitialSongs(), testUser)
+    songs = await Song.create(assignedSongs)
   })
 
   test('getting all songs fails', async () => {

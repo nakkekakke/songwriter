@@ -84,10 +84,11 @@ export const editTitle = (song, title) => {
 }
 
 
-export const initializeSongs = () => {
+export const initializeSongs = (user) => {
   return async (dispatch) => {
     try {
-      const songs = await songService.getAll()
+      console.log('user:', user)
+      const songs = await songService.getAll(user)
       console.log('Initialized:', songs)
       dispatch({
         type: INIT_SONGS,

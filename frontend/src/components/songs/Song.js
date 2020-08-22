@@ -245,6 +245,7 @@ const Song = () => {
   const handleDeleteAgreeClick = () => {
     console.log('Deleting song here')
     dispatch(deleteSong(song))
+    dispatch(resetSnapshot())
     history.push('/songs/')
   }
 

@@ -6,4 +6,9 @@ const signup = async (username, password) => {
   return res.data
 }
 
-export default { signup }
+const usernameAvailable = async (username) => {
+  const res = await axios.post(url + '/username-available', { username })
+  return res.data
+}
+
+export default { signup, usernameAvailable }

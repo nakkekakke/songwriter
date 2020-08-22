@@ -29,12 +29,8 @@ const AuthenticatedApp = () => {
 
   useEffect(() => {
     console.log('App effect')
-    const got = dispatch(initializeSongs())
-    console.log('got:', got)
-    if (user) {
-      //dispatch(showAlert(alerts.welcome))
-    }
-  }, [dispatch, user])
+    dispatch(initializeSongs(user))
+  }, [dispatch])
 
   return (
     <>

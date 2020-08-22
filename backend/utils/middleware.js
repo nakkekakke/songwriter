@@ -22,6 +22,7 @@ const errorHandler = (err, req, res, next) => {
   } else if (err.name === 'UserError') {
     return res.status(422).send({ error: 'User not found' })
   } else if (err.name !== undefined) {
+    console.log(err.message)
     return (res.status(500).json({ error: err.message }))
   }
 
