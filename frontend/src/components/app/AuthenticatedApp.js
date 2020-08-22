@@ -30,7 +30,7 @@ const AuthenticatedApp = () => {
   useEffect(() => {
     console.log('App effect')
     dispatch(initializeSongs(user))
-  }, [dispatch])
+  }, [dispatch, user])
 
   return (
     <>
