@@ -55,4 +55,5 @@
 | 22.8. | 2    | Fixing tests, refactoring database data, check for available username |
 |       | 3    | User specific songs, signup page tweaking and input validation, fixing Heroku |
 |       | 1    | Tried to get username uniqueness check to work before form submit |
-| total | 147  | |
+| 23.8. | 4    | (Frontend) Song menu, song cloning, refactoring and styling |
+| total | 151  | |
