@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { makeStyles, TextField, Button, Icon, Box } from '@material-ui/core'
+import { makeStyles, TextField, Button, Icon, Box, Typography } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import songHelper from '../../helpers/songHelper'
 import { useDispatch, useSelector } from 'react-redux'
@@ -24,8 +24,15 @@ const useStyles = makeStyles((theme) => ({
     marginTop: -12,
     marginBottom: -15
   },
+  name: {
+    marginTop: 10
+  },
+  linesDiv: {
+    marginTop: 12,
+    marginBottom: 10
+  },
   line: {
-    marginTop: -5
+    marginBottom: 5
   },
   editForm: {
     marginBottom: 15
@@ -57,11 +64,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const SongSection = ({ songId, sectionId, editMode }) => {
-
-
-  // Local states for inputs only
-  //const [name, setName] = useState(section.name)
-  //const [linesString, setLinesString] = useState(songHelper.linesArrayToString(section.lines)) // Lines are a string while in state
   const [deleteConfirm, setDeleteConfirm] = useState(false)
 
   const classes = useStyles()
@@ -114,10 +116,18 @@ const SongSection = ({ songId, sectionId, editMode }) => {
   const normalView = () => {
     return (
       <div className={classes.normalViewRoot}>
-        <h2>{section.name}</h2>
-        {section.lines.map((line, index) => {
-          return <p className={classes.line} key={index}>{line}</p>
-        })}
+        <Typography variant='h6' className={classes.name}>
+          {section.name}
+        </Typography>
+        <div className={classes.linesDiv}>
+          {section.lines.map((line, index) => {
+            return (
+              <div key={index}>
+                <Typography variant='body1' className={classes.line}>{line}</Typography>
+              </div>
+            )
+          })}
+        </div>
       </div>
     )
   }

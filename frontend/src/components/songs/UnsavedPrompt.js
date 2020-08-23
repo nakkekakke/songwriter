@@ -4,7 +4,7 @@ import NavigationPrompt from 'react-router-navigation-prompt'
 import PropTypes from 'prop-types'
 import DialogCloseButton from '../DialogCloseButton'
 
-const UnsavedPrompt = ({ handleSaveAgreeClick, handleSaveDiscardClick, unsavedChanges }) => {
+const UnsavedPrompt = ({ handleSaveConfirmClick, handleSaveDiscardClick, unsavedChanges }) => {
 
   const navPrompt = (isActive, onCancel, onConfirm) => {
     return (
@@ -19,10 +19,10 @@ const UnsavedPrompt = ({ handleSaveAgreeClick, handleSaveDiscardClick, unsavedCh
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handlePromptConfirmSaveClick(onConfirm)} color='primary' variant='contained'>
+          <Button onClick={handlePromptSaveClick(onConfirm)} color='primary' variant='contained'>
             Save and leave
           </Button>
-          <Button onClick={handlePromptConfirmDiscardClick(onConfirm)} color='secondary' variant='contained'>
+          <Button onClick={handlePromptDiscardClick(onConfirm)} color='secondary' variant='contained'>
             Leave without saving
           </Button>
           <DialogCloseButton onClick={onCancel} />
@@ -31,12 +31,12 @@ const UnsavedPrompt = ({ handleSaveAgreeClick, handleSaveDiscardClick, unsavedCh
     )
   }
 
-  const handlePromptConfirmSaveClick = (onConfirm) => () => {
-    handleSaveAgreeClick()
+  const handlePromptSaveClick = (onConfirm) => () => {
+    handleSaveConfirmClick()
     onConfirm()
   }
 
-  const handlePromptConfirmDiscardClick = (onConfirm) => () => {
+  const handlePromptDiscardClick = (onConfirm) => () => {
     handleSaveDiscardClick()
     onConfirm()
   }
@@ -49,7 +49,7 @@ const UnsavedPrompt = ({ handleSaveAgreeClick, handleSaveDiscardClick, unsavedCh
 }
 
 UnsavedPrompt.propTypes = {
-  handleSaveAgreeClick: PropTypes.func.isRequired,
+  handleSaveConfirmClick: PropTypes.func.isRequired,
   handleSaveDiscardClick: PropTypes.func.isRequired,
   unsavedChanges: PropTypes.func.isRequired
 }

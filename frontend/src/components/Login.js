@@ -3,6 +3,7 @@ import { TextField, Button, FormGroup, makeStyles, Container, Link as MaterialLi
 import { useDispatch } from 'react-redux'
 import { login } from '../redux/authReducer'
 import { Link } from 'react-router-dom'
+import Heading from './Heading'
 
 const useStyles = makeStyles(() => ({
   header: {
@@ -45,9 +46,7 @@ const Login = () => {
 
   return (
     <Container maxWidth='xs' align='center' className={classes.contentContainer}>
-      <Typography component='h1' variant='h4' className={classes.header}>
-        Log in
-      </Typography>
+      <Heading text='Log in'/>
       <form onSubmit={handleSubmit} className={classes.form}>
         <FormGroup>
           <TextField

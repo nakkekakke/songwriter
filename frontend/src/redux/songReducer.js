@@ -71,6 +71,11 @@ export const createSong = (song) => {
   }
 }
 
+export const cloneSong = (song, username) => {
+  const clone = { title: song.title, sections: [...song.sections], username: username }
+  return createSong(clone)
+}
+
 export const editTitle = (song, title) => {
   let songToDispatch = JSON.parse(JSON.stringify(song))
   songToDispatch.title = title

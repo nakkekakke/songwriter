@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { makeStyles, Container, Button, TextField, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog } from '@material-ui/core'
+import { makeStyles, Container, Button, TextField } from '@material-ui/core'
 import { Add, DeleteForever } from '@material-ui/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { editTitle, addSection, deleteSong, saveSong, getSongFromSnapshot } from '../../redux/songReducer'
@@ -8,7 +8,9 @@ import { saveSnapshot, resetSnapshot } from '../../redux/snapshotReducer'
 import SongSectionList from './SongSectionList'
 import _ from 'lodash'
 import UnsavedPrompt from './UnsavedPrompt'
-import DialogCloseButton from '../DialogCloseButton'
+import DeleteDialog from './DeleteDialog'
+import SaveDialog from './SaveDialog'
+import Heading from '../Heading'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1)
   },
   titleField: {
-    margin: 15
+    margin: 12
   },
   addSectionButton: {
     marginTop: theme.spacing(1)
@@ -52,9 +54,13 @@ const Song = () => {
 
   const snapshot = useSelector((state) => state.snapshot)
 
+  useEffect(() => {
+    dispatch(resetSnapshot())
+  }, [dispatch])
+
   console.log('Song render:', song)
 
-  const renderTitle = () => {
+  const title = () => {
     if (editMode) {
       return (
         <TextField
@@ -68,7 +74,7 @@ const Song = () => {
       )
     } else {
       return (
-        <h1>{song.title}</h1>
+        <Heading text={song.title}/>
       )
     }
   }
@@ -134,55 +140,6 @@ const Song = () => {
     return (<div/>)
   }
 
-  const deleteDialog = () => {
-    return (
-      <Dialog
-        open={delConfirmOpen}
-        onClose={() => setDelConfirmOpen(false)}
-      >
-        <DialogTitle>Delete this song?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Once deleted, this song cannot be restored (not even by discarding changes when exiting Edit Mode).
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteAgreeClick} color='secondary' variant='contained'>
-            Delete permanently
-          </Button>
-          <Button onClick={() => setDelConfirmOpen(false)} variant='contained'>
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-    )
-  }
-
-  const saveDialog = () => {
-    return (
-      <Dialog
-        open={saveOpen}
-        onClose={() => setSaveOpen(false)}
-      >
-        <DialogTitle>Save changes?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Save or discard the changes you have made.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSaveAgreeClick} color='primary' variant='contained'>
-            Save changes
-          </Button>
-          <Button onClick={handleSaveDiscardClick} color='secondary' variant='contained'>
-            Discard changes
-          </Button>
-          <DialogCloseButton onClick={() => setSaveOpen(false)} />
-        </DialogActions>
-      </Dialog>
-    )
-  }
-
   const handleSaveClick = () => {
     dispatch(saveSnapshot(song))
     dispatch(saveSong(song))
@@ -211,7 +168,7 @@ const Song = () => {
     }
   }
 
-  const handleSaveAgreeClick = () => {
+  const handleSaveConfirmClick = () => {
     console.log('Saving!')
     setSaveOpen(false)
     setEditMode(false)
@@ -223,9 +180,8 @@ const Song = () => {
     console.log('Discarding changes!')
     setSaveOpen(false)
     setEditMode(false)
-    dispatch(resetSnapshot())
     dispatch(getSongFromSnapshot(snapshot))
-    console.log('Snapshot after reset:', snapshot)
+    dispatch(resetSnapshot())
   }
 
   const handleTitleChange = (event) => {
@@ -242,7 +198,7 @@ const Song = () => {
     dispatch(addSection(song))
   }
 
-  const handleDeleteAgreeClick = () => {
+  const handleDeleteConfirmClick = () => {
     console.log('Deleting song here')
     dispatch(deleteSong(song))
     dispatch(resetSnapshot())
@@ -256,7 +212,7 @@ const Song = () => {
   if (song) {
     return (
       <div className={classes.root}>
-        {renderTitle()}
+        {title()}
         <div>
           <Container align='right' maxWidth={false} className={classes.menuContainer}>
             {saveButton()}
@@ -270,10 +226,19 @@ const Song = () => {
         <Container align='right' maxWidth={false}>
           {deleteSongButton()}
         </Container>
-        {deleteDialog()}
-        {saveDialog()}
+        <DeleteDialog
+          open={delConfirmOpen}
+          setOpen={setDelConfirmOpen}
+          handleConfirmClick={handleDeleteConfirmClick}
+        />
+        <SaveDialog
+          open={saveOpen}
+          setOpen={setSaveOpen}
+          handleConfirmClick={handleSaveConfirmClick}
+          handleDiscardClick={handleSaveDiscardClick}
+        />
         <UnsavedPrompt
-          handleSaveAgreeClick={handleSaveAgreeClick}
+          handleSaveConfirmClick={handleSaveConfirmClick}
           handleSaveDiscardClick={handleSaveDiscardClick}
           unsavedChanges={unsavedChanges}
         />
@@ -282,7 +247,7 @@ const Song = () => {
   } else {
     return (
       <div>
-        <h1>Loading</h1>
+        <Heading text='Loading song' />
         <p>Check the url if it takes too long</p>
       </div>
     )

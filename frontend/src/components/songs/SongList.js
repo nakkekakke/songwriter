@@ -6,10 +6,11 @@ import { Add } from '@material-ui/icons'
 import songHelper from '../../helpers/songHelper'
 import { createSong } from '../../redux/songReducer'
 import { useHistory } from 'react-router'
+import Heading from '../Heading'
 
 const useStyles = makeStyles(() => ({
-  root: {
-
+  list: {
+    marginTop: 10
   },
   addSongButton: {
     margin: 8
@@ -43,9 +44,9 @@ const SongList = () => {
   )
 
   return (
-    <div className={classes.root}>
-      <h1>Songs</h1>
-      <List>
+    <div>
+      <Heading text='Your songs' />
+      <List className={classes.list}>
         {songs.length !== 0 ? listSongs() : <p>No songs found</p>}
       </List>
       <Button

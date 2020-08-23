@@ -3,7 +3,10 @@ import { Container, CircularProgress, makeStyles, Typography } from '@material-u
 
 const useStyles = makeStyles(() => ({
   root: {
-    marginTop: 114 // 64 (navbar) + 20 (container padding) + 30 (login header top margin)
+    marginTop: 114, // 64 (navbar) + 20 (container padding) + 30 (login header top margin)
+  },
+  text: {
+    marginBottom: 15
   }
 }))
 
@@ -12,10 +15,9 @@ const LoadingScreen = () => {
   return (
     <div>
       <Container align='center' className={classes.root}>
-        <Typography component='h1' variant='h4'>
+        <Typography component='h1' variant='h4' className={classes.text}>
           Loading
         </Typography>
-        <h1>Loading</h1>
         <CircularProgress size={70} thickness={4}/>
       </Container>
     </div>

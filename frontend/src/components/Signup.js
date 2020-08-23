@@ -1,15 +1,13 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { makeStyles, Container, Typography, FormGroup, TextField, Button, Link as MaterialLink, Collapse } from '@material-ui/core'
+import { makeStyles, Container, FormGroup, TextField, Button, Link as MaterialLink, Collapse } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import { Link, useHistory } from 'react-router-dom'
 import { showAlert, alerts } from '../redux/alertReducer'
 import userService from '../services/userService'
+import Heading from './Heading'
 
 const useStyles = makeStyles(() => ({
-  header: {
-    marginTop: 30
-  },
   alert: {
     marginBottom: 10
   },
@@ -94,9 +92,7 @@ const Signup = () => {
 
   return (
     <Container maxWidth='xs' align='center' className={classes.contentContainer}>
-      <Typography component='h1' variant='h4' className={classes.header}>
-        Sign up
-      </Typography>
+      <Heading text='Sign up'/>
       <form onSubmit={handleSubmit} className={classes.form} autoComplete='off'>
         <FormGroup>
           {uniqueAlert()}
