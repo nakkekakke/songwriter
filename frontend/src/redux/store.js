@@ -6,6 +6,7 @@ import songReducer from './songReducer'
 import snapshotReducer from './snapshotReducer'
 import authReducer from './authReducer'
 import alertReducer from './alertReducer'
+import errorReducer from './errorReducer'
 
 const composeEnhancers = composeWithDevTools({ trace: true })
 
@@ -13,7 +14,8 @@ const reducers = combineReducers({
   songs: songReducer,
   snapshot: snapshotReducer,
   auth: authReducer,
-  alert: alertReducer
+  alert: alertReducer,
+  errors: errorReducer
 })
 
 const store = createStore(

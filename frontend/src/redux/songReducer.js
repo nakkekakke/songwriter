@@ -1,5 +1,6 @@
 import songService from '../services/songService'
 import songHelper from '../helpers/songHelper'
+import { showAlert, alerts } from './alertReducer'
 
 // Action types
 export const INIT_SONGS = 'INIT_SONGS'
@@ -80,7 +81,7 @@ export const editTitle = (song, title) => {
   let songToDispatch = JSON.parse(JSON.stringify(song))
   songToDispatch.title = title
 
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: EDIT_SONG,
       data: songToDispatch
@@ -123,19 +124,17 @@ export const deleteSong = (song) => {
 export const saveSong = (song) => {
   return async (dispatch) => {
     try {
-      const savedSong = await songService.edit(song)
-      dispatch({
-        type: EDIT_SONG,
-        data: savedSong
-      })
+      console.log('Saving')
+      await songService.edit(song)
     } catch (error) {
-      console.log(error)
+      console.log('tuli errori:', error)
+      dispatch(showAlert(alerts.validationFailure))
     }
   }
 }
 
 export const getSongFromSnapshot = (snapshot) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: EDIT_SONG,
       data: snapshot
@@ -145,7 +144,7 @@ export const getSongFromSnapshot = (snapshot) => {
 
 // Section action creators
 export const editSection = (songId, section) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: EDIT_SECTION,
       data: { songId, section }
@@ -154,7 +153,7 @@ export const editSection = (songId, section) => {
 }
 
 export const deleteSection = (songId, section) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: DELETE_SECTION,
       data: { songId, section }
@@ -166,7 +165,7 @@ export const addSection = (song) => {
   let songToDispatch = JSON.parse(JSON.stringify(song))
   songToDispatch = songHelper.addNewSection(songToDispatch)
 
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: EDIT_SONG,
       data: songToDispatch
@@ -187,7 +186,7 @@ export const sortSections = (song, sortedSections) => {
   let songToDispatch = JSON.parse(JSON.stringify(song))
   songToDispatch.sections = sortedSections
 
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: EDIT_SONG,
       data: songToDispatch

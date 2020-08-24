@@ -11,6 +11,7 @@ import UnsavedPrompt from './UnsavedPrompt'
 import DeleteDialog from './DeleteDialog'
 import SaveDialog from './SaveDialog'
 import Heading from '../Heading'
+import { errors, createError, removeError } from '../../redux/errorReducer'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,7 +44,6 @@ const Song = () => {
   const [editMode, setEditMode] = useState(false)
   const [delConfirmOpen, setDelConfirmOpen] = useState(false)
   const [saveOpen, setSaveOpen] = useState(false)
-  const [titleError, setTitleError] = useState(false)
 
   const classes = useStyles()
   const id = useParams().id
@@ -51,6 +51,9 @@ const Song = () => {
   const history = useHistory()
 
   const song = useSelector((state) => state.songs.find(s => s.id === id))
+  const songErrors = useSelector((state) => state.errors)
+  console.log('Errors:', songErrors)
+  const titleError = songErrors.find(e => e.type === errors.SONG_TITLE_ERROR)
 
   const snapshot = useSelector((state) => state.snapshot)
 
@@ -60,17 +63,24 @@ const Song = () => {
 
   console.log('Song render:', song)
 
+  const calculateTitleWidth = () => {
+    return 5 + (song.title.length / 2.5)
+  }
+
   const title = () => {
     if (editMode) {
       return (
-        <TextField
-          error={titleError}
-          className={classes.titleField}
-          label='Edit title'
-          defaultValue={song.title}
-          onChange={handleTitleChange}
-          helperText={titleError ? 'Title cannot be empty!' : ''} // Todo: enforce
-        />
+        <div style={{ width: `${calculateTitleWidth()}%` }}>
+          <TextField
+            fullWidth
+            error={titleError !== undefined}
+            className={classes.titleField}
+            label='Edit title'
+            defaultValue={song.title}
+            onChange={handleTitleChange}
+            helperText={titleError ? 'Length must be 1-50 characters' : ''}
+          />
+        </div>
       )
     } else {
       return (
@@ -86,6 +96,7 @@ const Song = () => {
           color='primary'
           variant='outlined'
           onClick={handleSaveClick}
+          disabled={songErrors.length !== 0}
         >
           Save changes
         </Button>
@@ -185,10 +196,12 @@ const Song = () => {
   }
 
   const handleTitleChange = (event) => {
-    if (event.target.value === '') {
-      setTitleError(true)
+    if (event.target.value === '' || event.target.value.length > 50) {
+      console.log('Dispatching error')
+      dispatch(createError(errors.SONG_TITLE_ERROR))
     } else if (titleError) {
-      setTitleError(false)
+      console.log('Removing errors')
+      dispatch(removeError(errors.SONG_TITLE_ERROR))
     }
     dispatch(editTitle(song, event.target.value))
   }
@@ -236,11 +249,13 @@ const Song = () => {
           setOpen={setSaveOpen}
           handleConfirmClick={handleSaveConfirmClick}
           handleDiscardClick={handleSaveDiscardClick}
+          saveAllowed={songErrors.length === 0}
         />
         <UnsavedPrompt
           handleSaveConfirmClick={handleSaveConfirmClick}
           handleSaveDiscardClick={handleSaveDiscardClick}
           unsavedChanges={unsavedChanges}
+          saveAllowed={songErrors.length === 0}
         />
       </div>
     )

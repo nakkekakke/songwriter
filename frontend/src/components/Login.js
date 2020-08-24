@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TextField, Button, FormGroup, makeStyles, Container, Link as MaterialLink, Typography } from '@material-ui/core'
+import { TextField, Button, FormGroup, makeStyles, Container, Link as MaterialLink } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { login } from '../redux/authReducer'
 import { Link } from 'react-router-dom'

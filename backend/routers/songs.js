@@ -43,7 +43,7 @@ songRouter.post('/', async (req, res, next) => {
 songRouter.put('/:id', async (req, res, next) => {
   try {
     const updatedFields = { title: req.body.title, sections: req.body.sections }
-    const song = await Song.findByIdAndUpdate(req.params.id, updatedFields, { new: true })
+    const song = await Song.updateOne({ _id: req.params.id }, updatedFields, { runValidators: true })
     res.json(song)
   } catch (error) {
     next(error)

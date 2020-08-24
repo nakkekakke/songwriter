@@ -56,4 +56,6 @@
 |       | 3    | User specific songs, signup page tweaking and input validation, fixing Heroku |
 |       | 1    | Tried to get username uniqueness check to work before form submit |
 | 23.8. | 4    | (Frontend) Song menu, song cloning, refactoring and styling |
-| total | 151  | |
+| 24.8. | 3    | Redux error reducer, validating song edit mode inputs |
+|       | 2    | Conditional save buttons, backend (Mongoose) validation bugfix |
+| total | 156  | |

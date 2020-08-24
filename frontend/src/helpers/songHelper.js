@@ -18,6 +18,15 @@ const linesStringToArray = (string) => {
   return array
 }
 
+const validateLines = (array) => {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i].length > 200) {
+      return false
+    }
+  }
+  return true
+}
+
 const lineCount = (string) => {
   return cutStringIntoLines(string).size
 }
@@ -80,4 +89,4 @@ const cloneAndAddSection = (song, section) => {
 
 
 
-export default { linesArrayToString, linesStringToArray, lineCount, getDefaultSong, addNewSection, createNewSection, cloneAndAddSection }
+export default { linesArrayToString, linesStringToArray, lineCount, getDefaultSong, addNewSection, createNewSection, cloneAndAddSection, validateLines }

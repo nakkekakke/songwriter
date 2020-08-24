@@ -7,6 +7,7 @@ import { editSection, deleteSection, cloneSection } from '../../redux/songReduce
 
 import { SortableHandle } from 'react-sortable-hoc'
 import { DragIndicator } from '@material-ui/icons'
+import { errors, createError, removeError } from '../../redux/errorReducer'
 
 const useStyles = makeStyles((theme) => ({
   section: {
@@ -72,20 +73,32 @@ const SongSection = ({ songId, sectionId, editMode }) => {
   const DragHandle = SortableHandle(() => <Box className={classes.dragHandle}> <Icon><DragIndicator /></Icon> </Box>)
 
   const section = useSelector((state) => state.songs.find(s => s.id === songId).sections.find(s => s.id === sectionId))
+  const nameError = useSelector((state) => state.errors.find(e => e.type === errors.SECTION_NAME_ERROR && e.id === sectionId))
+  const lineError = useSelector((state) => state.errors.find(e => e.type === errors.SECTION_LINES_ERROR && e.id === sectionId))
 
   const editView = () => {
     return (
       <form className={classes.editForm} >
-        <TextField className={classes.nameField} label='Edit name' name='name' defaultValue={section.name} onChange={handleNameChange} />
+        <TextField
+          className={classes.nameField}
+          error={nameError !== undefined}
+          label='Edit name'
+          name='name'
+          defaultValue={section.name}
+          onChange={handleNameChange}
+          helperText={nameError ? 'Length must be 1-50 characters' : ''}
+        />
         <div>
           <TextField
             multiline
+            error={lineError !== undefined}
             label='Lines'
             name='lines'
             rows={section.lines.size}
             defaultValue={songHelper.linesArrayToString(section.lines)}
             onChange={handleLinesChange}
             fullWidth={true}
+            helperText={lineError ? 'Max 200 characters for one line' : ''}
           />
         </div>
         <div className={classes.bottomDiv}>
@@ -133,13 +146,24 @@ const SongSection = ({ songId, sectionId, editMode }) => {
   }
 
   const handleNameChange = (event) => {
-    const editedSection = { ...section, lines: [...section.lines], name: event.target.value }
+    const name = event.target.value
+    const editedSection = { ...section, lines: [...section.lines], name }
+    if (name.length === 0 || name.length > 50) {
+      dispatch(createError(errors.SECTION_NAME_ERROR, sectionId))
+    } else {
+      dispatch(removeError(errors.SECTION_NAME_ERROR, sectionId))
+    }
     dispatch(editSection(songId, editedSection))
   }
 
   const handleLinesChange = (event) => {
     const linesArray = songHelper.linesStringToArray(event.target.value)
     const editedSection = { ...section, lines: linesArray }
+    if (!songHelper.validateLines(linesArray)) {
+      dispatch(createError(errors.SECTION_LINES_ERROR, sectionId))
+    } else {
+      dispatch(removeError(errors.SECTION_LINES_ERROR, sectionId))
+    }
     dispatch(editSection(songId, editedSection))
   }
 

@@ -12,6 +12,7 @@ export const alerts = {
   logout: { message: 'Logged out.', type: 'success' },
   signupSuccess: { message: 'Signup successful! You can now log in.', type: 'success' },
   signupFailure: { message: 'Username is already taken!', type: 'error' },
+  validationFailure: { message: 'Saving failed due to invalid input data.', type: 'error' }
 }
 
 const initialState = {
