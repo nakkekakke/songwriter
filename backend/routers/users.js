@@ -1,6 +1,7 @@
 const userRouter = require('express').Router()
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
+const Song = require('../models/song')
 
 userRouter.get('/', async (req, res, next) => {
   console.log('user:', req.user)
@@ -39,6 +40,23 @@ userRouter.post('/', async (req, res, next) => {
   }
 })
 
+// Edit/reorder user's song list
+userRouter.put('/songs', async (req, res, next) => {
+  try {
+    const songIds = req.body.songIds
+    const username = req.body.username
+    let songs = []
+    await asyncForEach(songIds, async s => {
+      const song = await Song.findOne({ _id: s })
+      songs = songs.concat(song)
+    })
+    await User.updateOne({ username }, { songs: songs }, { runValidators: true })
+    res.status(200).end()
+  } catch (error) {
+    next(error)
+  }
+})
+
 userRouter.post('/username-available', async (req, res, next) => {
   const username = req.body.username
   console.log('username:', username)
@@ -50,5 +68,11 @@ userRouter.post('/username-available', async (req, res, next) => {
     next(error)
   }
 })
+
+const asyncForEach = async (array, callback) => {
+  for (let i = 0; i < array.length; i++) {
+    await callback(array[i])
+  }
+}
 
 module.exports = userRouter

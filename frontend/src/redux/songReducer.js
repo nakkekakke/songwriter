@@ -11,6 +11,7 @@ export const DELETE_SONG = 'DELETE_SONG'
 export const EDIT_SECTION = 'EDIT_SECTION'
 export const DELETE_SECTION = 'DELETE_SECTION'
 export const CLONE_SECTION = 'CLONE_SECTION'
+export const SORT_SONGS = 'SORT_SONGS'
 
 
 // Reducer
@@ -26,6 +27,8 @@ const songReducer = (state = [], action) => {
     const id = action.data.id
     return state.map(song => song.id !== id ? song : action.data)
   }
+  case SORT_SONGS:
+    return action.data
   case DELETE_SONG:
     return state.filter(song => song.id !== action.data.id)
   case EDIT_SECTION: {
@@ -89,7 +92,6 @@ export const editTitle = (song, title) => {
   }
 }
 
-
 export const initializeSongs = (user) => {
   return async (dispatch) => {
     try {
@@ -118,6 +120,15 @@ export const deleteSong = (song) => {
     } catch (error) {
       console.log(error)
     }
+  }
+}
+
+export const sortSongs = (sortedSongs) => {
+  console.log('Sorted:', sortedSongs)
+
+  return {
+    type: SORT_SONGS,
+    data: sortedSongs
   }
 }
 

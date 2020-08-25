@@ -40,7 +40,7 @@ const Signup = () => {
     event.preventDefault()
 
     try {
-      const user = await userService.signup(username, password)
+      const user = await userService.create(username, password)
       console.log('Signed up:', user)
       dispatch(showAlert(alerts.signupSuccess))
       history.push('/')

@@ -1,12 +1,14 @@
 import React from 'react'
 import { List, makeStyles, Button } from '@material-ui/core'
-import SongListItem from './SongListItem'
 import { useSelector, useDispatch } from 'react-redux'
 import { Add } from '@material-ui/icons'
 import songHelper from '../../helpers/songHelper'
-import { createSong } from '../../redux/songReducer'
+import { createSong, sortSongs } from '../../redux/songReducer'
 import { useHistory } from 'react-router'
 import Heading from '../Heading'
+import SortableSongList from './SortableSongList'
+import arrayMove from 'array-move'
+import userService from '../../services/userService'
 
 const useStyles = makeStyles(() => ({
   list: {
@@ -35,19 +37,30 @@ const SongList = () => {
       .catch(e => console.log('Error creating new song:', e))
   }
 
-  const listSongs = () => songs.map(song =>
-    <SongListItem
-      key={song.id}
-      to={`/songs/${song.id}`}
-      song={song}
-    />
-  )
+  const handleSortEnd = async ({ oldIndex, newIndex }) => {
+    const sortedSongs = arrayMove(songs, oldIndex, newIndex)
+    console.log('Sort ended')
+    dispatch(sortSongs(sortedSongs))
+    await userService.editSongs(user.username, sortedSongs)
+  }
+
+  const songList = () => {
+    return (
+      <SortableSongList
+        songs={songs}
+        onSortEnd={handleSortEnd}
+        useWindowAsScrollContainer
+        useDragHandle
+      />
+    )
+  }
 
   return (
     <div>
       <Heading text='Your songs' />
+
       <List className={classes.list}>
-        {songs.length !== 0 ? listSongs() : <p>No songs found</p>}
+        {songs.length !== 0 ? songList() : <p>No songs found</p>}
       </List>
       <Button
         className={classes.addSongButton}

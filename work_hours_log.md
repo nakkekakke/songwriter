@@ -58,4 +58,5 @@
 | 23.8. | 4    | (Frontend) Song menu, song cloning, refactoring and styling |
 | 24.8. | 3    | Redux error reducer, validating song edit mode inputs |
 |       | 2    | Conditional save buttons, backend (Mongoose) validation bugfix |
-| total | 156  | |
+| 25.8. | 3    | Song list reordering functionality |
+| total | 159  | |

@@ -1,7 +1,12 @@
 import axios from 'axios'
+import { getAuthHeader } from '../helpers/auth'
 const url = '/api/users'
 
-const signup = async (username, password) => {
+const getAuthConfig = () => {
+  return { headers: getAuthHeader() }
+}
+
+const create = async (username, password) => {
   const res = await axios.post(url, { username, password })
   return res.data
 }
@@ -11,4 +16,10 @@ const usernameAvailable = async (username) => {
   return res.data
 }
 
-export default { signup, usernameAvailable }
+const editSongs = async (username, songs) => {
+  const songIds = songs.map(s => s.id)
+  const res = await axios.put(url + '/songs', { username, songIds } , getAuthConfig())
+  return res.data
+}
+
+export default { create, usernameAvailable, editSongs }

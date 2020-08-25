@@ -13,10 +13,9 @@ const User = require('../models/user')
 
 songRouter.get('/', async (req, res, next) => {
   try {
-    console.log('params:', req.user)
-    const songs = await Song.find({ user: req.user.id })
-    console.log('songs:', songs)
-    res.json(songs.map(s => s.toJSON()))
+    //console.log('params:', req.user)
+    const user = await User.findOne({ _id: req.user.id }).populate('songs') // Required for song list sorting. TODO: rework to userRouter
+    res.json(user.songs.map(s => s.toJSON()))
   } catch (error) {
     next(error)
   }
@@ -43,8 +42,8 @@ songRouter.post('/', async (req, res, next) => {
 songRouter.put('/:id', async (req, res, next) => {
   try {
     const updatedFields = { title: req.body.title, sections: req.body.sections }
-    const song = await Song.updateOne({ _id: req.params.id }, updatedFields, { runValidators: true })
-    res.json(song)
+    await Song.updateOne({ _id: req.params.id }, updatedFields, { runValidators: true })
+    res.status(200).end()
   } catch (error) {
     next(error)
   }
