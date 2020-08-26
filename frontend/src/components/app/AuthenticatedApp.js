@@ -37,7 +37,7 @@ const AuthenticatedApp = () => {
       <Router>
         <NavBar loggedIn />
         <Container maxWidth={false} className={classes.mainContainer}>
-          <Container maxWidth={false} align='center' className={classes.contentContainer}>
+          <Container maxWidth={'lg'} align='center' className={classes.contentContainer}>
             <Switch>
               <Route path='/songs/:id'>
                 <Song />

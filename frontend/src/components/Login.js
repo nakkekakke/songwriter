@@ -79,7 +79,7 @@ const Login = () => {
             size='medium'
             className={classes.loginButton}
           >
-            Login
+            Log in
           </Button>
         </FormGroup>
       </form>

@@ -59,4 +59,6 @@
 | 24.8. | 3    | Redux error reducer, validating song edit mode inputs |
 |       | 2    | Conditional save buttons, backend (Mongoose) validation bugfix |
 | 25.8. | 3    | Song list reordering functionality |
-| total | 159  | |
+| 26.8. | 1    | Pressing tab in lyrics editor now adds 4 spaces |
+|       | 3    | Chords can be added to lyrics |
+| total | 163  | |

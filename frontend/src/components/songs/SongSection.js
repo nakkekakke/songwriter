@@ -4,10 +4,9 @@ import PropTypes from 'prop-types'
 import songHelper from '../../helpers/songHelper'
 import { useDispatch, useSelector } from 'react-redux'
 import { editSection, deleteSection, cloneSection } from '../../redux/songReducer'
-
+import { errors, createError, removeError } from '../../redux/errorReducer'
 import { SortableHandle } from 'react-sortable-hoc'
 import { DragIndicator } from '@material-ui/icons'
-import { errors, createError, removeError } from '../../redux/errorReducer'
 
 const useStyles = makeStyles((theme) => ({
   section: {
@@ -76,6 +75,19 @@ const SongSection = ({ songId, sectionId, editMode }) => {
   const nameError = useSelector((state) => state.errors.find(e => e.type === errors.SECTION_NAME_ERROR && e.id === sectionId))
   const lineError = useSelector((state) => state.errors.find(e => e.type === errors.SECTION_LINES_ERROR && e.id === sectionId))
 
+  // If tab is pressed, put 4 spaces into the string
+  const linesOnKeyDown = (event) => {
+    if (event.key === 'Tab' && !event.shiftKey) {
+      event.preventDefault()
+      const value = event.target.value
+      const selectionStart = event.target.selectionStart
+      const selectionEnd = event.target.selectionEnd
+      event.target.value = value.substring(0, selectionStart) + '    ' + value.substring(selectionEnd)
+      event.target.selectionStart = selectionEnd + 4 - (selectionEnd - selectionStart)
+      event.target.selectionEnd = selectionEnd + 4 - (selectionEnd - selectionStart)
+    }
+  }
+
   const editView = () => {
     return (
       <form className={classes.editForm} >
@@ -99,6 +111,7 @@ const SongSection = ({ songId, sectionId, editMode }) => {
             onChange={handleLinesChange}
             fullWidth={true}
             helperText={lineError ? 'Max 200 characters for one line' : ''}
+            onKeyDown={linesOnKeyDown}
           />
         </div>
         <div className={classes.bottomDiv}>
@@ -136,7 +149,12 @@ const SongSection = ({ songId, sectionId, editMode }) => {
           {section.lines.map((line, index) => {
             return (
               <div key={index}>
-                <Typography variant='body1' className={classes.line}>{line}</Typography>
+                <Typography
+                  variant='body1'
+                  className={classes.line}
+                >
+                  {songHelper.addChordsToLine(line)}
+                </Typography>
               </div>
             )
           })}

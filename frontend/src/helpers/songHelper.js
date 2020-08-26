@@ -1,3 +1,7 @@
+import React from 'react'
+import Chord from '../components/songs/Chord'
+import reactStringReplace from 'react-string-replace'
+
 const linesArrayToString = (lines) => {
   let string = ''
   for (let i = 0; i < lines.length; i++) {
@@ -11,8 +15,8 @@ const linesArrayToString = (lines) => {
 
 const linesStringToArray = (string) => {
   const array = cutStringIntoLines(string)
-    .map(line => line = line.trim())
-    .filter(line => line !== '')
+  //.map(line => line = line.trim())
+  //.filter(line => line !== '')
 
   //console.log('Trimmed lines:', array)
   return array
@@ -87,6 +91,29 @@ const cloneAndAddSection = (song, section) => {
   return { ...song, sections: [...song.sections, newSection] }
 }
 
+const addChordsToLine = (rawLine) => {
+  const rawChords = rawLine.match(/\[([^\]]+)\]/gm)
+  let line = rawLine.replace(/ /g, '\u00a0')
+  if (rawChords) {
+    for (let i = 0; i < rawChords.length; i++) {
+      line = reactStringReplace(line, rawChords[i], (match, index) => {
+        return <Chord key={rawChords[i] + index} chordString={match.substring(1, match.length - 1)} />
+      })
+    }
+  }
+  return line
+}
 
 
-export default { linesArrayToString, linesStringToArray, lineCount, getDefaultSong, addNewSection, createNewSection, cloneAndAddSection, validateLines }
+
+export default {
+  linesArrayToString,
+  linesStringToArray,
+  lineCount,
+  getDefaultSong,
+  addNewSection,
+  createNewSection,
+  cloneAndAddSection,
+  validateLines,
+  addChordsToLine
+}
