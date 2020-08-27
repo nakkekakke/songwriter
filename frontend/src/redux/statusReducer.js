@@ -2,11 +2,13 @@ export const TOGGLE_EDIT_MODE = 'TOGGLE_EDIT_MODE'
 export const TOGGLE_CHORDS = 'TOGGLE_CHORDS'
 export const RESET_SONG_STATUSES = 'RESET_SONG_STATUSES'
 export const RESET_ALL_STATUSES = 'RESET_ALL_STATUSES'
+export const TOGGLE_DARK_MODE = 'TOGGLE_DARK_MODE'
 
 
 const initialState = {
   editMode: false,
-  chords: true
+  chords: true,
+  darkMode: true
 }
 
 // Statuses aka boolean variables reflecting different UI-only states
@@ -22,6 +24,8 @@ const statusReducer = (state = initialState, action) => {
       editMode: initialState.editMode,
       chords: initialState.chords
     }
+  case TOGGLE_DARK_MODE:
+    return { ...state, darkMode: !state.darkMode }
   case RESET_ALL_STATUSES:
     return initialState
   default:
@@ -44,6 +48,12 @@ export const toggleChords = () => {
 export const resetSongStatuses = () => {
   return {
     type: RESET_SONG_STATUSES
+  }
+}
+
+export const toggleDarkMode = () => {
+  return {
+    type: TOGGLE_DARK_MODE
   }
 }
 

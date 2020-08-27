@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   chord: {
-    backgroundColor: '#ccc',
+    backgroundColor: theme.palette.grey[400],
     marginBottom: -20,
     marginLeft: 1,
     marginRight: 1,
@@ -16,7 +16,8 @@ const useStyles = makeStyles((theme) => ({
     borderStyle: 'solid',
     borderRadius: 5,
     display: 'inline-block',
-    fontSize: '85%'
+    fontSize: '85%',
+    color: theme.palette.common.black
   }
 }))
 

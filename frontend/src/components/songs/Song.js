@@ -61,6 +61,7 @@ const Song = () => {
   const titleError = songErrors.find(e => e.type === errors.SONG_TITLE_ERROR)
   const editMode = useSelector((state) => state.statuses.editMode)
   const showChords = useSelector((state) => state.statuses.chords)
+  const darkMode = useSelector((state) => state.statuses.darkMode)
 
   const snapshot = useSelector((state) => state.snapshot)
 
@@ -104,7 +105,7 @@ const Song = () => {
       return (
         <Button
           color='primary'
-          variant='outlined'
+          variant={darkMode ? 'contained' : 'outlined'}
           onClick={handleSaveClick}
           disabled={songErrors.length !== 0}
         >

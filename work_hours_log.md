@@ -62,4 +62,7 @@
 | 26.8. | 1    | Pressing tab in lyrics editor now adds 4 spaces |
 |       | 3    | Chords can be added to lyrics |
 | 27.8. | 2    | Fixed a bug that caused songs to get overwritten, new alerts, simpler action creators |
-| total | 163  | |
+|       | 1    | Status reducer for simple boolean states, for easier UI manipulation |
+|       | 1    | Replaced some buttons with switches, option to not autoformat chords |
+|       | 2    | Dark mode |
+| total | 169  | |

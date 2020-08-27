@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 3,
     overflow: 'auto',
     whiteSpace: 'nowrap',
-    backgroundColor: '#fff'
+    backgroundColor: theme.palette.background.paper
   },
   normalViewRoot: {
     marginTop: -12,
@@ -76,6 +76,7 @@ const SongSection = ({ songId, sectionId }) => {
   const lineError = useSelector((state) => state.errors.find(e => e.type === errors.SECTION_LINES_ERROR && e.id === sectionId))
   const editMode = useSelector((state) => state.statuses.editMode)
   const showChords = useSelector((state) => state.statuses.chords)
+  const darkMode = useSelector((state) => state.statuses.darkMode)
 
   // If tab is pressed, put 4 spaces into the string
   const linesOnKeyDown = (event) => {
@@ -121,7 +122,7 @@ const SongSection = ({ songId, sectionId }) => {
             className={classes.cloneButton}
             size='small'
             color='primary'
-            variant='outlined'
+            variant={darkMode ? 'contained' : 'outlined'}
             onClick={handleCloneClick}
           >
             Clone
@@ -131,7 +132,7 @@ const SongSection = ({ songId, sectionId }) => {
             className={classes.deleteButton}
             size='small'
             color='secondary'
-            variant='outlined'
+            variant={darkMode ? 'contained' : 'outlined'}
             onClick={handleDeleteClick}
           >
             {deleteConfirm ? 'Confirm deletion' : 'Delete'}

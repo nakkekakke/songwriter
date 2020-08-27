@@ -26,10 +26,8 @@ const initialState = {
 const alertReducer = (state = initialState, action) => {
   switch (action.type) {
   case SHOW_ALERT:
-    console.log('Alert reducer show', { ...action.data, open: true })
     return { ...action.data, open: true }
   case HIDE_ALERT:
-    console.log('Alert reducer hide')
     return { ...state, open: false }
   default:
     return state
@@ -43,7 +41,7 @@ export const showAlert = (alert) => {
   }
 }
 
-export const hideAlert = () => { // EDIT simpler
+export const hideAlert = () => {
   return {
     type: HIDE_ALERT
   }
