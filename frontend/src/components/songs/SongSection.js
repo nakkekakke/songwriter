@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const SongSection = ({ songId, sectionId, editMode }) => {
+const SongSection = ({ songId, sectionId }) => {
   const [deleteConfirm, setDeleteConfirm] = useState(false)
 
   const classes = useStyles()
@@ -74,6 +74,8 @@ const SongSection = ({ songId, sectionId, editMode }) => {
   const section = useSelector((state) => state.songs.find(s => s.id === songId).sections.find(s => s.id === sectionId))
   const nameError = useSelector((state) => state.errors.find(e => e.type === errors.SECTION_NAME_ERROR && e.id === sectionId))
   const lineError = useSelector((state) => state.errors.find(e => e.type === errors.SECTION_LINES_ERROR && e.id === sectionId))
+  const editMode = useSelector((state) => state.statuses.editMode)
+  const showChords = useSelector((state) => state.statuses.chords)
 
   // If tab is pressed, put 4 spaces into the string
   const linesOnKeyDown = (event) => {
@@ -153,7 +155,7 @@ const SongSection = ({ songId, sectionId, editMode }) => {
                   variant='body1'
                   className={classes.line}
                 >
-                  {songHelper.addChordsToLine(line)}
+                  {showChords ? songHelper.addChordsToLine(line) : lineWithSpaces(line)}
                 </Typography>
               </div>
             )
@@ -161,6 +163,10 @@ const SongSection = ({ songId, sectionId, editMode }) => {
         </div>
       </div>
     )
+  }
+
+  const lineWithSpaces = (line) => {
+    return line.replace(/ /g, '\u00a0')
   }
 
   const handleNameChange = (event) => {
@@ -210,8 +216,7 @@ const SongSection = ({ songId, sectionId, editMode }) => {
 
 SongSection.propTypes = {
   songId: PropTypes.string.isRequired,
-  sectionId: PropTypes.number.isRequired,
-  editMode: PropTypes.bool.isRequired
+  sectionId: PropTypes.number.isRequired
 }
 
 export default SongSection

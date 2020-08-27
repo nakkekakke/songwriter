@@ -20,21 +20,16 @@ const errorReducer = (state = [], action) => {
 }
 
 export const createError = (type, id = null) => {
-  return (dispatch) => {
-    dispatch({
-      type: CREATE_ERROR,
-      data: { type, id }
-    })
+  return {
+    type: CREATE_ERROR,
+    data: { type, id }
   }
 }
 
 export const removeError = (type, id = null) => {
-  console.log('Type is:', type, 'id is:', id)
-  return (dispatch) => {
-    dispatch({
-      type: REMOVE_ERROR,
-      data: { type, id }
-    })
+  return {
+    type: REMOVE_ERROR,
+    data: { type, id }
   }
 }
 

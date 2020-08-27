@@ -6,7 +6,7 @@ import { sortSections } from '../../redux/songReducer'
 import SortableSectionList from './SortableSectionList'
 
 
-const SongSectionList = ({ song, editMode }) => {
+const SongSectionList = ({ song }) => {
 
   const dispatch = useDispatch()
 
@@ -26,7 +26,6 @@ const SongSectionList = ({ song, editMode }) => {
     return (
       <SortableSectionList
         song={song}
-        editMode={editMode}
         onSortEnd={handleSortEnd}
         useDragHandle
         useWindowAsScrollContainer

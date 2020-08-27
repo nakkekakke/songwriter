@@ -15,21 +15,15 @@ const snapshotReducer = (state = initialState, action) => {
 }
 
 export const saveSnapshot = (song) => {
-  console.log('Saving snapshot:', song)
-  return (dispatch) => {
-    dispatch({
-      type: SAVE_SNAPSHOT,
-      data: song
-    })
+  return {
+    type: SAVE_SNAPSHOT,
+    data: song
   }
 }
 
 export const resetSnapshot = () => {
-  console.log('Resetting snapshot')
-  return (dispatch) => {
-    dispatch({
-      type: RESET_SNAPSHOT
-    })
+  return {
+    type: RESET_SNAPSHOT
   }
 }
 

@@ -12,7 +12,9 @@ export const alerts = {
   logout: { message: 'Logged out.', type: 'success' },
   signupSuccess: { message: 'Signup successful! You can now log in.', type: 'success' },
   signupFailure: { message: 'Username is already taken!', type: 'error' },
-  validationFailure: { message: 'Saving failed due to invalid input data.', type: 'error' }
+  validationFailure: { message: 'Saving failed due to invalid input data.', type: 'error' },
+  serverFailure: { message: 'Error communicating with the server. Check your internet connection and try again.', type: 'error' },
+  dataDesync: { message: 'Local data differs from server data. Please refresh the page.', type: 'error' }
 }
 
 const initialState = {
@@ -35,21 +37,15 @@ const alertReducer = (state = initialState, action) => {
 }
 
 export const showAlert = (alert) => {
-  console.log('Creating alert', alert)
-  return (dispatch) => {
-    dispatch({
-      type: SHOW_ALERT,
-      data: { ...alert }
-    })
+  return {
+    type: SHOW_ALERT,
+    data: { ...alert }
   }
 }
 
 export const hideAlert = () => { // EDIT simpler
-  console.log('Hiding alert')
-  return (dispatch) => {
-    dispatch({
-      type: HIDE_ALERT
-    })
+  return {
+    type: HIDE_ALERT
   }
 }
 

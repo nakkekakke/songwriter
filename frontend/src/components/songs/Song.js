@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { makeStyles, Container, Button, TextField } from '@material-ui/core'
+import { makeStyles, Container, Button, TextField, FormControlLabel, Switch } from '@material-ui/core'
 import { Add, DeleteForever } from '@material-ui/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { editTitle, addSection, deleteSong, saveSong, getSongFromSnapshot } from '../../redux/songReducer'
@@ -12,19 +12,26 @@ import DeleteDialog from './DeleteDialog'
 import SaveDialog from './SaveDialog'
 import Heading from '../Heading'
 import { errors, createError, removeError } from '../../redux/errorReducer'
+import { toggleChords, toggleEditMode, resetSongStatuses } from '../../redux/statusReducer'
 
 const useStyles = makeStyles((theme) => ({
   root: {
 
   },
   menuContainer: {
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(1),
+    display: 'flex',
+    justifyContent: 'flex-end'
   },
-  editModeButton: {
+  chordToggleSwitch: {
+    marginRight: 'auto'
+  },
+  editModeSwitch: {
     marginLeft: theme.spacing(1)
   },
   titleField: {
-    margin: 12
+    marginTop: 20,
+    marginBottom: 3
   },
   addSectionButton: {
     marginTop: theme.spacing(1)
@@ -41,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Song = () => {
-  const [editMode, setEditMode] = useState(false)
   const [delConfirmOpen, setDelConfirmOpen] = useState(false)
   const [saveOpen, setSaveOpen] = useState(false)
 
@@ -52,13 +58,17 @@ const Song = () => {
 
   const song = useSelector((state) => state.songs.find(s => s.id === id))
   const songErrors = useSelector((state) => state.errors)
-  console.log('Errors:', songErrors)
   const titleError = songErrors.find(e => e.type === errors.SONG_TITLE_ERROR)
+  const editMode = useSelector((state) => state.statuses.editMode)
+  const showChords = useSelector((state) => state.statuses.chords)
 
   const snapshot = useSelector((state) => state.snapshot)
 
   useEffect(() => {
     dispatch(resetSnapshot())
+    return () => {
+      dispatch(resetSongStatuses())
+    }
   }, [dispatch])
 
   console.log('Song render:', song)
@@ -104,16 +114,35 @@ const Song = () => {
     }
   }
 
-  const editModeButton = () => {
+  const chordsSwitch = () => {
+    if (!editMode) {
+      return (
+        <FormControlLabel
+          control={<Switch checked={showChords} onChange={handleChordsSwitchClick} color='primary' />}
+          label='Show chords'
+          className={classes.chordToggleSwitch}
+        />
+      )
+    }
+  }
+
+  const editModeSwitch = () => {
+    // return (
+    //   <Button
+    //     color='primary'
+    //     variant='contained'
+    //     onClick={handleEditButtonClick}
+    //     className={classes.editModeButton}
+    //   >
+    //     {editMode ? 'Exit edit mode' : 'Edit mode'}
+    //   </Button>
+    // )
     return (
-      <Button
-        color='primary'
-        variant='contained'
-        onClick={handleEditButtonClick}
-        className={classes.editModeButton}
-      >
-        {editMode ? 'Exit edit mode' : 'Edit mode'}
-      </Button>
+      <FormControlLabel
+        control={<Switch checked={editMode} onChange={handleEditSwitchClick} color='primary' />}
+        label='Edit mode'
+        className={classes.editModeSwitch}
+      />
     )
   }
 
@@ -151,12 +180,16 @@ const Song = () => {
     return (<div/>)
   }
 
+  const handleChordsSwitchClick = () => {
+    dispatch(toggleChords())
+  }
+
   const handleSaveClick = () => {
     dispatch(saveSnapshot(song))
     dispatch(saveSong(song))
   }
 
-  const handleEditButtonClick = () => {
+  const handleEditSwitchClick = () => {
     if (editMode) {
       handleEditModeExitClick()
     } else {
@@ -166,7 +199,7 @@ const Song = () => {
 
   const handleEditModeEnterClick = () => {
     dispatch(saveSnapshot(song))
-    setEditMode(true)
+    dispatch(toggleEditMode())
   }
 
   const handleEditModeExitClick = () => {
@@ -174,7 +207,7 @@ const Song = () => {
     if (unsavedChanges()) {
       setSaveOpen(true)
     } else {
-      setEditMode(false)
+      dispatch(toggleEditMode())
       dispatch(resetSnapshot())
     }
   }
@@ -182,7 +215,7 @@ const Song = () => {
   const handleSaveConfirmClick = () => {
     console.log('Saving!')
     setSaveOpen(false)
-    setEditMode(false)
+    dispatch(toggleEditMode())
     dispatch(resetSnapshot())
     dispatch(saveSong(song))
   }
@@ -190,7 +223,7 @@ const Song = () => {
   const handleSaveDiscardClick = () => {
     console.log('Discarding changes!')
     setSaveOpen(false)
-    setEditMode(false)
+    dispatch(toggleEditMode())
     dispatch(getSongFromSnapshot(snapshot))
     dispatch(resetSnapshot())
   }
@@ -227,11 +260,14 @@ const Song = () => {
       <div className={classes.root}>
         {title()}
         <div>
-          <Container align='right' maxWidth={false} className={classes.menuContainer}>
+          <div className={classes.menuContainer}>
+            {chordsSwitch()}
             {saveButton()}
-            {editModeButton()}
-          </Container>
-          <SongSectionList song={song} editMode={editMode} />
+            {editModeSwitch()}
+          </div>
+          <SongSectionList
+            song={song}
+          />
         </div>
         <Container maxWidth={false}>
           {addSectionButton()}

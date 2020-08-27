@@ -60,29 +60,23 @@ export const login = (username, password) => {
 
 export const loginWithToken = (user) => {
   console.log('auto-login for', user)
-  return (dispatch) => {
-    dispatch({
-      type: LOGIN_WITH_TOKEN,
-      data: user
-    })
+  return {
+    type: LOGIN_WITH_TOKEN,
+    data: user
   }
 }
 
 export const logout = () => {
   localStorage.removeItem('SongWriterUser')
-  return (dispatch) => {
-    dispatch({
-      type: LOGOUT_SUCCESS
-    })
+  return {
+    type: LOGOUT_SUCCESS
   }
 }
 
 export const authFailure = () => {
   localStorage.removeItem('SongWriterUser')
-  return (dispatch) => {
-    dispatch({
-      type: AUTH_FAILURE
-    })
+  return {
+    type: AUTH_FAILURE
   }
 }
 

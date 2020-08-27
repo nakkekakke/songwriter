@@ -7,6 +7,7 @@ import snapshotReducer from './snapshotReducer'
 import authReducer from './authReducer'
 import alertReducer from './alertReducer'
 import errorReducer from './errorReducer'
+import statusReducer from './statusReducer'
 
 const composeEnhancers = composeWithDevTools({ trace: true })
 
@@ -15,7 +16,8 @@ const reducers = combineReducers({
   snapshot: snapshotReducer,
   auth: authReducer,
   alert: alertReducer,
-  errors: errorReducer
+  errors: errorReducer,
+  statuses: statusReducer
 })
 
 const store = createStore(

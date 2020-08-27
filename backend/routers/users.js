@@ -2,6 +2,7 @@ const userRouter = require('express').Router()
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const Song = require('../models/song')
+const userService = require('../services/userService')
 
 userRouter.get('/', async (req, res, next) => {
   console.log('user:', req.user)
@@ -45,13 +46,17 @@ userRouter.put('/songs', async (req, res, next) => {
   try {
     const songIds = req.body.songIds
     const username = req.body.username
-    let songs = []
-    await asyncForEach(songIds, async s => {
-      const song = await Song.findOne({ _id: s })
-      songs = songs.concat(song)
-    })
-    await User.updateOne({ username }, { songs: songs }, { runValidators: true })
-    res.status(200).end()
+    if (await userService.verifySongs(username, songIds)) {
+      let songs = []
+      await asyncForEach(songIds, async s => {
+        const song = await Song.findOne({ _id: s })
+        songs = songs.concat(song)
+      })
+      await User.updateOne({ username }, { songs: songs }, { runValidators: true })
+      res.status(200).end()
+    } else {
+      res.status(409).send({ error: 'Client song list differs from server.' })
+    }
   } catch (error) {
     next(error)
   }

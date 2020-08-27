@@ -3,18 +3,17 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 import { Container } from '@material-ui/core'
 import SongSection from './SongSection'
 
-const SortableSection = SortableElement(({ section, song, editMode }) => {
+const SortableSection = SortableElement(({ section, song }) => {
   return (
     <SongSection
       songId={song.id}
       sectionId={section.id}
-      editMode={editMode}
     >
     </SongSection>
   )
 })
 
-const SortableSectionList = SortableContainer(({ song, editMode }) => {
+const SortableSectionList = SortableContainer(({ song }) => {
   return (
     <Container maxWidth={false} align='left'>
       {song.sections.map((section, index) => {
@@ -24,7 +23,6 @@ const SortableSectionList = SortableContainer(({ song, editMode }) => {
             index={index}
             section={section}
             song={song}
-            editMode={editMode}
           />
         )
       })}

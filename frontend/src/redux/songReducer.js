@@ -63,7 +63,6 @@ export const createSong = (song) => {
   return async (dispatch) => {
     try {
       const createdSong = await songService.create(song)
-      console.log('Created:', createdSong)
       dispatch({
         type: CREATE_SONG,
         data: createdSong
@@ -76,28 +75,28 @@ export const createSong = (song) => {
 }
 
 export const cloneSong = (song, username) => {
-  const clone = { title: song.title, sections: [...song.sections], username: username }
-  return createSong(clone)
+  const rawClone = {
+    title: song.title,
+    sections: [...song.sections],
+    username: username
+  }
+  return createSong(rawClone)
 }
 
 export const editTitle = (song, title) => {
   let songToDispatch = JSON.parse(JSON.stringify(song))
   songToDispatch.title = title
 
-  return (dispatch) => {
-    dispatch({
-      type: EDIT_SONG,
-      data: songToDispatch
-    })
+  return {
+    type: EDIT_SONG,
+    data: songToDispatch
   }
 }
 
 export const initializeSongs = (user) => {
   return async (dispatch) => {
     try {
-      console.log('user:', user)
       const songs = await songService.getAll(user)
-      console.log('Initialized:', songs)
       dispatch({
         type: INIT_SONGS,
         data: songs
@@ -111,8 +110,7 @@ export const initializeSongs = (user) => {
 export const deleteSong = (song) => {
   return async (dispatch) => {
     try {
-      const returnValue = await songService.destroy(song.id)
-      console.log('Destroy returned:', returnValue)
+      await songService.destroy(song.id)
       dispatch({
         type: DELETE_SONG,
         data: song
@@ -124,8 +122,6 @@ export const deleteSong = (song) => {
 }
 
 export const sortSongs = (sortedSongs) => {
-  console.log('Sorted:', sortedSongs)
-
   return {
     type: SORT_SONGS,
     data: sortedSongs
@@ -135,40 +131,32 @@ export const sortSongs = (sortedSongs) => {
 export const saveSong = (song) => {
   return async (dispatch) => {
     try {
-      console.log('Saving')
       await songService.edit(song)
     } catch (error) {
-      console.log('tuli errori:', error)
       dispatch(showAlert(alerts.validationFailure))
     }
   }
 }
 
 export const getSongFromSnapshot = (snapshot) => {
-  return (dispatch) => {
-    dispatch({
-      type: EDIT_SONG,
-      data: snapshot
-    })
+  return {
+    type: EDIT_SONG,
+    data: snapshot
   }
 }
 
 // Section action creators
 export const editSection = (songId, section) => {
-  return (dispatch) => {
-    dispatch({
-      type: EDIT_SECTION,
-      data: { songId, section }
-    })
+  return {
+    type: EDIT_SECTION,
+    data: { songId, section }
   }
 }
 
 export const deleteSection = (songId, section) => {
-  return (dispatch) => {
-    dispatch({
-      type: DELETE_SECTION,
-      data: { songId, section }
-    })
+  return {
+    type: DELETE_SECTION,
+    data: { songId, section }
   }
 }
 
@@ -176,20 +164,16 @@ export const addSection = (song) => {
   let songToDispatch = JSON.parse(JSON.stringify(song))
   songToDispatch = songHelper.addNewSection(songToDispatch)
 
-  return (dispatch) => {
-    dispatch({
-      type: EDIT_SONG,
-      data: songToDispatch
-    })
+  return {
+    type: EDIT_SONG,
+    data: songToDispatch
   }
 }
 
 export const cloneSection = (songId, section) => {
-  return (dispatch) => {
-    dispatch({
-      type: CLONE_SECTION,
-      data: { songId, section }
-    })
+  return {
+    type: CLONE_SECTION,
+    data: { songId, section }
   }
 }
 
@@ -197,11 +181,9 @@ export const sortSections = (song, sortedSections) => {
   let songToDispatch = JSON.parse(JSON.stringify(song))
   songToDispatch.sections = sortedSections
 
-  return (dispatch) => {
-    dispatch({
-      type: EDIT_SONG,
-      data: songToDispatch
-    })
+  return {
+    type: EDIT_SONG,
+    data: songToDispatch
   }
 }
 

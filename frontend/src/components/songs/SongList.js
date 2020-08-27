@@ -9,6 +9,7 @@ import Heading from '../Heading'
 import SortableSongList from './SortableSongList'
 import arrayMove from 'array-move'
 import userService from '../../services/userService'
+import { showAlert, alerts } from '../../redux/alertReducer'
 
 const useStyles = makeStyles(() => ({
   list: {
@@ -34,14 +35,18 @@ const SongList = () => {
         history.push('/songs/' + res.id)
         console.log('Redirected!')
       })
-      .catch(e => console.log('Error creating new song:', e))
+      .catch(() => console.log('Error creating song'))
   }
 
   const handleSortEnd = async ({ oldIndex, newIndex }) => {
     const sortedSongs = arrayMove(songs, oldIndex, newIndex)
     console.log('Sort ended')
-    dispatch(sortSongs(sortedSongs))
-    await userService.editSongs(user.username, sortedSongs)
+    dispatch(sortSongs(sortedSongs))  // Seperated from the backend call so sorting looks smoother for user
+    try {
+      await userService.editSongs(user.username, sortedSongs)
+    } catch (error) {
+      dispatch(showAlert(alerts.dataDesync))
+    }
   }
 
   const songList = () => {
