@@ -65,5 +65,5 @@
 |       | 1    | Status reducer for simple boolean states, for easier UI manipulation |
 |       | 1    | Replaced some buttons with switches, option to not autoformat chords |
 |       | 2    | Dark mode |
-| 28.8. | 1    | Frontend cleanup, removed redundant styles & prints etc. |
+| 29.8. | 1    | Frontend cleanup, removed redundant styles & prints etc. |
 | total | 169  | |
