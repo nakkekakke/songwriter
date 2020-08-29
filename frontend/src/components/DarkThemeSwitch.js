@@ -9,7 +9,12 @@ const DarkThemeSwitch = () => {
 
   return (
     <FormControlLabel
-      control={<Switch checked={darkMode} onChange={() => dispatch(toggleDarkMode())} color='secondary' />}
+      control={
+        <Switch checked={darkMode}
+          onChange={() => dispatch(toggleDarkMode())}
+          color='secondary'
+        />
+      }
       label='Dark theme'
       labelPlacement='top'
       style={{ margin: 6, marginRight: 30 }}

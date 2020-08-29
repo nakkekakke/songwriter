@@ -18,7 +18,6 @@ const App = () => {
 
   useEffect(() => {
     const jsonUser = localStorage.getItem('SongWriterUser')
-    console.log('Getting user effect')
     if (jsonUser) {
       const authUser = JSON.parse(jsonUser)
       dispatch(loginWithToken(authUser))
@@ -31,12 +30,12 @@ const App = () => {
     palette: {
       type: 'dark',
       background: {
-        default: '#1c1c1c',
-        //paper:
+        default: '#000' //'#1c1c1c'
       },
       primary: {
-        main: '#2a367b',
-        dark: '#222c64',
+        //main: ''//'#2a367b',
+        main: '#354599',//lightTheme.palette.primary.main,
+        dark: '#263271', //'#2a367b',//'#222c64',
         light: lightTheme.palette.primary.main
       },
       secondary: {

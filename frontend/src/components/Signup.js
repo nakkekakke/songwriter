@@ -7,7 +7,7 @@ import { showAlert, alerts } from '../redux/alertReducer'
 import userService from '../services/userService'
 import Heading from './Heading'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   alert: {
     marginBottom: 10
   },
@@ -18,11 +18,8 @@ const useStyles = makeStyles(() => ({
   input: {
     marginBottom: 20
   },
-  loginButton: {
-
-  },
-  linkContainer: {
-
+  link: {
+    color: theme.palette.primary.light
   }
 }))
 
@@ -40,8 +37,7 @@ const Signup = () => {
     event.preventDefault()
 
     try {
-      const user = await userService.create(username, password)
-      console.log('Signed up:', user)
+      await userService.create(username, password)
       dispatch(showAlert(alerts.signupSuccess))
       history.push('/')
     } catch (error) {
@@ -91,9 +87,13 @@ const Signup = () => {
   }
 
   return (
-    <Container maxWidth='xs' align='center' className={classes.contentContainer}>
+    <Container maxWidth='xs' align='center'>
       <Heading text='Sign up'/>
-      <form onSubmit={handleSubmit} className={classes.form} autoComplete='off'>
+      <form
+        onSubmit={handleSubmit}
+        autoComplete='off'
+        className={classes.form}
+      >
         <FormGroup>
           {uniqueAlert()}
           <TextField
@@ -105,9 +105,9 @@ const Signup = () => {
             autoFocus
             autoComplete='username'
             onChange={handleUsernameChange}
-            className={classes.input}
             error={errors.username !== ''}
             helperText={errors.username}
+            className={classes.input}
           />
 
           <TextField
@@ -119,9 +119,9 @@ const Signup = () => {
             type='password'
             autoComplete='current-password'
             onChange={handlePasswordChange}
-            className={classes.input}
             error={errors.password !== ''}
             helperText={errors.password}
+            className={classes.input}
           />
 
           <Button
@@ -129,15 +129,20 @@ const Signup = () => {
             variant='contained'
             color='primary'
             size='medium'
-            className={classes.loginButton}
             disabled={errors.password !== '' || errors.username !== ''}
           >
             Sign up
           </Button>
         </FormGroup>
       </form>
-      <Container align='left' className={classes.linkContainer}>
-        <MaterialLink component={Link} to='/'>Back to login page.</MaterialLink>
+      <Container align='left'>
+        <MaterialLink
+          component={Link}
+          to='/'
+          className={classes.link}
+        >
+          Back to login page.
+        </MaterialLink>
       </Container>
     </Container>
   )

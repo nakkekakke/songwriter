@@ -4,11 +4,6 @@ import Alert from '@material-ui/lab/Alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { hideAlert } from '../redux/alertReducer'
 
-//const Alert = (props) => {
-//  return <MuiAlert elevation={6} variant='filled' {...props} />
-//}
-
-
 const SnackbarAlert = () => {
 
   const dispatch = useDispatch()

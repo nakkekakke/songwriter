@@ -4,7 +4,14 @@ import NavigationPrompt from 'react-router-navigation-prompt'
 import PropTypes from 'prop-types'
 import DialogCloseButton from '../DialogCloseButton'
 
-const UnsavedPrompt = ({ handleSaveConfirmClick, handleSaveDiscardClick, unsavedChanges, saveAllowed = true }) => {
+const UnsavedPrompt = (
+  {
+    handleSaveConfirmClick,
+    handleSaveDiscardClick,
+    unsavedChanges,
+    saveAllowed = true
+  }
+) => {
 
   const navPrompt = (isActive, onCancel, onConfirm) => {
     return (
@@ -20,7 +27,11 @@ const UnsavedPrompt = ({ handleSaveConfirmClick, handleSaveDiscardClick, unsaved
         </DialogContent>
         <DialogActions>
           {saveAllowed ? saveButton(onConfirm) : disabledSaveButton(onConfirm)}
-          <Button onClick={handlePromptDiscardClick(onConfirm)} color='secondary' variant='contained'>
+          <Button
+            onClick={handlePromptDiscardClick(onConfirm)}
+            color='secondary'
+            variant='contained'
+          >
             Leave without saving
           </Button>
           <DialogCloseButton onClick={onCancel} />
@@ -31,7 +42,11 @@ const UnsavedPrompt = ({ handleSaveConfirmClick, handleSaveDiscardClick, unsaved
 
   const saveButton = (onConfirm) => {
     return (
-      <Button onClick={handlePromptSaveClick(onConfirm)} color='primary' variant='contained'>
+      <Button
+        onClick={handlePromptSaveClick(onConfirm)}
+        color='primary'
+        variant='contained'
+      >
         Save and leave
       </Button>
     )
@@ -41,7 +56,12 @@ const UnsavedPrompt = ({ handleSaveConfirmClick, handleSaveDiscardClick, unsaved
     return (
       <Tooltip title='Resolve errors before saving' arrow>
         <span> {/* !! Extra wrapper required for Safari !! */}
-          <Button onClick={handlePromptSaveClick(onConfirm)} color='primary' variant='contained' disabled>
+          <Button
+            onClick={handlePromptSaveClick(onConfirm)}
+            color='primary'
+            variant='contained'
+            disabled
+          >
             Can&apos;t save
           </Button>
         </span>

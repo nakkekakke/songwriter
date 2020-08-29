@@ -5,7 +5,7 @@ import { login } from '../redux/authReducer'
 import { Link } from 'react-router-dom'
 import Heading from './Heading'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   header: {
     marginTop: 30
   },
@@ -16,11 +16,8 @@ const useStyles = makeStyles(() => ({
   input: {
     marginBottom: 20
   },
-  loginButton: {
-
-  },
-  linkContainer: {
-
+  link: {
+    color: theme.palette.primary.light
   }
 }))
 
@@ -45,7 +42,7 @@ const Login = () => {
   }
 
   return (
-    <Container maxWidth='xs' align='center' className={classes.contentContainer}>
+    <Container maxWidth='xs' align='center'>
       <Heading text='Log in'/>
       <form onSubmit={handleSubmit} className={classes.form}>
         <FormGroup>
@@ -77,14 +74,19 @@ const Login = () => {
             variant='contained'
             color='primary'
             size='medium'
-            className={classes.loginButton}
           >
             Log in
           </Button>
         </FormGroup>
       </form>
-      <Container align='right' className={classes.linkContainer}>
-        <MaterialLink component={Link} to='/signup'>Don&apos;t have an account yet? Sign up here.</MaterialLink>
+      <Container align='right'>
+        <MaterialLink
+          component={Link}
+          to='/signup'
+          className={classes.link}
+        >
+          Don&apos;t have an account yet? Sign up here.
+        </MaterialLink>
       </Container>
     </Container>
   )

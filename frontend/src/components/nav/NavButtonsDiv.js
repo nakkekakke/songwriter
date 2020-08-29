@@ -17,7 +17,7 @@ const NavButtonsDiv = ({ loggedIn }) => {
   }
 
   const loggedOutButtons = () => {
-
+    return <span/>
   }
 
   return (

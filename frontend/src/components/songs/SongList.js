@@ -27,20 +27,16 @@ const SongList = () => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  console.log('Rendered', songs.length, 'songs')
-
   const handleNewSongClick = () => {
     dispatch(createSong(songHelper.getDefaultSong(user))) // Note: not error handling createSong
       .then(res => {
         history.push('/songs/' + res.id)
-        console.log('Redirected!')
       })
       .catch(() => console.log('Error creating song'))
   }
 
   const handleSortEnd = async ({ oldIndex, newIndex }) => {
     const sortedSongs = arrayMove(songs, oldIndex, newIndex)
-    console.log('Sort ended')
     dispatch(sortSongs(sortedSongs))  // Seperated from the backend call so sorting looks smoother for user
     try {
       await userService.editSongs(user.username, sortedSongs)
@@ -68,11 +64,11 @@ const SongList = () => {
         {songs.length !== 0 ? songList() : <p>No songs found</p>}
       </List>
       <Button
-        className={classes.addSongButton}
+        onClick={handleNewSongClick}
         variant='contained'
         color='primary'
         startIcon={<Add />}
-        onClick={handleNewSongClick}
+        className={classes.addSongButton}
       >
         New song
       </Button>

@@ -6,9 +6,9 @@ import SongMenu from './SongMenu'
 import { SortableHandle } from 'react-sortable-hoc'
 import { DragIndicator } from '@material-ui/icons'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   item: {
-
+    color: theme.palette.primary.main
   },
   container: {
     display: 'flex',
@@ -18,13 +18,16 @@ const useStyles = makeStyles(() => ({
     textAlign: 'left',
     marginTop: 8,
     marginBottom: 8
-  },
-  menu: {
-
   }
 }))
 
-const DragHandle = SortableHandle(() => <Box style={{ marginTop: 18, marginLeft: -12 }}> <Icon><DragIndicator /></Icon> </Box>)
+const DragHandle = SortableHandle(() => (
+  <Box style={{ marginTop: 18, marginLeft: -12 }}>
+    <Icon>
+      <DragIndicator />
+    </Icon>
+  </Box>
+))
 
 const SongListItem = ({ song }) => {
   const classes = useStyles()
@@ -43,7 +46,7 @@ const SongListItem = ({ song }) => {
           {song.title}
         </Typography>
       </ListItem>
-      <SongMenu song={song} className={classes.menu} />
+      <SongMenu song={song} />
     </Container>
   )
 }

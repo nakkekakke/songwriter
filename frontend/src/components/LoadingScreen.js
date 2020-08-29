@@ -15,7 +15,11 @@ const LoadingScreen = () => {
   return (
     <div>
       <Container align='center' className={classes.root}>
-        <Typography component='h1' variant='h4' className={classes.text}>
+        <Typography
+          component='h1'
+          variant='h4'
+          className={classes.text}
+        >
           Loading
         </Typography>
         <CircularProgress size={70} thickness={4}/>

@@ -19,7 +19,7 @@ const DialogCloseButton = ({ onClick }) => {
   const classes = useStyles()
 
   return (
-    <IconButton className={classes.closeButton} onClick={onClick}>
+    <IconButton onClick={onClick} className={classes.closeButton}>
       <Close />
     </IconButton>
   )

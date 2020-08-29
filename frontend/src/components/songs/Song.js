@@ -15,9 +15,6 @@ import { errors, createError, removeError } from '../../redux/errorReducer'
 import { toggleChords, toggleEditMode, resetSongStatuses } from '../../redux/statusReducer'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-
-  },
   menuContainer: {
     marginBottom: theme.spacing(1),
     display: 'flex',
@@ -31,19 +28,13 @@ const useStyles = makeStyles((theme) => ({
   },
   titleField: {
     marginTop: 20,
-    marginBottom: 3
+    marginBottom: 4
   },
   addSectionButton: {
     marginTop: theme.spacing(1)
   },
   deleteSongButton: {
     marginLeft: 'auto'
-  },
-  dialogCloseButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
   }
 }))
 
@@ -72,8 +63,6 @@ const Song = () => {
     }
   }, [dispatch])
 
-  console.log('Song render:', song)
-
   const calculateTitleWidth = () => {
     return 5 + (song.title.length / 2.5)
   }
@@ -83,13 +72,13 @@ const Song = () => {
       return (
         <div style={{ width: `${calculateTitleWidth()}%` }}>
           <TextField
-            fullWidth
-            error={titleError !== undefined}
-            className={classes.titleField}
             label='Edit title'
-            defaultValue={song.title}
             onChange={handleTitleChange}
+            defaultValue={song.title}
+            error={titleError !== undefined}
             helperText={titleError ? 'Length must be 1-50 characters' : ''}
+            fullWidth
+            className={classes.titleField}
           />
         </div>
       )
@@ -104,9 +93,9 @@ const Song = () => {
     if (unsavedChanges()) {
       return (
         <Button
+          onClick={handleSaveClick}
           color='primary'
           variant={darkMode ? 'contained' : 'outlined'}
-          onClick={handleSaveClick}
           disabled={songErrors.length !== 0}
         >
           Save changes
@@ -119,7 +108,13 @@ const Song = () => {
     if (!editMode) {
       return (
         <FormControlLabel
-          control={<Switch checked={showChords} onChange={handleChordsSwitchClick} color='primary' />}
+          control={
+            <Switch
+              onChange={handleChordsSwitchClick}
+              checked={showChords}
+              color='primary'
+            />
+          }
           label='Show chords'
           className={classes.chordToggleSwitch}
         />
@@ -128,19 +123,15 @@ const Song = () => {
   }
 
   const editModeSwitch = () => {
-    // return (
-    //   <Button
-    //     color='primary'
-    //     variant='contained'
-    //     onClick={handleEditButtonClick}
-    //     className={classes.editModeButton}
-    //   >
-    //     {editMode ? 'Exit edit mode' : 'Edit mode'}
-    //   </Button>
-    // )
     return (
       <FormControlLabel
-        control={<Switch checked={editMode} onChange={handleEditSwitchClick} color='primary' />}
+        control={
+          <Switch
+            onChange={handleEditSwitchClick}
+            checked={editMode}
+            color='primary'
+          />
+        }
         label='Edit mode'
         className={classes.editModeSwitch}
       />
@@ -151,11 +142,11 @@ const Song = () => {
     if (editMode) {
       return (
         <Button
-          className={classes.addSectionButton}
+          onClick={handleAddSectionClick}
           variant='contained'
           color='primary'
           startIcon={<Add />}
-          onClick={handleAddSectionClick}
+          className={classes.addSectionButton}
         >
           New section
         </Button>
@@ -168,11 +159,11 @@ const Song = () => {
     if (editMode) {
       return (
         <Button
-          className={classes.deleteSongButton}
+          onClick={() => setDelConfirmOpen(true)}
           variant='contained'
           color='secondary'
           startIcon={<DeleteForever />}
-          onClick={() => setDelConfirmOpen(true)}
+          className={classes.deleteSongButton}
         >
           Delete song
         </Button>
@@ -204,7 +195,6 @@ const Song = () => {
   }
 
   const handleEditModeExitClick = () => {
-    console.log('Exiting edit mode')
     if (unsavedChanges()) {
       setSaveOpen(true)
     } else {
@@ -214,7 +204,6 @@ const Song = () => {
   }
 
   const handleSaveConfirmClick = () => {
-    console.log('Saving!')
     setSaveOpen(false)
     dispatch(toggleEditMode())
     dispatch(resetSnapshot())
@@ -222,7 +211,6 @@ const Song = () => {
   }
 
   const handleSaveDiscardClick = () => {
-    console.log('Discarding changes!')
     setSaveOpen(false)
     dispatch(toggleEditMode())
     dispatch(getSongFromSnapshot(snapshot))
@@ -231,22 +219,18 @@ const Song = () => {
 
   const handleTitleChange = (event) => {
     if (event.target.value === '' || event.target.value.length > 50) {
-      console.log('Dispatching error')
       dispatch(createError(errors.SONG_TITLE_ERROR))
     } else if (titleError) {
-      console.log('Removing errors')
       dispatch(removeError(errors.SONG_TITLE_ERROR))
     }
     dispatch(editTitle(song, event.target.value))
   }
 
   const handleAddSectionClick = () => {
-    console.log('Add new section!')
     dispatch(addSection(song))
   }
 
   const handleDeleteConfirmClick = () => {
-    console.log('Deleting song here')
     dispatch(deleteSong(song))
     dispatch(resetSnapshot())
     history.push('/songs/')
@@ -258,7 +242,7 @@ const Song = () => {
 
   if (song) {
     return (
-      <div className={classes.root}>
+      <div>
         {title()}
         <div>
           <div className={classes.menuContainer}>

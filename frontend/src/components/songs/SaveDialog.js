@@ -3,11 +3,23 @@ import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, B
 import DialogCloseButton from '../DialogCloseButton'
 import PropTypes from 'prop-types'
 
-const SaveDialog = ({ open, setOpen, handleConfirmClick, handleDiscardClick, saveAllowed = true }) => {
+const SaveDialog = (
+  {
+    open,
+    setOpen,
+    handleConfirmClick,
+    handleDiscardClick,
+    saveAllowed = true
+  }
+) => {
 
   const saveButton = () => {
     return (
-      <Button onClick={handleConfirmClick} color='primary' variant='contained' >
+      <Button
+        onClick={handleConfirmClick}
+        color='primary'
+        variant='contained'
+      >
         Save changes
       </Button>
     )
@@ -17,7 +29,12 @@ const SaveDialog = ({ open, setOpen, handleConfirmClick, handleDiscardClick, sav
     return (
       <Tooltip title='Resolve errors before saving' arrow>
         <span> {/* !! Extra wrapper required for Safari !! */}
-          <Button onClick={handleConfirmClick} color='primary' variant='contained' disabled >
+          <Button
+            onClick={handleConfirmClick}
+            color='primary'
+            variant='contained'
+            disabled
+          >
           Can&apos;t save
           </Button>
         </span>
@@ -38,7 +55,11 @@ const SaveDialog = ({ open, setOpen, handleConfirmClick, handleDiscardClick, sav
       </DialogContent>
       <DialogActions>
         {saveAllowed ? saveButton() : disabledSaveButton()}
-        <Button onClick={handleDiscardClick} color='secondary' variant='contained'>
+        <Button
+          onClick={handleDiscardClick}
+          color='secondary'
+          variant='contained'
+        >
           Discard changes
         </Button>
         <DialogCloseButton onClick={() => setOpen(false)} />

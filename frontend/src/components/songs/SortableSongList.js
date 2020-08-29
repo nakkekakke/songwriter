@@ -5,10 +5,7 @@ import SongListItem from './SongListItem'
 
 const SortableSong = SortableElement(({ song }) => {
   return (
-    <SongListItem
-      song={song}
-    >
-    </SongListItem>
+    <SongListItem song={song} />
   )
 })
 

@@ -12,23 +12,16 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20
-  },
-  contentContainer: {
-
   }
 }))
 
 const AuthenticatedApp = () => {
-  console.log('App rendering')
-  //const [open, setOpen] = useState(false)
-
   const classes = useStyles()
   const dispatch = useDispatch()
 
   const user = useSelector((state) => state.auth.user)
 
   useEffect(() => {
-    console.log('App effect')
     dispatch(initializeSongs(user))
   }, [dispatch, user])
 
@@ -37,7 +30,7 @@ const AuthenticatedApp = () => {
       <Router>
         <NavBar loggedIn />
         <Container maxWidth={false} className={classes.mainContainer}>
-          <Container maxWidth={'lg'} align='center' className={classes.contentContainer}>
+          <Container maxWidth={'lg'} align='center'>
             <Switch>
               <Route path='/songs/:id'>
                 <Song />

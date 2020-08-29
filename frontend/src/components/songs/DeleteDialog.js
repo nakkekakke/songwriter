@@ -15,7 +15,11 @@ const DeleteDialog = ({ open, setOpen, handleConfirmClick }) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleConfirmClick} color='secondary' variant='contained'>
+        <Button
+          onClick={handleConfirmClick}
+          color='secondary'
+          variant='contained'
+        >
           Delete permanently
         </Button>
         <Button onClick={() => setOpen(false)} variant='contained'>
