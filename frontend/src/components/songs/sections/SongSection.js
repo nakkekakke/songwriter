@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { makeStyles, TextField, Button, Icon, Box, Typography } from '@material-ui/core'
 import PropTypes from 'prop-types'
-import songHelper from '../../helpers/songHelper'
+import songHelper from '../../../helpers/songHelper'
 import { useDispatch, useSelector } from 'react-redux'
-import { editSection, deleteSection, cloneSection } from '../../redux/songReducer'
-import { errors, createError, removeError } from '../../redux/errorReducer'
+import { editSection, deleteSection, cloneSection } from '../../../redux/songReducer'
+import { errors, createError, removeError } from '../../../redux/errorReducer'
 import { SortableHandle } from 'react-sortable-hoc'
 import { DragIndicator } from '@material-ui/icons'
 
@@ -69,7 +69,14 @@ const SongSection = ({ songId, sectionId }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
-  const DragHandle = SortableHandle(() => <Box className={classes.dragHandle}> <Icon><DragIndicator /></Icon> </Box>)
+  const DragHandle = SortableHandle(() => (
+    <Box
+      className={classes.dragHandle}>
+      <Icon>
+        <DragIndicator />
+      </Icon>
+    </Box>
+  ))
 
   const section = useSelector((state) => state.songs.find(s => s.id === songId).sections.find(s => s.id === sectionId))
   const nameError = useSelector((state) => state.errors.find(e => e.type === errors.SECTION_NAME_ERROR && e.id === sectionId))
@@ -95,45 +102,45 @@ const SongSection = ({ songId, sectionId }) => {
     return (
       <form className={classes.editForm} >
         <TextField
-          className={classes.nameField}
-          error={nameError !== undefined}
           label='Edit name'
           name='name'
-          defaultValue={section.name}
           onChange={handleNameChange}
+          defaultValue={section.name}
+          error={nameError !== undefined}
           helperText={nameError ? 'Length must be 1-50 characters' : ''}
+          className={classes.nameField}
         />
         <div>
           <TextField
             multiline
-            error={lineError !== undefined}
             label='Lines'
             name='lines'
-            rows={section.lines.size}
-            defaultValue={songHelper.linesArrayToString(section.lines)}
             onChange={handleLinesChange}
+            onKeyDown={linesOnKeyDown}
+            defaultValue={songHelper.linesArrayToString(section.lines)}
+            rows={section.lines.size}
+            error={lineError !== undefined}
             fullWidth={true}
             helperText={lineError ? 'Max 200 characters for one line' : ''}
-            onKeyDown={linesOnKeyDown}
           />
         </div>
         <div className={classes.bottomDiv}>
           <Button
-            className={classes.cloneButton}
+            onClick={handleCloneClick}
             size='small'
             color='primary'
             variant={darkMode ? 'contained' : 'outlined'}
-            onClick={handleCloneClick}
+            className={classes.cloneButton}
           >
             Clone
           </Button>
           <DragHandle />
           <Button
-            className={classes.deleteButton}
+            onClick={handleDeleteClick}
             size='small'
             color='secondary'
             variant={darkMode ? 'contained' : 'outlined'}
-            onClick={handleDeleteClick}
+            className={classes.deleteButton}
           >
             {deleteConfirm ? 'Confirm deletion' : 'Delete'}
           </Button>
@@ -152,10 +159,7 @@ const SongSection = ({ songId, sectionId }) => {
           {section.lines.map((line, index) => {
             return (
               <div key={index}>
-                <Typography
-                  variant='body1'
-                  className={classes.line}
-                >
+                <Typography variant='body1' className={classes.line}>
                   {showChords ? songHelper.addChordsToLine(line) : lineWithSpaces(line)}
                 </Typography>
               </div>
@@ -199,9 +203,7 @@ const SongSection = ({ songId, sectionId }) => {
 
   const handleDeleteClick = (event) => {
     event.preventDefault()
-    console.log('Delete button pressed!')
     if (deleteConfirm) {
-      console.log('Delete for realz')
       dispatch(deleteSection(songId, section))
     } else {
       setDeleteConfirm(true)

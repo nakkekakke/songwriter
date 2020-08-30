@@ -2,7 +2,7 @@ import React from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Tooltip } from '@material-ui/core'
 import NavigationPrompt from 'react-router-navigation-prompt'
 import PropTypes from 'prop-types'
-import DialogCloseButton from '../DialogCloseButton'
+import DialogCloseButton from './DialogCloseButton'
 
 const UnsavedPrompt = (
   {

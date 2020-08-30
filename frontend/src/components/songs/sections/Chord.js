@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
 const Chord = ({ chordString }) => {
   const classes = useStyles()
 
-  // TODO: Add a onHover tooltip that shows chord diagram, if possible?
   return (
     <span className={classes.chord}>
       {chordString}

@@ -3,7 +3,7 @@ import { IconButton, Menu, MenuItem, Button } from '@material-ui/core'
 import { MoreVert } from '@material-ui/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteSong, cloneSong } from '../../redux/songReducer'
-import DeleteDialog from './DeleteDialog'
+import DeleteDialog from '../songs/dialogs/DeleteDialog'
 import PropTypes from 'prop-types'
 
 const SongMenu = ({ song }) => {

@@ -32,7 +32,6 @@ const DragHandle = SortableHandle(() => (
 const SongListItem = ({ song }) => {
   const classes = useStyles()
 
-
   return (
     <Container maxWidth='xl' className={classes.container}>
       <DragHandle />

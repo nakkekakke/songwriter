@@ -1,6 +1,6 @@
 import React from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Tooltip } from '@material-ui/core'
-import DialogCloseButton from '../DialogCloseButton'
+import DialogCloseButton from './DialogCloseButton'
 import PropTypes from 'prop-types'
 
 const SaveDialog = (

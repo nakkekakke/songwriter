@@ -8,7 +8,7 @@ export const LOGIN_WITH_TOKEN = 'LOGIN_WITH_TOKEN'
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
 export const AUTH_FAILURE = 'AUTH_FAILURE'
 
-const initialState = {
+export const initialState = {
   loginInProgress: false,
   loggedIn: false,
   user: null

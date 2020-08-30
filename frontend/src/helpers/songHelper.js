@@ -1,5 +1,5 @@
 import React from 'react'
-import Chord from '../components/songs/Chord'
+import Chord from '../components/songs/sections/Chord'
 import reactStringReplace from 'react-string-replace'
 
 const linesArrayToString = (lines) => {

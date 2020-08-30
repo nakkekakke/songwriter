@@ -2,7 +2,7 @@ import React from 'react'
 import { Container } from '@material-ui/core'
 import arrayMove from 'array-move'
 import { useDispatch } from 'react-redux'
-import { sortSections } from '../../redux/songReducer'
+import { sortSections } from '../../../redux/songReducer'
 import SortableSectionList from './SortableSectionList'
 
 

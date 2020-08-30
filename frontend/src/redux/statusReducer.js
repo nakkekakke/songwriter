@@ -5,7 +5,7 @@ export const RESET_ALL_STATUSES = 'RESET_ALL_STATUSES'
 export const TOGGLE_DARK_MODE = 'TOGGLE_DARK_MODE'
 
 
-const initialState = {
+export const initialState = {
   editMode: false,
   chords: true,
   darkMode: true
