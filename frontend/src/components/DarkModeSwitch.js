@@ -3,7 +3,7 @@ import { Switch, FormControlLabel } from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
 import { toggleDarkMode } from '../redux/statusReducer'
 
-const DarkThemeSwitch = () => {
+const DarkModeSwitch = () => {
   const dispatch = useDispatch()
   const darkMode = useSelector((state) => state.statuses.darkMode)
 
@@ -15,11 +15,11 @@ const DarkThemeSwitch = () => {
           color='secondary'
         />
       }
-      label='Dark theme'
+      label='Dark mode'
       labelPlacement='top'
       style={{ margin: 6, marginRight: 30 }}
     />
   )
 }
 
-export default DarkThemeSwitch
+export default DarkModeSwitch

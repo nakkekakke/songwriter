@@ -30,18 +30,18 @@ const App = () => {
     palette: {
       type: 'dark',
       background: {
-        default: '#000' //'#1c1c1c'
+        default: '#202020',
+        paper: '#3e3e3e'
       },
       primary: {
-        //main: ''//'#2a367b',
-        main: '#354599',//lightTheme.palette.primary.main,
-        dark: '#263271', //'#2a367b',//'#222c64',
+        main: '#354599',
+        dark: '#263271',
         light: lightTheme.palette.primary.main
       },
       secondary: {
         main: '#84002f',
         dark: '#620023',
-        light: lightTheme.palette.primary.main
+        light: lightTheme.palette.secondary.main
       }
     }
   })

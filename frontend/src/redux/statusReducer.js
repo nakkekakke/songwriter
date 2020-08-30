@@ -8,7 +8,7 @@ export const TOGGLE_DARK_MODE = 'TOGGLE_DARK_MODE'
 export const initialState = {
   editMode: false,
   chords: true,
-  darkMode: true
+  darkMode: false
 }
 
 // Statuses aka boolean variables reflecting different UI-only states

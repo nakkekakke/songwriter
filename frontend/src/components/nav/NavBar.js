@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import LogoutButton from './LogButton'
 import NavButtonsDiv from './NavButtonsDiv'
 import PropTypes from 'prop-types'
-import DarkThemeSwitch from '../DarkThemeSwitch'
+import DarkModeSwitch from '../DarkModeSwitch'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -27,7 +27,7 @@ const NavBar = ({ loggedIn }) => {
             SongWriter
           </Typography>
           <NavButtonsDiv loggedIn={loggedIn} />
-          <DarkThemeSwitch />
+          <DarkModeSwitch />
           <LogoutButton loggedIn={loggedIn} />
         </Toolbar>
       </AppBar>

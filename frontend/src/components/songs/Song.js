@@ -64,13 +64,13 @@ const Song = () => {
   }, [dispatch])
 
   const calculateTitleWidth = () => {
-    return 5 + (song.title.length / 2.5)
+    return 8 * (song.title.length) + 25
   }
 
   const title = () => {
     if (editMode) {
       return (
-        <div style={{ width: `${calculateTitleWidth()}%` }}>
+        <div style={{ width: `${calculateTitleWidth()}px` }}>
           <TextField
             label='Edit title'
             onChange={handleTitleChange}

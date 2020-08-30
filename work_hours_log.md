@@ -68,4 +68,5 @@
 | 29.8. | 1    | Frontend cleanup, removed redundant styles & prints etc. |
 | 30.8. | 3    | Fixed all backend tests, some refactoring and bugfixing |
 |       | 2    | Frontend refactoring, added a couple of tests after struggles |
-| total | 175  | |
+|       | 2    | Created instructions, fixed a visual issue with song title input area, adjusted dark mode |
+| total | 177  | |
