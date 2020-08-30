@@ -5,7 +5,6 @@ const Song = require('../models/song')
 const userService = require('../services/userService')
 
 userRouter.get('/', async (req, res, next) => {
-  console.log('user:', req.user)
   try {
     const users = await User.find({}).populate('songs', { _id: 1, title: 1 })
     res.json(users.map(u => u.toJSON()))
@@ -34,7 +33,6 @@ userRouter.post('/', async (req, res, next) => {
 
   try {
     const savedUser = await userToSave.save()
-    console.log('Saved:', savedUser)
     res.json(savedUser)
   } catch (error) {
     next(error)
@@ -52,8 +50,8 @@ userRouter.put('/songs', async (req, res, next) => {
         const song = await Song.findOne({ _id: s })
         songs = songs.concat(song)
       })
-      await User.updateOne({ username }, { songs: songs }, { runValidators: true })
-      res.status(200).end()
+      const updatedUser = await User.findOneAndUpdate({ username }, { songs: songs }, { new: true, useFindAndModify: false, runValidators: true })
+      updatedUser ? res.status(200).json(updatedUser.toJSON()) : res.status(404).end()
     } else {
       res.status(409).send({ error: 'Client song list differs from server.' })
     }
@@ -64,10 +62,8 @@ userRouter.put('/songs', async (req, res, next) => {
 
 userRouter.post('/username-available', async (req, res, next) => {
   const username = req.body.username
-  console.log('username:', username)
   try {
     const found = await User.findOne({ username })
-    console.log('found:', found)
     return found ? false : true
   } catch (error) {
     next(error)

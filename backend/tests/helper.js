@@ -1,5 +1,6 @@
 const fs = require('fs')
 const Song = require('../models/song')
+const User = require('../models/user')
 const supertest = require('supertest')
 const { app } = require('../app')
 
@@ -8,12 +9,19 @@ const getInitialSongs = () => {
   return JSON.parse(rawSongs)
 }
 
-const assignSongs = (songs, user) => {
+const assignUserToSongs = (songs, user) => {
   songs.forEach(song => {
     song.user = user.id
-    user.songs = user.songs.concat(song.id)
   })
   return songs
+}
+
+const initializeSongsAndUser = async (songs, user) => {
+  const songsWithUser = assignUserToSongs(songs, user)
+  const savedSongs = await Song.create(songsWithUser)
+  const songIds = savedSongs.map(s => s._id)
+  const savedUser = await User.findByIdAndUpdate(user.id, { songs: songIds }, { new: true, useFindAndModify: false })
+  return { songs: savedSongs, user: savedUser }
 }
 
 const sampleSong = {
@@ -52,4 +60,11 @@ const api = {
 
 const userCred = { username: 'test', password: 'test' }
 
-module.exports = { getInitialSongs, sampleSong, getNonexistingId: getNonexistingSongId, api, userCred, assignSongs }
+module.exports = {
+  getInitialSongs,
+  sampleSong,
+  getNonexistingSongId,
+  api,
+  userCred,
+  initializeSongsAndUser
+}

@@ -2,19 +2,18 @@ const songRouter = require('express').Router()
 const Song = require('../models/song')
 const User = require('../models/user')
 
-// songRouter.get('/:id', async (req, res, next) => {
-//   try {
-//     const song = await Song.findById(req.params.id)
-//     song ? res.json(song.toJSON()) : res.status(404).end()
-//   } catch (error) {
-//     next(error)
-//   }
-// })
+songRouter.get('/:id', async (req, res, next) => {
+  try {
+    const song = await Song.findById(req.params.id)
+    song ? res.json(song.toJSON()) : res.status(404).end()
+  } catch (error) {
+    next(error)
+  }
+})
 
 songRouter.get('/', async (req, res, next) => {
   try {
-    //console.log('params:', req.user)
-    const user = await User.findOne({ _id: req.user.id }).populate('songs') // Required for song list sorting. TODO: rework to userRouter
+    const user = await User.findOne({ _id: req.user.id }).populate('songs')
     res.json(user.songs.map(s => s.toJSON()))
   } catch (error) {
     next(error)
@@ -42,8 +41,8 @@ songRouter.post('/', async (req, res, next) => {
 songRouter.put('/:id', async (req, res, next) => {
   try {
     const updatedFields = { title: req.body.title, sections: req.body.sections }
-    await Song.updateOne({ _id: req.params.id }, updatedFields, { runValidators: true })
-    res.status(200).end()
+    const song = await Song.findByIdAndUpdate(req.params.id, updatedFields, { new: true, useFindAndModify: false, runValidators: true })
+    song ? res.status(200).json(song.toJSON()) : res.status(404).end()
   } catch (error) {
     next(error)
   }

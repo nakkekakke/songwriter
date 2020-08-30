@@ -4,10 +4,10 @@ const Song = require('../models/song')
 const {
   getInitialSongs,
   sampleSong,
-  getNonexistingId,
+  getNonexistingSongId,
   api,
   userCred,
-  assignSongs
+  initializeSongsAndUser
 } = require('./helper')
 
 
@@ -51,8 +51,9 @@ describe('When user is authenticated', () => {
     beforeEach(async () => {
       await Song.deleteMany({})
       testUser.songs = []
-      const assignedSongs = assignSongs(getInitialSongs(), testUser)
-      initialSongs = await Song.create(assignedSongs)
+      const initialized = await initializeSongsAndUser(getInitialSongs(), testUser)
+      initialSongs = initialized.songs
+      testUser = initialized.user
     })
 
     describe('all songs', () => {
@@ -60,12 +61,16 @@ describe('When user is authenticated', () => {
       test('can be successfully retrieved in JSON format', async () => {
         await api
           .get('/api/songs', token)
+          .send(testUser)
           .expect(200)
           .expect('Content-Type', /application\/json/)
       })
 
       test('have correct amount of songs', async () => {
-        const res = await api.get('/api/songs', token)
+        const res = await api
+          .get('/api/songs', token)
+          .send(testUser)
+
         expect(res.body).toHaveLength(initialSongs.length)
       })
 
@@ -114,7 +119,7 @@ describe('When user is authenticated', () => {
         })
 
         test('if no song with that id exists', async () => {
-          const badId = await getNonexistingId()
+          const badId = await getNonexistingSongId()
           const songToGetRes = await api
             .get(`/api/songs/${badId}`, token)
             .expect(404)
@@ -248,7 +253,7 @@ describe('When user is authenticated', () => {
       })
 
       test('fails if no song with that id exists', async () => {
-        const nonExistingId = await getNonexistingId()
+        const nonExistingId = await getNonexistingSongId()
 
         await api.delete('/api/songs/' + nonExistingId, token)
 
@@ -264,13 +269,16 @@ describe('When user is authenticated', () => {
         const initialTitle = initialSongs[0].title
         let songToEdit = initialSongs[0]
         songToEdit.title = 'Edited title'
+        console.log('SONGTOEDIT:', songToEdit)
 
         const editRes = await api
-          .put('/api/songs/' + songToEdit.id, token)
+          .put('/api/songs/' + songToEdit._id, token)
           .send(songToEdit)
           .expect(200)
 
-        expect(editRes.body.id).toEqual(songToEdit.id)
+        console.log('EDITRES:', editRes.body)
+
+        expect(editRes.body.id).toEqual(songToEdit._id.toString())
         expect(editRes.body.title).not.toEqual(initialTitle)
         expect(editRes.body.title).toEqual(songToEdit.title)
       })
@@ -278,16 +286,16 @@ describe('When user is authenticated', () => {
       test('fails if no song with that id exists', async () => {
         let songToEdit = initialSongs[0]
         songToEdit.title = 'Edited title'
-        songToEdit._id = await getNonexistingId()
+        songToEdit._id = await getNonexistingSongId()
 
         const editRes = await api
           .put('/api/songs/' + songToEdit.id, token)
           .send(songToEdit)
-          .expect(200)
+          .expect(404)
 
-        expect(editRes.body).toEqual(null)
+        expect(editRes.body).toEqual({})
 
-        const songsRes = await api.get('/api/songs', token)
+        const songsRes = await api.get('/api/songs', token).send(testUser)
         expect(songsRes.body).toHaveLength(initialSongs.length)
       })
 
@@ -327,9 +335,11 @@ describe('When user is authenticated', () => {
 describe('When user is not authenticated', () => {
   let songs
   beforeEach(async () => {
+    await Song.deleteMany({})
     testUser.songs = []
-    const assignedSongs = assignSongs(getInitialSongs(), testUser)
-    songs = await Song.create(assignedSongs)
+    const initialized = await initializeSongsAndUser(getInitialSongs(), testUser)
+    songs = initialized.songs
+    testUser = initialized.user
   })
 
   test('getting all songs fails', async () => {
