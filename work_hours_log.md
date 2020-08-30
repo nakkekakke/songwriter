@@ -66,4 +66,6 @@
 |       | 1    | Replaced some buttons with switches, option to not autoformat chords |
 |       | 2    | Dark mode |
 | 29.8. | 1    | Frontend cleanup, removed redundant styles & prints etc. |
-| total | 169  | |
+| 30.8. | 3    | Fixed all backend tests, some refactoring and bugfixing |
+|       | 2    | Frontend refactoring, added a couple of tests after struggles |
+| total | 175  | |
