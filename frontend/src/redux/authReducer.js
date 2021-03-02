@@ -1,4 +1,5 @@
 import authService from '../services/authService'
+import userService from '../services/userService'
 import { showAlert, alerts } from './alertReducer'
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
@@ -54,6 +55,23 @@ export const login = (username, password) => {
         type: LOGIN_FAILURE
       })
       dispatch(showAlert(alerts.loginFailure))
+    }
+  }
+}
+
+export const signup = (username, password) => {
+  return async (dispatch) => {
+    try {
+      const user = await userService.create(username, password)
+      localStorage.setItem('SongWriterUser', JSON.stringify(user))
+      dispatch({
+        type: LOGIN_SUCCESS,
+        data: user
+      })
+      dispatch(showAlert(alerts.signupSuccess))
+    } catch (error) {
+      console.log('Signup failed')
+      dispatch(showAlert(alerts.signupFailure))
     }
   }
 }

@@ -10,7 +10,7 @@ export const alerts = {
   songCreated: { message: 'Song created.', type: 'success' },
   songSaved: { message: 'Song saved.', type: 'success' },
   logout: { message: 'Logged out.', type: 'success' },
-  signupSuccess: { message: 'Signup successful! You can now log in.', type: 'success' },
+  signupSuccess: { message: 'Signup successful!', type: 'success' },
   signupFailure: { message: 'Username is already taken!', type: 'error' },
   validationFailure: { message: 'Saving failed due to invalid input data.', type: 'error' },
   serverFailure: { message: 'Error communicating with the server. Check your internet connection and try again.', type: 'error' },

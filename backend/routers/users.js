@@ -3,6 +3,8 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const Song = require('../models/song')
 const userService = require('../services/userService')
+const jwt = require('jsonwebtoken')
+const config = require('../utils/config')
 
 userRouter.get('/', async (req, res, next) => {
   try {
@@ -33,7 +35,8 @@ userRouter.post('/', async (req, res, next) => {
 
   try {
     const savedUser = await userToSave.save()
-    res.json(savedUser)
+    const token = jwt.sign({ username: savedUser.username, id: savedUser._id }, config.JWT_SECRET, { expiresIn: '1h' })
+    res.status(200).send({ token, username: savedUser.username })
   } catch (error) {
     next(error)
   }

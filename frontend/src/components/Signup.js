@@ -2,9 +2,8 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { makeStyles, Container, FormGroup, TextField, Button, Link as MaterialLink, Collapse } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
-import { Link, useHistory } from 'react-router-dom'
-import { showAlert, alerts } from '../redux/alertReducer'
-import userService from '../services/userService'
+import { Link } from 'react-router-dom'
+import { signup } from '../redux/authReducer'
 import Heading from './Heading'
 
 const useStyles = makeStyles((theme) => ({
@@ -31,15 +30,11 @@ const Signup = () => {
 
   const dispatch = useDispatch()
   const classes = useStyles()
-  const history = useHistory()
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-
     try {
-      await userService.create(username, password)
-      dispatch(showAlert(alerts.signupSuccess))
-      history.push('/')
+      dispatch(signup(username, password))
     } catch (error) {
       setCollapseOpen(true)
       setTimeout(() => setCollapseOpen(false), 3000)
