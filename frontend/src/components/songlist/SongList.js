@@ -47,22 +47,23 @@ const SongList = () => {
 
   const songList = () => {
     return (
-      <SortableSongList
-        songs={songs}
-        onSortEnd={handleSortEnd}
-        useWindowAsScrollContainer
-        useDragHandle
-      />
+      <List className={classes.list}>
+        {songs.length !== 0 ?
+          <SortableSongList
+            songs={songs}
+            onSortEnd={handleSortEnd}
+            useWindowAsScrollContainer
+            useDragHandle
+          /> :
+          <p>No songs found</p>}
+      </List>
     )
   }
 
   return (
     <div>
       <Heading text='Your songs' />
-
-      <List className={classes.list}>
-        {songs.length !== 0 ? songList() : <p>No songs found</p>}
-      </List>
+      {songList()}
       <Button
         onClick={handleNewSongClick}
         variant='contained'
